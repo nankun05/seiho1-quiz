@@ -417,7 +417,7 @@
   function renderQuestion(){
     const qi=order[pos], q=questions[qi];
     document.getElementById("qTag").textContent=`Q${pos+1} ・ ${q.tag}`;
-    document.getElementById("question").textContent=q.q;
+    document.getElementById("question").textContent=q.q.replace(/\\n/g,"\n");
     const form=document.getElementById("choiceForm"); form.innerHTML="";
     q.c.forEach((txt,idx)=>{
       const lab=document.createElement("label"); lab.className="choice";
