@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>生保1 合格クイズ</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;--panel:#ffffff;--panel2:#f8fafc;--text:#172033;--muted:#64748b;
+      --line:#dbe3ee;--accent:#2563eb;--accent2:#1d4ed8;--good:#15803d;--bad:#b91c1c;
+      --goodbg:#f0fdf4;--badbg:#fef2f2;--warn:#a16207;--shadow:0 10px 30px rgba(15,23,42,.08);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b1220;--panel:#111a2b;--panel2:#162033;--text:#eef4ff;--muted:#9fb0c7;
+        --line:#26344a;--accent:#60a5fa;--accent2:#93c5fd;--good:#4ade80;--bad:#fb7185;
+        --goodbg:#10251a;--badbg:#2a151b;--warn:#facc15;--shadow:0 10px 30px rgba(0,0,0,.22);
+      }
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;line-height:1.65}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .shell{max-width:1040px;margin:0 auto;padding:18px 16px 48px}
+    .header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--text);color:var(--bg);font-weight:900;letter-spacing:-.04em}
+    .brand h1{font-size:20px;margin:0;line-height:1.2}
+    .brand small{color:var(--muted)}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:10px 14px;font-weight:750;min-height:44px}
+    .btn:hover{border-color:var(--muted)}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    @media (prefers-color-scheme: dark){.btn.primary{color:#08111f}}
+    .btn.primary:hover{background:var(--accent2)}
+    .btn.danger{color:var(--bad)}
+    .hero{background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+    .kicker{font-size:12px;letter-spacing:.12em;font-weight:850;color:var(--accent);margin-bottom:6px}
+    .hero h2{font-size:clamp(24px,5vw,40px);margin:0 0 8px;line-height:1.2;letter-spacing:-.03em}
+    .hero p{margin:0;color:var(--muted);max-width:760px}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+    .stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+    .stat b{font-size:24px;display:block;line-height:1.2}
+    .stat span{font-size:12px;color:var(--muted)}
+    .section-title{display:flex;justify-content:space-between;gap:12px;align-items:end;margin:26px 2px 12px}
+    .section-title h3{margin:0;font-size:18px}
+    .section-title span{font-size:13px;color:var(--muted)}
+    .chapters{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .chapter{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:left;color:var(--text);position:relative;min-height:134px}
+    .chapter.active:hover{border-color:var(--accent);transform:translateY(-1px)}
+    .chapter.locked{opacity:.65;cursor:not-allowed}
+    .chapter-no{font-size:12px;font-weight:850;color:var(--accent)}
+    .chapter h4{margin:5px 0 8px;font-size:18px}
+    .chapter p{margin:0;color:var(--muted);font-size:13px}
+    .pill{position:absolute;right:14px;top:14px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);padding:4px 9px;font-size:11px;font-weight:800}
+    .app-panel{display:none}
+    .app-panel.show{display:block}
+    .quiz-top{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap}
+    .quiz-top h2{margin:0;font-size:24px}
+    .quiz-top p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .mode-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .mode-row select{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:9px 12px;min-height:44px}
+    .progress-wrap{margin:14px 0}
+    .progress-track{height:9px;background:var(--line);border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;background:var(--accent);width:0;transition:width .2s}
+    .progress-meta{display:flex;justify-content:space-between;gap:10px;margin-top:6px;font-size:12px;color:var(--muted)}
+    .question-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:var(--shadow)}
+    .qtag{display:inline-flex;padding:5px 10px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);font-size:12px;font-weight:800;margin-bottom:14px}
+    .question{font-size:clamp(17px,3vw,21px);font-weight:780;white-space:pre-line;margin:0 0 20px}
+    .choices{display:grid;gap:10px}
+    .choice{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:var(--panel2);cursor:pointer}
+    .choice:hover{border-color:var(--muted)}
+    .choice.selected{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--panel))}
+    .choice.correct{border-color:var(--good);background:var(--goodbg)}
+    .choice.wrong{border-color:var(--bad);background:var(--badbg)}
+    .choice input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent)}
+    .letter{font-weight:900;min-width:22px}
+    .feedback{display:none;margin-top:18px;border-radius:14px;padding:15px;background:var(--panel2);border:1px solid var(--line)}
+    .feedback.show{display:block}
+    .feedback.good{border-color:color-mix(in srgb,var(--good) 50%,var(--line))}
+    .feedback.bad{border-color:color-mix(in srgb,var(--bad) 50%,var(--line))}
+    .feedback h4{margin:0 0 6px}
+    .feedback p{margin:0;font-size:14px}
+    .source{margin-top:10px;font-size:12px;color:var(--muted)}
+    .source a{color:var(--accent)}
+    .actions{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:20px}
+    .actions .right{display:flex;gap:8px;flex-wrap:wrap}
+    .result-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow)}
+    .result-score{text-align:center;padding:12px 0 22px}
+    .big{font-size:clamp(54px,12vw,92px);font-weight:950;letter-spacing:-.06em;line-height:1}
+    .grade{font-size:20px;font-weight:850;margin-top:10px}
+    .muted{color:var(--muted)}
+    .review-list{display:grid;gap:10px}
+    .review-item{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .review-item b{display:block;margin-bottom:4px}
+    .notice{border:1px dashed var(--line);border-radius:14px;padding:14px;color:var(--muted);font-size:13px;margin-top:16px}
+    .footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
+    .footer a{color:var(--accent)}
+    @media(max-width:720px){
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .chapters{grid-template-columns:1fr}
+      .header{align-items:flex-start}
+    }
+    @media(max-width:480px){
+      .shell{padding:12px 12px 36px}
+      .header{flex-direction:column}
+      .header-actions{width:100%}
+      .header-actions .btn{flex:1}
+      .hero{padding:18px}
+      .question-card{border-radius:18px}
+      .actions .btn,.actions .right{flex:1}
+      .actions .right .btn{flex:1}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="header">
+    <div class="brand">
+      <div class="logo">生1</div>
+      <div><h1>生保1 合格クイズ</h1><small>日本アクチュアリー会テキスト × 過去問論点</small></div>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="homeBtn" type="button">章一覧</button>
+      <button class="btn danger" id="resetBtn" type="button">学習記録をリセット</button>
+    </div>
+  </header>
+
+  <main id="homePanel" class="app-panel show">
+    <section class="hero">
+      <div class="kicker">ACTUARIAL EXAM / LIFE INSURANCE I</div>
+      <h2>生保1を、クイズで合格水準へ。</h2>
+      <p>単純暗記ではなく、本番で迷いやすい選択肢・基礎率変更・十分性と公平性・商品設計上の判断まで問う演習アプリです。</p>
+      <div class="stats">
+        <div class="stat"><b id="statAttempts">0</b><span>解答済み</span></div>
+        <div class="stat"><b id="statCorrect">0</b><span>累計正解</span></div>
+        <div class="stat"><b id="statRate">—</b><span>累計正答率</span></div>
+        <div class="stat"><b id="statWeak">0</b><span>復習対象</span></div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <div><h3>章を選択</h3><span>第1章から順次追加</span></div>
+    </div>
+    <section class="chapters">
+      <button class="chapter active" data-chapter="1" type="button">
+        <span class="pill">12問</span><div class="chapter-no">CHAPTER 01</div>
+        <h4>営業保険料</h4>
+        <p>Equation type / Accumulation type、予定基礎率、予定事業費、十分性・公平性など。</p>
+      </button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 02</div><h4>解約および解約返戻金</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 03</div><h4>アセットシェア</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 04</div><h4>生命保険の商品開発</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 05</div><h4>変額年金保険</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 06</div><h4>団体生命保険</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 07</div><h4>医療保険</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 08</div><h4>再保険</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 09</div><h4>第9章</h4><p>今後追加予定</p></button>
+      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 10</div><h4>商品毎収益検証</h4><p>今後追加予定</p></button>
+    </section>
+  </main>
+
+  <main id="quizPanel" class="app-panel">
+    <div class="quiz-top">
+      <div><h2>第1章「営業保険料」</h2><p>難問・本番レベル</p></div>
+      <div class="mode-row">
+        <label for="mode">出題：</label>
+        <select id="mode">
+          <option value="all">全12問</option>
+          <option value="weak">間違えた問題だけ</option>
+        </select>
+        <button class="btn" id="shuffleBtn" type="button">順番をシャッフル</button>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      <div class="progress-meta"><span id="progressText">1 / 12</span><span id="liveScore">正解 0 / 0</span></div>
+    </div>
+    <section class="question-card">
+      <div id="qTag" class="qtag"></div>
+      <p id="question" class="question"></p>
+      <form id="choiceForm" class="choices"></form>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+      <div class="actions">
+        <button class="btn" id="prevBtn" type="button">← 前へ</button>
+        <div class="right">
+          <button class="btn primary" id="checkBtn" type="button">判定する</button>
+          <button class="btn primary" id="nextBtn" type="button" style="display:none">次へ →</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main id="resultPanel" class="app-panel">
+    <section class="result-card">
+      <div class="result-score">
+        <div class="kicker">RESULT</div>
+        <div id="finalScore" class="big">0 / 12</div>
+        <div id="grade" class="grade"></div>
+        <p id="resultMessage" class="muted"></p>
+      </div>
+      <div class="section-title"><div><h3>復習ポイント</h3><span>間違えた問題を確認</span></div></div>
+      <div id="reviewList" class="review-list"></div>
+      <div class="actions">
+        <button class="btn" id="resultHomeBtn" type="button">章一覧へ</button>
+        <div class="right">
+          <button class="btn" id="weakRetryBtn" type="button">間違いだけ復習</button>
+          <button class="btn primary" id="retryBtn" type="button">全問もう一度</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    出典：
+    <a href="https://www.actuaries.jp/examin/textbook/pdf/hoken1-seiho_01.pdf" target="_blank" rel="noopener">日本アクチュアリー会 生保1 第1章公式テキスト</a>
+    ／
+    <a href="https://www.actuaries.jp/lib/collection/" target="_blank" rel="noopener">過去問題集</a>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const STORAGE_KEY = "seiho1QuizProgressV1";
+  const sourceText = "日本アクチュアリー会 生保1 第1章公式テキスト・過去問論点";
+  const questions = [
+    {
+      id:"c1q1", tag:"標準責任準備金 × 営業保険料",
+      q:"次の記述のうち、正しいものはいくつあるか。\\n\\n① 営業保険料の計算基礎率は、標準責任準備金の標準基礎率と必ず一致させる必要がある。\\n② 保険期間満了までの収益の単純合計だけを見るなら、責任準備金の積立水準は主として収益認識の時期に影響する。\\n③ 営業保険料を低廉に設定すると、保険期間途中に営業保険料と対応しない責任準備金積立負担が生じる場合がある。\\n④ 予定利率を標準利率より高く設定した一時払商品では、契約初期の積立負担が大きくなる場合がある。",
+      c:["1個","2個","3個","4個"], a:2,
+      e:"①は誤りです。営業保険料の計算基礎率と標準責任準備金の基礎率は必ずしも一致しません。②③④が正しいため、正解は「3個」です。"
+    },
+    {
+      id:"c1q2", tag:"Equation type / Accumulation type",
+      q:"次の記述のうち、正しいものの組合せを選べ。\\n\\n① Equation typeは、計算式と計算基礎率が決まれば営業保険料が一意に決まり、再現性が高い。\\n② Equation typeでは、各計算基礎率に対応した利源分析を行いやすい。\\n③ Accumulation typeでは、利益目標を満たす保険料を、アセット・シェアや将来収支のsimulationを用いて検討できる。\\n④ Accumulation typeでは、各計算基礎率に安全割増を含めることは制度上禁止されている。",
+      c:["①②のみ","①③のみ","①②③","①②③④"], a:2,
+      e:"①②③が正しく、④は誤りです。Accumulation typeの本質は、将来収支を積み上げ、利益目標との関係から営業保険料水準を検討する点にあります。"
+    },
+    {
+      id:"c1q3", tag:"安全割増",
+      q:"予定死亡率・予定給付発生率の安全割増について正しいものを選べ。\\n\\n① 死亡保障について死亡率上昇がリスクなら、best estimateの死亡率に安全割増を上乗せする方向が考えられる。\\n② 生存リスクが問題となる商品では、予定死亡率を安全割「引」することがリスク方向への対応となる場合がある。\\n③ 基礎データが十分に大きければ、将来の不確実性がなくなるため安全割増は不要になる。\\n④ 安全割増は将来の不確実性への備えであると同時に、収益の源泉とも関係する。",
+      c:["①②","①③④","①②④","①②③④"], a:2,
+      e:"③が誤りです。データ量が増えて統計的変動が小さくなっても、将来の構造変化などの不確実性まで消えるわけではありません。"
+    },
+    {
+      id:"c1q4", tag:"予定解約率",
+      q:"低・無解約返戻金型商品について正しいものはいくつあるか。\\n\\n① 解約給付を責任準備金より低くすることによって生じる効果を保険料計算に織り込むため、予定解約率が用いられる。\\n② 他の条件が同じなら、予定解約率を高く設定することで保険料を低廉化できる場合がある。\\n③ 実績解約率が予定解約率を下回ると、想定した解約益が不足して収支が悪化する場合がある。\\n④ 予定解約率は死亡率より水準が高いことが多いが、保険料への影響は死亡率より一般に小さい。",
+      c:["1個","2個","3個","4個"], a:2,
+      e:"①②③が正しく、④は一般化できません。低・無解約返戻金型では予定解約率がpricingに大きく効くことがあります。"
+    },
+    {
+      id:"c1q5", tag:"予定解約率・応用",
+      q:"新しい低解約返戻金型終身保険について、会社が競争力を高めるため予定解約率を10%から20%に引き上げようとしている。最も適切なアクチュアリーの意見はどれか。",
+      c:["予定解約率は高いほど解約益が増えるため、保守的である。","実績解約率が予定を下回るリスクがあるため、「高いほど保守的」とはいえない。経過年数別の実績等も検討すべきである。","解約率は死亡率より予測しやすいため、会社経験をそのまま使用すればよい。","解約率の設定は営業保険料には影響するが、収益性には影響しない。"], a:1,
+      e:"高い予定解約率は保険料を安くできる一方、実績が下振れすると想定した解約益が得られません。「高いほど保守的」と単純には言えない点が重要です。"
+    },
+    {
+      id:"c1q6", tag:"予定利率",
+      q:"次のうち正しいものの組合せを選べ。\\n\\n① 予定利率は、自社の運用利回り、新規投資利回り、将来の運用方針などを考慮して設定する。\\n② 「予定利率を低くすれば低くするほど保守的であり、常に望ましい」というのがテキストの立場である。\\n③ 定期保険は養老保険より積立部分が小さいため、一般に予定利率が保険料へ与える影響が比較的小さい。\\n④ 定期保険では死差益が一定のbufferとなり、養老保険よりリスク許容度が高いと考えられる場合がある。",
+      c:["①②③","①③④","②③④","①②③④"], a:1,
+      e:"②が誤りです。予定利率は安全性だけでなく商品競争力や商品特性等とのバランスで考える必要があります。"
+    },
+    {
+      id:"c1q7", tag:"予定利率・過去問発展",
+      q:"ある会社が、養老保険と定期保険の予定利率をともに引き下げた。試算では「養老保険の営業保険料は上昇」「定期保険の営業保険料は低下」となった。この結果について最も適切な説明はどれか。",
+      c:["数学的にあり得ないため、必ず計算ミスである。","予定利率を下げれば、すべての生命保険商品の保険料は必ず上昇する。","営業保険料の予定利率に対する感応度・方向は、商品構造や保険料算式、予定事業費等との関係に依存するため、一律ではない。","定期保険では予定利率を使用しないためである。"], a:2,
+      e:"予定利率と営業保険料の関係は商品構造に依存します。「利率低下＝必ず保険料上昇」と機械的に判断しないことが重要です。"
+    },
+    {
+      id:"c1q8", tag:"予定事業費・十分性と公平性",
+      q:"次の記述のうち、誤っているものを選べ。",
+      c:["原則として、ある保険群団の運営に必要な事業費は、その群団の予定事業費によって賄うことが望ましい。","ある群団の予定事業費が恒常的に不足し、他の群団の利益で補填されれば、群団間の公平性の問題が生じ得る。","「普遍性」と「公平性」は常に同じ方向に作用するため、普遍性を高めれば必ず公平性も高まる。","将来のinflationや顧客service高度化に伴うcostも予定事業費設定で論点となり得る。"], a:2,
+      e:"普遍性と公平性は常に同方向ではありません。料率体系を単純・普遍的にしすぎると、費用負担の実態との乖離から公平性を損なう場合があります。"
+    },
+    {
+      id:"c1q9", tag:"費用主義 / 効用主義",
+      q:"次の対応として最も適切なものはどれか。\\n\\nⅠ：契約1件ごとに申込受付・契約管理costが概ね同額発生するため、1件あたり一定額を賦課する。\\nⅡ：貯蓄性商品の資産残高が大きいほど「貯蓄効用」が大きいと考え、責任準備金に比例して予定事業費を賦課する。",
+      c:["Ⅰ＝効用主義、Ⅱ＝費用主義","Ⅰ＝費用主義、Ⅱ＝効用主義","Ⅰ＝費用主義、Ⅱ＝費用主義","Ⅰ＝効用主義、Ⅱ＝効用主義"], a:1,
+      e:"Ⅰは実際の費用発生構造に対応させる費用主義、Ⅱは契約者が得る効用に応じて負担させる効用主義です。"
+    },
+    {
+      id:"c1q10", tag:"有配当 / 無配当",
+      q:"次の記述のうち正しいものの組合せを選べ。\\n\\n① 有配当保険では相応の安全割増を含め、剰余が実現すればその一部を配当として契約者に還元する考え方がある。\\n② 無配当保険は、配当還元見合いの安全割増をあらかじめ除くことで、有配当保険より営業保険料を安くできる場合がある。\\n③ 無配当保険は安全割増が相対的に小さくなるため、収支悪化時のリスク対応力は一般に有配当保険より高くなる。\\n④ 有配当保険では、配当後の実質的な保険料負担が無配当保険より低くなる可能性もある。",
+      c:["①②","①②④","②③④","①②③④"], a:1,
+      e:"③が誤りです。一般に安全割増が小さければ、収支悪化時のbufferはむしろ小さくなります。①②④が適切です。"
+    },
+    {
+      id:"c1q11", tag:"十分性 / 保険技術的公平性",
+      q:"次の記述のうち最も適切なものはどれか。",
+      c:["十分性が満たされていれば、個々の契約者の保険料も自動的に公平になる。","十分性原則は、個々の契約者間でどのように保険料を配分するかまで一意に決定する原則である。","保険技術的公平性とは、同じ保険料で保障される被保険者集団は同一の危険度を有するべきだという考え方である。","保険技術的公平性を徹底するため、実務上の簡素性を無視して可能な限り細かく料率を細分化しなければならない。"], a:2,
+      e:"十分性と公平性は別の論点です。また公平性を追求しても、実務可能性・簡素性・統計的信頼性などとのバランスが必要です。"
+    },
+    {
+      id:"c1q12", tag:"総合ケース",
+      q:"あなたは新商品のpricing担当アクチュアリーである。\\n\\n商品は「終身保障・低解約返戻金型・競合より安い営業保険料・予定解約率を高めに設定・予定利率も比較的高め・新契約費が大きい」という特徴を持つ。販売後のmonitoringとして最も適切なのはどれか。",
+      c:["死亡率だけをmonitoringすればよい。","販売量だけ確認し、予定基礎率については契約時に保証したため実績確認は不要である。","実績解約率、資産運用利回り、新契約費の回収状況、責任準備金積立負担などを複合的に確認する。","標準責任準備金の計算基礎率と営業保険料の計算基礎率を完全に一致させれば、その他のmonitoringは不要となる。"], a:2,
+      e:"この商品は解約率、金利、新契約費、積立負担など複数のrisk driverを抱えています。単一指標ではなく複合的な事後検証が必要です。"
+    }
+  ];
+  const letters = ["A","B","C","D"];
+  const panels = {
+    home: document.getElementById("homePanel"),
+    quiz: document.getElementById("quizPanel"),
+    result: document.getElementById("resultPanel")
+  };
+  let state = loadState();
+  let order = questions.map((_,i)=>i);
+  let pos = 0;
+  let sessionAnswers = {};
+  let sessionChecked = {};
+
+  function defaultState(){ return { attempts:0, correct:0, weak:[] }; }
+  function loadState(){
+    try{
+      const raw=localStorage.getItem(STORAGE_KEY);
+      if(!raw) return defaultState();
+      const parsed=JSON.parse(raw);
+      return {attempts:Number(parsed.attempts)||0,correct:Number(parsed.correct)||0,weak:Array.isArray(parsed.weak)?parsed.weak:[]};
+    }catch(e){ return defaultState(); }
+  }
+  function saveState(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); updateStats(); }
+  function showPanel(name){
+    Object.values(panels).forEach(p=>p.classList.remove("show"));
+    panels[name].classList.add("show");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  function updateStats(){
+    document.getElementById("statAttempts").textContent=state.attempts;
+    document.getElementById("statCorrect").textContent=state.correct;
+    document.getElementById("statRate").textContent=state.attempts?Math.round(state.correct/state.attempts*100)+"%":"—";
+    document.getElementById("statWeak").textContent=state.weak.length;
+  }
+  function buildOrder(mode="all"){
+    if(mode==="weak"){
+      const set=new Set(state.weak);
+      order=questions.map((q,i)=>set.has(q.id)?i:null).filter(i=>i!==null);
+      if(!order.length){ alert("復習対象の問題はありません。まず全問モードに挑戦してください。"); order=questions.map((_,i)=>i); document.getElementById("mode").value="all"; }
+    }else order=questions.map((_,i)=>i);
+    pos=0; sessionAnswers={}; sessionChecked={};
+  }
+  function startQuiz(mode="all"){
+    buildOrder(mode); showPanel("quiz"); renderQuestion();
+  }
+  function renderQuestion(){
+    const qi=order[pos], q=questions[qi];
+    document.getElementById("qTag").textContent=`Q${pos+1} ・ ${q.tag}`;
+    document.getElementById("question").textContent=q.q;
+    const form=document.getElementById("choiceForm"); form.innerHTML="";
+    q.c.forEach((txt,idx)=>{
+      const lab=document.createElement("label"); lab.className="choice";
+      if(sessionAnswers[q.id]===idx) lab.classList.add("selected");
+      if(sessionChecked[q.id]){
+        if(idx===q.a) lab.classList.add("correct");
+        else if(idx===sessionAnswers[q.id] && idx!==q.a) lab.classList.add("wrong");
+      }
+      const input=document.createElement("input"); input.type="radio"; input.name="answer"; input.value=String(idx); input.checked=sessionAnswers[q.id]===idx; input.disabled=!!sessionChecked[q.id];
+      input.addEventListener("change",()=>{
+        sessionAnswers[q.id]=idx;
+        form.querySelectorAll(".choice").forEach(el=>el.classList.remove("selected"));
+        lab.classList.add("selected");
+      });
+      const letter=document.createElement("span"); letter.className="letter"; letter.textContent=letters[idx];
+      const text=document.createElement("span"); text.textContent=txt;
+      lab.append(input,letter,text); form.appendChild(lab);
+    });
+    const feedback=document.getElementById("feedback");
+    if(sessionChecked[q.id]){
+      const ok=sessionAnswers[q.id]===q.a;
+      feedback.className=`feedback show ${ok?"good":"bad"}`;
+      feedback.innerHTML=`<h4>${ok?"正解！":"不正解"}</h4><p><b>正解：${letters[q.a]}</b><br>${q.e}</p><div class="source">${sourceText}</div>`;
+    } else { feedback.className="feedback"; feedback.innerHTML=""; }
+    document.getElementById("checkBtn").style.display=sessionChecked[q.id]?"none":"";
+    const next=document.getElementById("nextBtn"); next.style.display=sessionChecked[q.id]?"":"none"; next.textContent=pos===order.length-1?"結果を見る":"次へ →";
+    document.getElementById("prevBtn").disabled=pos===0;
+    document.getElementById("progressBar").style.width=((pos+1)/order.length*100)+"%";
+    document.getElementById("progressText").textContent=`${pos+1} / ${order.length}`;
+    const checkedCount=order.filter(i=>sessionChecked[questions[i].id]).length;
+    const correctCount=order.filter(i=>sessionChecked[questions[i].id] && sessionAnswers[questions[i].id]===questions[i].a).length;
+    document.getElementById("liveScore").textContent=`正解 ${correctCount} / ${checkedCount}`;
+  }
+  function checkAnswer(){
+    const q=questions[order[pos]];
+    if(sessionAnswers[q.id]===undefined){
+      const f=document.getElementById("feedback"); f.className="feedback show"; f.innerHTML="<p>選択肢を1つ選んでください。</p>"; return;
+    }
+    if(!sessionChecked[q.id]){
+      sessionChecked[q.id]=true;
+      state.attempts++;
+      if(sessionAnswers[q.id]===q.a){
+        state.correct++;
+        state.weak=state.weak.filter(id=>id!==q.id);
+      }else if(!state.weak.includes(q.id)) state.weak.push(q.id);
+      saveState();
+    }
+    renderQuestion();
+  }
+  function finish(){
+    const attempted=order.filter(i=>sessionChecked[questions[i].id]).length;
+    const correct=order.filter(i=>sessionChecked[questions[i].id] && sessionAnswers[questions[i].id]===questions[i].a).length;
+    const total=order.length;
+    document.getElementById("finalScore").textContent=`${correct} / ${total}`;
+    let grade,msg;
+    const rate=total?correct/total:0;
+    if(rate>=.92){grade="第1章：かなり強い";msg="本番でも十分戦える水準です。次は記述・論述型や選択肢の細部比較に進めます。";}
+    else if(rate>=.75){grade="合格圏に近い";msg="理解はかなり良好です。間違えた論点を重点復習すると安定します。";}
+    else if(rate>=.5){grade="もう一段";msg="基礎はあります。予定基礎率と公平性・十分性の関係を整理すると伸びます。";}
+    else{grade="重点復習推奨";msg="まず各基礎率の役割とEquation type / Accumulation typeの違いから固めましょう。";}
+    document.getElementById("grade").textContent=grade;
+    document.getElementById("resultMessage").textContent=msg;
+    const list=document.getElementById("reviewList"); list.innerHTML="";
+    order.forEach(i=>{
+      const q=questions[i];
+      if(!sessionChecked[q.id] || sessionAnswers[q.id]!==q.a){
+        const d=document.createElement("div"); d.className="review-item";
+        const yours=sessionAnswers[q.id]===undefined?"未回答":letters[sessionAnswers[q.id]];
+        d.innerHTML=`<b>${q.tag}</b>あなたの回答：${yours} ／ 正解：${letters[q.a]}<br>${q.e}`;
+        list.appendChild(d);
+      }
+    });
+    if(!list.children.length){
+      const d=document.createElement("div");d.className="review-item";d.innerHTML="<b>全問正解</b>主要論点を高い水準で理解できています。";list.appendChild(d);
+    }
+    document.getElementById("weakRetryBtn").disabled=state.weak.length===0;
+    showPanel("result");
+  }
+  document.querySelector('[data-chapter="1"]').addEventListener("click",()=>startQuiz("all"));
+  document.getElementById("homeBtn").addEventListener("click",()=>showPanel("home"));
+  document.getElementById("resultHomeBtn").addEventListener("click",()=>showPanel("home"));
+  document.getElementById("checkBtn").addEventListener("click",checkAnswer);
+  document.getElementById("nextBtn").addEventListener("click",()=>{ if(pos===order.length-1) finish(); else {pos++;renderQuestion();} });
+  document.getElementById("prevBtn").addEventListener("click",()=>{if(pos>0){pos--;renderQuestion();}});
+  document.getElementById("retryBtn").addEventListener("click",()=>{document.getElementById("mode").value="all";startQuiz("all");});
+  document.getElementById("weakRetryBtn").addEventListener("click",()=>{document.getElementById("mode").value="weak";startQuiz("weak");});
+  document.getElementById("mode").addEventListener("change",e=>startQuiz(e.target.value));
+  document.getElementById("shuffleBtn").addEventListener("click",()=>{
+    for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+    pos=0;sessionAnswers={};sessionChecked={};renderQuestion();
+  });
+  document.getElementById("resetBtn").addEventListener("click",()=>{
+    if(confirm("累計正答率・復習対象をすべてリセットしますか？")){
+      state=defaultState();localStorage.removeItem(STORAGE_KEY);updateStats();alert("学習記録をリセットしました。");
+    }
+  });
+  updateStats();
+})();
+</script>
+</body>
+</html>
