@@ -33,6 +33,9 @@
     .auth-card input{width:100%;min-height:48px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel2);color:var(--text);text-align:center;font-size:20px;letter-spacing:.18em}
     .auth-card input:focus{outline:3px solid color-mix(in srgb,var(--accent) 22%,transparent);border-color:var(--accent)}
     .auth-card .btn{width:100%;margin-top:14px}
+    .password-row{position:relative}
+    .password-row input{padding-right:76px}
+    .password-toggle{position:absolute;right:8px;top:6px;min-height:36px;border:0;background:transparent;color:var(--accent);font-weight:750;cursor:pointer}
     .auth-error{min-height:24px;margin:10px 0 0!important;color:var(--bad)!important;font-size:13px}
     .shell{max-width:1040px;margin:0 auto;padding:18px 16px 48px}
     .header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}
@@ -77,6 +80,11 @@
     .progress-track{height:9px;background:var(--line);border-radius:999px;overflow:hidden}
     .progress-bar{height:100%;background:var(--accent);width:0;transition:width .2s}
     .progress-meta{display:flex;justify-content:space-between;gap:10px;margin-top:6px;font-size:12px;color:var(--muted)}
+    .question-nav{display:flex;gap:7px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:thin}
+    .question-nav button{flex:0 0 38px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);font-weight:800}
+    .question-nav button.current{outline:3px solid color-mix(in srgb,var(--accent) 22%,transparent);border-color:var(--accent)}
+    .question-nav button.correct{background:var(--goodbg);border-color:var(--good)}
+    .question-nav button.wrong{background:var(--badbg);border-color:var(--bad)}
     .question-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:var(--shadow)}
     .qtag{display:inline-flex;padding:5px 10px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);font-size:12px;font-weight:800;margin-bottom:14px}
     .question{font-size:clamp(17px,3vw,21px);font-weight:780;white-space:pre-line;margin:0 0 20px}
@@ -87,13 +95,22 @@
     .choice.correct{border-color:var(--good);background:var(--goodbg)}
     .choice.wrong{border-color:var(--bad);background:var(--badbg)}
     .choice input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent)}
+    .input-answer{display:grid;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:16px;background:var(--panel2)}
+    .input-answer label{display:grid;gap:7px;font-weight:800}
+    .input-answer input,.input-answer textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:12px;font:inherit;color:var(--text);background:var(--panel)}
+    .input-answer textarea{min-height:96px;resize:vertical}
+    .input-answer input:focus,.input-answer textarea:focus{outline:3px solid color-mix(in srgb,var(--accent) 18%,transparent);border-color:var(--accent)}
+    .input-hint{font-size:13px;color:var(--muted);font-weight:600}
     .letter{font-weight:900;min-width:22px}
     .feedback{display:none;margin-top:18px;border-radius:14px;padding:15px;background:var(--panel2);border:1px solid var(--line)}
     .feedback.show{display:block}
     .feedback.good{border-color:color-mix(in srgb,var(--good) 50%,var(--line))}
     .feedback.bad{border-color:color-mix(in srgb,var(--bad) 50%,var(--line))}
     .feedback h4{margin:0 0 6px}
-    .feedback p{margin:0;font-size:14px}
+    .feedback p{margin:0;font-size:14px;line-height:1.7}
+    .explain-grid{display:grid;gap:10px;margin-top:14px}
+    .explain-item{border-top:1px solid color-mix(in srgb,var(--line) 75%,transparent);padding-top:10px;font-size:14px;line-height:1.65}
+    .explain-item b{display:block;margin-bottom:3px}
     .source{margin-top:10px;font-size:12px;color:var(--muted)}
     .source a{color:var(--accent)}
     .actions{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:20px}
@@ -134,7 +151,10 @@
     <h1 id="authTitle">生保1 合格クイズ</h1>
     <p>閲覧するにはパスワードを入力してください。</p>
     <label for="authPassword">パスワード</label>
-    <input id="authPassword" type="password" inputmode="numeric" autocomplete="current-password" required autofocus />
+    <div class="password-row">
+      <input id="authPassword" type="password" inputmode="numeric" autocomplete="current-password" required autofocus />
+      <button id="passwordToggle" class="password-toggle" type="button" aria-pressed="false">表示</button>
+    </div>
     <button class="btn primary" type="submit">クイズを開く</button>
     <p id="authError" class="auth-error" role="alert" aria-live="polite"></p>
   </form>
@@ -148,6 +168,7 @@
     </div>
     <div class="header-actions">
       <button class="btn" id="homeBtn" type="button">章一覧</button>
+      <button class="btn" id="logoutBtn" type="button">ログアウト</button>
       <button class="btn danger" id="resetBtn" type="button">学習記録をリセット</button>
     </div>
   </header>
@@ -170,7 +191,7 @@
     </div>
     <section class="chapters">
       <button class="chapter active" data-chapter="1" type="button">
-        <span class="pill">12問</span><div class="chapter-no">CHAPTER 01</div>
+        <span class="pill">50問</span><div class="chapter-no">CHAPTER 01</div>
         <h4>営業保険料</h4>
         <p>Equation type / Accumulation type、予定基礎率、予定事業費、十分性・公平性など。</p>
       </button>
@@ -181,35 +202,43 @@
       <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 06</div><h4>団体生命保険</h4><p>今後追加予定</p></button>
       <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 07</div><h4>医療保険</h4><p>今後追加予定</p></button>
       <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 08</div><h4>再保険</h4><p>今後追加予定</p></button>
-      <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 09</div><h4>第9章</h4><p>今後追加予定</p></button>
       <button class="chapter locked" disabled type="button"><span class="pill">準備中</span><div class="chapter-no">CHAPTER 10</div><h4>商品毎収益検証</h4><p>今後追加予定</p></button>
     </section>
   </main>
 
   <main id="quizPanel" class="app-panel">
     <div class="quiz-top">
-      <div><h2>第1章「営業保険料」</h2><p>難問・本番レベル</p></div>
+      <div><h2>第1章「営業保険料」</h2><p>穴埋め・キーワード列挙・選択式の50問から、毎回10問をランダム出題</p></div>
       <div class="mode-row">
         <label for="mode">出題：</label>
         <select id="mode">
-          <option value="all">全12問</option>
+          <option value="all">全レベル</option>
+          <option value="basic">基礎</option>
+          <option value="exam">本番レベル</option>
+          <option value="hard">難問</option>
           <option value="weak">間違えた問題だけ</option>
+          <option value="favorite">お気に入りだけ</option>
         </select>
         <button class="btn" id="shuffleBtn" type="button">順番をシャッフル</button>
       </div>
     </div>
     <div class="progress-wrap">
       <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
-      <div class="progress-meta"><span id="progressText">1 / 12</span><span id="liveScore">正解 0 / 0</span></div>
+      <div class="progress-meta"><span id="progressText">1 / 10</span><span id="liveScore">正解 0 / 0</span></div>
     </div>
+    <nav id="questionNav" class="question-nav" aria-label="問題番号"></nav>
     <section class="question-card">
-      <div id="qTag" class="qtag"></div>
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div id="qTag" class="qtag"></div>
+        <button class="btn" id="favoriteBtn" type="button" aria-pressed="false">☆ お気に入り</button>
+      </div>
       <p id="question" class="question"></p>
       <form id="choiceForm" class="choices"></form>
       <div id="feedback" class="feedback" aria-live="polite"></div>
       <div class="actions">
         <button class="btn" id="prevBtn" type="button">← 前へ</button>
         <div class="right">
+          <button class="btn" id="revealBtn" type="button">答えを見る</button>
           <button class="btn primary" id="checkBtn" type="button">判定する</button>
           <button class="btn primary" id="nextBtn" type="button" style="display:none">次へ →</button>
         </div>
@@ -221,7 +250,7 @@
     <section class="result-card">
       <div class="result-score">
         <div class="kicker">RESULT</div>
-        <div id="finalScore" class="big">0 / 12</div>
+        <div id="finalScore" class="big">0 / 10</div>
         <div id="grade" class="grade"></div>
         <p id="resultMessage" class="muted"></p>
       </div>
@@ -255,6 +284,14 @@
   const form = document.getElementById("authForm");
   const input = document.getElementById("authPassword");
   const error = document.getElementById("authError");
+  const passwordToggle = document.getElementById("passwordToggle");
+
+  passwordToggle.addEventListener("click", () => {
+    const visible = input.type === "text";
+    input.type = visible ? "password" : "text";
+    passwordToggle.textContent = visible ? "表示" : "隠す";
+    passwordToggle.setAttribute("aria-pressed", String(!visible));
+  });
 
   function isAuthenticated() {
     try {
@@ -296,7 +333,7 @@
 (() => {
   const STORAGE_KEY = "seiho1QuizProgressV1";
   const sourceText = "日本アクチュアリー会 生保1 第1章公式テキスト・過去問論点";
-  const questions = [
+  const legacyQuestions = [
     {
       id:"c1q1", tag:"標準責任準備金 × 営業保険料",
       q:"次の記述のうち、正しいものはいくつあるか。\n\n① 営業保険料の計算基礎率は、標準責任準備金の標準基礎率と必ず一致させる必要がある。\n② 保険期間満了までの収益の単純合計だけを見るなら、責任準備金の積立水準は主として収益認識の時期に影響する。\n③ 営業保険料を低廉に設定すると、保険期間途中に営業保険料と対応しない責任準備金積立負担が生じる場合がある。\n④ 予定利率を標準利率より高く設定した一時払商品では、契約初期の積立負担が大きくなる場合がある。",
@@ -368,8 +405,156 @@
       q:"あなたは新商品のpricing担当アクチュアリーである。\n\n商品は「終身保障・低解約返戻金型・競合より安い営業保険料・予定解約率を高めに設定・予定利率も比較的高め・新契約費が大きい」という特徴を持つ。販売後のmonitoringとして最も適切なのはどれか。",
       c:["死亡率だけをmonitoringすればよい。","販売量だけ確認し、予定基礎率については契約時に保証したため実績確認は不要である。","実績解約率、資産運用利回り、新契約費の回収状況、責任準備金積立負担などを複合的に確認する。","標準責任準備金の計算基礎率と営業保険料の計算基礎率を完全に一致させれば、その他のmonitoringは不要となる。"], a:2,
       e:"この商品は解約率、金利、新契約費、積立負担など複数のrisk driverを抱えています。単一指標ではなく複合的な事後検証が必要です。"
-    }
+    },
+    {id:"c1q13",level:"basic",tag:"純保険料と営業保険料",q:"営業保険料の構成について最も適切なものはどれか。",c:["純保険料のみで構成される。","純保険料に付加保険料を加えたものである。","付加保険料から純保険料を控除したものである。","責任準備金と常に同額である。"],a:1,e:"営業保険料は、保険給付の対価である純保険料に、事業費等に対応する付加保険料を加えたものです。教科書1.1。"},
+    {id:"c1q14",level:"basic",tag:"保証基礎率",q:"予定死亡率・予定利率の「予定」の意味として最も適切なものはどれか。",c:["将来実績の単なる予想値","毎年度必ず変更する暫定値","実績が変動しても追加保険料を徴収しない保証基礎率","標準責任準備金だけに用いる基礎率"],a:2,e:"予定死亡率・予定利率は単なる予測ではなく、契約者に対して保証する計算基礎率という性格を持ちます。教科書1.1。"},
+    {id:"c1q15",level:"basic",tag:"十分性",q:"営業保険料決定で十分性が最も重要とされる主な理由はどれか。",c:["募集人の人数が決まるため","会社の最終的な支払能力に関係するため","すべての契約者の保険料を同額にするため","標準基礎率との一致が義務だから"],a:1,e:"保険料の不足は最終的な支払能力に直結します。契約者からの直接収入という意味でも営業保険料は第一義的です。教科書1.2.1。"},
+    {id:"c1q16",level:"basic",tag:"公平性",q:"営業保険料の公平性について正しいものはどれか。",c:["理論上完全な細分化を必ず実現する。","実務の簡素化も考慮して検討する。","年齢や性別による料率差は禁止される。","十分性があれば公平性は自動的に満たされる。"],a:1,e:"公平性は重要ですが、理論的に完璧である必要はなく、実務の簡素化とのバランスが必要です。教科書1.2.2。"},
+    {id:"c1q17",level:"basic",tag:"収益性",q:"生命保険商品の収益性評価で重視される視点はどれか。",c:["契約初日の現金収支だけ","将来にわたる収支見通し","募集人数だけ","責任準備金を無視した保険料総額だけ"],a:1,e:"生命保険契約は長期に継続するため、販売後の将来収支を見通して収益性を評価します。教科書1.2.3。"},
+    {id:"c1q18",level:"basic",tag:"価格競争力",q:"価格競争に晒される機会が相対的に多いと考えられる販売チャネルはどれか。",c:["会社専属募集人だけのチャネル","乗り合い代理店チャネル","比較機会が存在しないチャネル","保険料を提示しないチャネル"],a:1,e:"乗り合い代理店では類似する他社商品と比較されやすく、価格競争の機会が多くなります。教科書1.2.3。"},
+    {id:"c1q19",level:"basic",tag:"Equation type",q:"Equation typeの説明として正しいものはどれか。",c:["利益目標を満たすまで乱数計算だけを行う。","収入現価と支出現価が相等する方程式から保険料を求める。","実績保険料を事後的に平均する。","標準責任準備金を営業保険料とみなす。"],a:1,e:"Equation typeは、保険期間にわたる収入現価と支出現価が収支相等するよう営業保険料を算出します。教科書1.3.1。"},
+    {id:"c1q20",level:"basic",tag:"Accumulation type",q:"Accumulation typeで主に確認するものはどれか。",c:["利益目標と将来のアセット・シェアや収支推移","契約者の氏名だけ","標準生命表の作成年だけ","過去の販売件数だけ"],a:0,e:"利益目標を満たす保険料水準を、将来のアセット・シェアや収支シミュレーションで検討します。教科書1.3.2。"},
+    {id:"c1q21",level:"basic",tag:"予定給付発生率",q:"予定給付発生率の基礎データを細分化するとき、特に確認すべきものはどれか。",c:["データ量と正確性","会社ロゴの色","募集資料のページ数","本社の所在地"],a:0,e:"細かな区分を設定するほど、十分なデータ量とデータの正確性の確認が重要になります。教科書1.4.1。"},
+    {id:"c1q22",level:"basic",tag:"補整",q:"年齢別発生率の不合理な凹凸をならす処理は一般に何と呼ばれるか。",c:["スムージング","ディスカウンティング","コミュテーション","デュレーション"],a:0,e:"年齢別データの偶然的・不合理な凹凸を移動平均等でならす処理はスムージングです。教科書1.4.1。"},
+    {id:"c1q23",level:"basic",tag:"予定解約率",q:"低・無解約返戻金型商品で予定解約率を用いる主な理由はどれか。",c:["解約給付を織り込んだ収支から保険料を算出するため","死亡率を使用しないため","解約を禁止するため","責任準備金をゼロにするため"],a:0,e:"責任準備金より低い解約給付を支出現価に織り込むため、予定解約率が計算基礎となります。教科書1.4.2。"},
+    {id:"c1q24",level:"basic",tag:"予定利率",q:"予定利率の設定で考慮すべきものとして不適切なものはどれか。",c:["自社の運用利回り","新規投資利回り","将来の運用方針","担当者の根拠のない好みだけ"],a:3,e:"予定利率は運用実績、新規投資利回り、将来見通し、商品特性等に基づき合理的に設定します。教科書1.4.3。"},
+    {id:"c1q25",level:"basic",tag:"予定事業費",q:"費用主義の説明として正しいものはどれか。",c:["実際の費用発生の型と大きさに応じて事業費を賦課する。","保障効用だけで事業費を決める。","全契約に必ず同額を課す。","事業費を一切保険料に含めない。"],a:0,e:"費用主義は、実際に発生する事業費の型と大きさに対応させて予定事業費を賦課する考え方です。教科書1.4.4。"},
+    {id:"c1q26",level:"basic",tag:"効用主義",q:"効用主義の説明として正しいものはどれか。",c:["提供する保障効用・貯蓄効用に応じて事業費を賦課する。","実費だけを契約ごとに精算する。","死亡率を使わずに保険料を計算する。","付加保険料を常にゼロにする。"],a:0,e:"効用主義は、保険商品が提供する保障効用や貯蓄効用に比例して負担を求める考え方です。教科書1.4.4。"},
+    {id:"c1q27",level:"basic",tag:"有配当・無配当",q:"無配当保険の一般的な特徴として最も適切なものはどれか。",c:["配当還元見合いの安全割増をあらかじめ小さくし得る。","必ず有配当保険より高い保険料となる。","将来収支の悪化に対する余裕が必ず大きい。","予定基礎率を設定しない。"],a:0,e:"無配当保険では配当還元見合いの安全割増を除くことで保険料を低くできる一方、悪化時の余裕も小さくなり得ます。教科書1.4.5。"},
+    {id:"c1q28",level:"exam",tag:"標準責任準備金",q:"営業保険料を標準基礎率より低廉に設定する場合の説明として最も適切なものはどれか。",c:["期間通算の十分性だけでなく途中の積立負担も検証する。","標準基礎率との一致だけを確認する。","一時払契約では積立負担は生じない。","他群団からの恒常的立替えを前提とする。"],a:0,e:"期間全体の収益だけでなく、途中時点の標準責任準備金積立負担と資本への影響を確認する必要があります。教科書1.2.3。"},
+    {id:"c1q29",level:"exam",tag:"収入現価の制約",q:"標準基礎率による純保険料Pが営業保険料πを上回る場合の留意として正しいものはどれか。",c:["将来収入現価に営業保険料を用いる取扱いが必要となり得る。","Pとπの大小は責任準備金に無関係である。","必ず責任準備金を負値にする。","営業保険料を事後的に追加徴収する。"],a:0,e:"将来収入として純保険料Pをそのまま見込めないため、営業保険料πによる収入現価を使う取扱いとなり、初期負担が増え得ます。教科書1.2.3。"},
+    {id:"c1q30",level:"exam",tag:"価格競争力ケース",q:"保障内容で差別化しにくい追随商品を開発する場合、最も適切な対応はどれか。",c:["価格競争力と十分性・収益性を総合的に検討する。","販売量だけを最大化する。","十分性を無視して最安値にする。","競合価格を確認せず高い保険料にする。"],a:0,e:"追随商品では価格競争力が重要ですが、十分性・収益性との相反関係を踏まえた総合判断が必要です。教科書1.2.3。"},
+    {id:"c1q31",level:"exam",tag:"Equation typeの特徴",q:"Equation typeの弱点として最も適切なものはどれか。",c:["総合的な十分性・収益性の程度や構造が明示的になりにくい。","保険料が一意に定まらない。","利源分析が不可能である。","関係者間の意思疎通が困難である。"],a:0,e:"内枠で各基礎率に安全性を織り込むため、総合的な余裕の程度や時系列構造が見えにくい面があります。教科書1.3.1。"},
+    {id:"c1q32",level:"exam",tag:"Accumulation typeの特徴",q:"Accumulation typeの利点でないものはどれか。",c:["新契約費回収の時期を把握できる。","積立負担の推移を把握できる。","前提変動の影響を柔軟に検討できる。","計算式だけで常に一意かつ機械的に保険料が決まる。"],a:3,e:"Accumulation typeは利益目標や前提の置き方に応じて柔軟に検討する方式で、単一の式だけで機械的に一意決定することが本質ではありません。教科書1.3.2。"},
+    {id:"c1q33",level:"exam",tag:"基礎データ補整",q:"5歳階級の発生率から各歳別の率を作る場合に用い得る処理はどれか。",c:["補間","免責","配当","解約控除"],a:0,e:"必要な粒度が不足する場合、直線補間等により各歳別の率へ補整することがあります。教科書1.4.1。"},
+    {id:"c1q34",level:"exam",tag:"選択効果",q:"危険選択後の経過年数が浅い契約群団で給付発生率が低くなる傾向を何というか。",c:["選択効果","価格弾力性","規模の経済","費用主義"],a:0,e:"加入時の危険選択により健康な群団が形成され、初期の発生率が低くなる現象は選択効果です。教科書1.4.1。"},
+    {id:"c1q35",level:"exam",tag:"将来トレンド",q:"長期の医療保障の予定給付発生率設定で最も適切なものはどれか。",c:["医療進展や生活習慣等の将来トレンドも検討する。","直近1か月の実績だけを使用する。","将来変化は一切考慮しない。","死亡率と必ず同じ率を使用する。"],a:0,e:"第三分野は将来の不確実性が高く、医療技術、受療行動、生活習慣等のトレンドを合理的に考慮します。教科書1.4.1。"},
+    {id:"c1q36",level:"exam",tag:"リスク濃縮",q:"健康に不安のない契約者ほど解約し、残存群団の給付発生率が上昇する現象の説明として適切なものはどれか。",c:["契約者行動によるリスク濃縮","スムージング","費用主義","標準化"],a:0,e:"契約者行動によって高リスク者が残り、群団のリスクが濃縮する可能性を商品設計時に考慮します。教科書1.4.1。"},
+    {id:"c1q37",level:"exam",tag:"予定解約率の保守性",q:"低解約返戻金型終身保険の予定解約率設定で最も適切なものはどれか。",c:["経過年数別実績と長期的妥当性を確認する。","高いほど常に保守的である。","死亡率より分析が容易なので検証不要である。","全期間で必ず一定率にする。"],a:0,e:"解約率は多くの要因で変動し、経過が深いほど低下することもあるため、経過年数別・長期的な検証が必要です。教科書1.4.2。"},
+    {id:"c1q38",level:"exam",tag:"一時払と金利リスク",q:"一時払養老保険で長期国債により運用する場合にも残る重要なリスクはどれか。",c:["金利上昇時の解約に伴う債券売却損","将来の保険料入金が増え続けるリスク","保険料未収リスクだけ","予定事業費が必ずゼロになるリスク"],a:0,e:"金利上昇時には債券価格が下落し、解約対応で売却すると損失が実現し得ます。MVAやヘッジが対応策となります。教科書1.4.3。"},
+    {id:"c1q39",level:"exam",tag:"平準払と金利リスク",q:"平準払養老保険の予定利率設定で特に考慮すべきものはどれか。",c:["将来流入する保険料の再投資時の金利低下リスク","契約時に全保険料を受領済みであること","運用資産が不要であること","解約が制度上不可能であること"],a:0,e:"平準払では将来もnew moneyが入るため、その時点の金利低下・再投資リスクを考慮します。教科書1.4.3。"},
+    {id:"c1q40",level:"exam",tag:"予定事業費体系",q:"新契約費・維持費・集金費と予定事業費の対応を把握しやすい方式はどれか。",c:["α-β-γ方式","予定死亡率方式","標準利率方式","純保険料方式"],a:0,e:"α-β-γ方式は新契約費、維持費、集金費との対応が比較的明確で、少数のパラメータで表現できます。教科書1.4.4。"},
+    {id:"c1q41",level:"hard",tag:"複合判断・積立負担",q:"標準利率より高い予定利率を用いる一時払商品を大量販売する際、最も優先すべき追加検証はどれか。",c:["初期の標準責任準備金積立負担と内部留保への影響","広告の色だけ","満期時の収益単純合計だけ","募集人一人当たりの名刺枚数"],a:0,e:"期間通算で十分でも契約初期に大きな積立負担が生じ得るため、販売量を含む資本・流動性への影響を検証します。教科書1.2.3。"},
+    {id:"c1q42",level:"hard",tag:"複合判断・基礎率",q:"新しい医療保障でデータ量が少なく、診断技術の進歩も見込まれる。最も適切な設定プロセスはどれか。",c:["関連データを合理的に補整し、将来トレンドと不確実性を安全割増に反映する。","観測平均を無修正で永久に使用する。","データ不足なので発生率をゼロとする。","標準死亡率をそのまま給付発生率とする。"],a:0,e:"データ定義の整合、補間・補外、トレンド、不確実性を総合的に扱う必要があります。教科書1.4.1。"},
+    {id:"c1q43",level:"hard",tag:"公平性の限界",q:"細分化料率を導入する際の判断として最も適切なものはどれか。",c:["保険数理的合理性、統計的信頼性、社会的容認性、実務可能性を総合評価する。","細分化できる限り無条件に細分化する。","社会的容認性だけで決定する。","十分性があれば区分の合理性は不要である。"],a:0,e:"保険技術的公平性は重要ですが、データの信頼性、社会的公平性、簡素性等とのバランスが必要です。教科書1.5。"},
+    {id:"c1q44",level:"hard",tag:"予定解約率ストレス",q:"予定解約率を高く設定した低解約返戻金型商品のストレステストとして重要なものはどれか。",c:["実績解約率が前提を下回るシナリオ","解約率が常に予定と一致するシナリオだけ","死亡率だけを変えるシナリオ","販売件数を固定し全前提を無視するシナリオ"],a:0,e:"実績解約率が下振れすると想定した解約益が得られず、収益性が悪化します。下方ストレスが重要です。教科書1.4.2。"},
+    {id:"c1q45",level:"hard",tag:"方式選択",q:"新商品について利益目標、資本負担、新契約費回収期間を明示的に確認したい。最も適した中心的手法はどれか。",c:["Accumulation typeによる将来収支検証","Equation typeの式だけで十分として時系列を見ない。","実績販売量の単純平均","標準基礎率との一致確認だけ"],a:0,e:"時系列の利益・資本・費用回収を明示的に見る目的にはAccumulation typeが適します。Equation typeとの併用も有効です。教科書1.3。"},
+    {id:"c1q46",level:"hard",tag:"利率変動型",q:"予定利率変動型商品でALM上の留意として最も適切なものはどれか。",c:["利率見直し期間に対応した資産運用と再投資リスクを検討する。","全期間固定利率商品と同じ運用だけでよい。","見直しルールは恣意的でよい。","短期資産化すれば運用利回りは必ず上昇する。"],a:0,e:"見直し期間に対応して資産durationが短くなると利回り低下の可能性がある一方、長期再投資リスクは軽減されます。教科書1.4.5。"},
+    {id:"c1q47",level:"hard",tag:"チャネル別事業費",q:"専属募集人とネット販売で同一の予定事業費率を無検証で用いることの問題として最も適切なものはどれか。",c:["費用構造の差を反映できず、十分性・公平性を損なう可能性がある。","予定死亡率が必ず同じになる。","標準責任準備金が不要になる。","純保険料がゼロになる。"],a:0,e:"販売経路により新契約費・維持費・手数料構造が異なるため、区分測定とモニタリングが必要です。教科書1.4.4。"},
+    {id:"c1q48",level:"hard",tag:"有配当・無配当ケース",q:"同じ保障の有配当商品と無配当商品を比較するとき、最も適切な説明はどれか。",c:["表面保険料だけでなく安全割増、配当後負担、悪化時対応力を比較する。","無配当は常に契約者負担が小さい。","有配当は必ず実質負担が大きい。","両者の予定基礎率は必ず同一である。"],a:0,e:"無配当は表面保険料を低くし得ますが、有配当は剰余還元と悪化時の余裕を持ち得るため総合比較が必要です。教科書1.4.5。"},
+    {id:"c1q49",level:"hard",tag:"総合モニタリング",q:"価格競争力を重視して保険料を引き下げた商品の販売後モニタリングとして不十分なものはどれか。",c:["販売件数だけ確認し、基礎率実績や費用・積立負担を確認しない。","死亡・給付発生率の実績差を確認する。","事業費回収と収益性を確認する。","標準責任準備金積立負担と資本影響を確認する。"],a:0,e:"販売量だけでは十分性・収益性を確認できません。基礎率差、費用、積立負担、資本を複合的に検証します。教科書1.2～1.4。"},
+    {id:"c1q50",level:"hard",tag:"総合・アクチュアリー判断",q:"営業保険料設定におけるアクチュアリーの最も適切な判断姿勢はどれか。",c:["十分性、公平性、収益性、積立負担、価格競争力を相互関係も含めて総合判断する。","最安値だけを目標にする。","標準基礎率と一致させれば他の検証は不要とする。","最良推定だけを使い不確実性を考慮しない。"],a:0,e:"各要素にはトレードオフがあります。長期の不確実性と契約者・会社双方への影響を総合的に判断することが中心です。教科書第1章全体。"}
   ];
+  const questions = [
+    {id:"c1q1",level:"basic",type:"input",tag:"営業保険料の構成",q:"営業保険料は、保険給付の対価である（①）に、事業費等に対応する（②）を加えたものである。",fields:[{label:"①",answers:["純保険料"]},{label:"②",answers:["付加保険料"]}],e:"完成文：営業保険料は、純保険料に付加保険料を加えたものです。教科書1.1。"},
+    {id:"c1q2",level:"basic",type:"choice",tag:"営業保険料の考慮事項",q:"営業保険料の水準を決める際の主な考慮事項について、空欄の正しい組合せを選べ。\n\n（①）、（②）、収益性、標準責任準備金制度との関係、（③）",c:["①十分性／②公平性／③価格競争力","①普遍性／②効用性／③流動性","①収益性／②安全性／③継続性","①十分性／②簡素性／③解約控除"],a:0,e:"完成：十分性、公平性、収益性、標準責任準備金制度との関係、価格競争力。教科書1.2。"},
+    {id:"c1q3",level:"basic",type:"keywords",tag:"5つの考慮事項",q:"【列挙】営業保険料の水準を決める際の主な考慮事項を5つ、すべて入力せよ。",keys:[["十分性"],["公平性"],["収益性"],["標準責任準備金制度","標準責任準備金"],["価格競争力"]],e:"正答：十分性、公平性、収益性、標準責任準備金制度との関係、価格競争力。順不同で判定します。教科書1.2。"},
+    {id:"c1q4",level:"basic",type:"input",tag:"十分性",q:"営業保険料の（①）は最も重要であり、保険料が十分か不足するかによって会社の最終的な（②）が決定される。契約者からの直接の（③）という意味で営業保険料は第一義的に重要である。",fields:[{label:"①",answers:["十分性"]},{label:"②",answers:["支払能力"]},{label:"③",answers:["収入"]}],e:"完成：十分性／支払能力／収入。教科書1.2.1。"},
+    {id:"c1q5",level:"basic",type:"choice",tag:"公平性",q:"公平性について空欄の正しい組合せを選べ。\n\n理論的に（①）な公平性を実現する必要はなく、実務の（②）を念頭に置いて考える。",c:["①完璧／②簡素化","①平均的／②複雑化","①保険技術的／②収益化","①社会的／②標準化"],a:0,e:"完成：理論的に完璧な公平性を実現する必要はなく、実務の簡素化を念頭に置きます。教科書1.2.2。"},
+    {id:"c1q6",level:"basic",type:"input",tag:"収益性",q:"生命保険は販売後も契約が（①）にわたり継続するため、（②）にわたる収支を見通して収益性を評価する。最良推定ベースの前提を（③）という。",fields:[{label:"①",answers:["長期間","長期"]},{label:"②",answers:["将来"]},{label:"③",answers:["ベストエスティメイト","ベスト・エスティメイト","bestestimate"]}],e:"完成：長期間／将来／ベスト・エスティメイト。教科書1.2.3。"},
+    {id:"c1q7",level:"basic",type:"choice",tag:"価格競争力",q:"販売チャネルと価格競争力について空欄を埋めよ。\n\n他社商品との比較機会が多く、価格競争に晒されやすいのは（①）。きめ細かなコンサルティングが付加価値となるのは（②）。",c:["①乗り合い代理店／②会社専属募集人","①会社専属募集人／②乗り合い代理店","①団体保険／②通信販売","①銀行窓販／②再保険会社"],a:0,e:"完成：乗り合い代理店／会社専属募集人。教科書1.2.3。"},
+    {id:"c1q8",level:"basic",type:"input",tag:"保険料計算の2方式",q:"営業保険料の計算方法は国際的に大別して（①）typeと（②）type（またはprofit testing approach）の2通りであり、日本の実務では主に（③）typeが採用される。",fields:[{label:"①",answers:["equation","Equation"]},{label:"②",answers:["accumulation","Accumulation"]},{label:"③",answers:["equation","Equation"]}],e:"完成：Equation type／Accumulation type／Equation type。教科書1.3。"},
+    {id:"c1q9",level:"basic",type:"choice",tag:"Equation type",q:"Equation typeは、保険期間にわたる（①）現価と（②）現価が（③）となるよう方程式で営業保険料を算出する。",c:["①収入／②支出／③収支相等","①資産／②負債／③完全一致","①保険料／②配当／③利益最大","①新契約／②維持費／③費差ゼロ"],a:0,e:"完成：収入現価／支出現価／収支相等。教科書1.3.1。"},
+    {id:"c1q10",level:"basic",type:"input",tag:"Accumulation type",q:"Accumulation typeは、（①）を満たす営業保険料水準を、保険期間にわたる（②）や収支のシミュレーションによって定め、（③）としての収支構造も把握できる。",fields:[{label:"①",answers:["利益目標"]},{label:"②",answers:["アセットシェア","アセット・シェア","assetshare"]},{label:"③",answers:["時系列"]}],e:"完成：利益目標／アセット・シェア／時系列。教科書1.3.2。"},
+    {id:"c1q11",level:"basic",type:"keywords",tag:"主要な計算基礎率",q:"【列挙】営業保険料の計算で用いる主要な基礎率を4種類挙げよ（死亡・給付発生、利率、事業費、解約に関するもの）。",keys:[["予定死亡率","予定給付発生率"],["予定利率"],["予定事業費率","予定事業費"],["予定解約率"]],e:"正答：予定死亡率（予定給付発生率）、予定利率、予定事業費率、予定解約率。順不同で判定します。教科書1.4。"},
+    {id:"c1q12",level:"basic",type:"choice",tag:"予定死亡率等",q:"予定死亡率・予定給付発生率等は、保険給付が将来（①）する確率に係る基礎率であり、予定する（②）の計算にも用いられる。通常は（③）別に設定する。",c:["①発生／②残存者／③性・年齢","①消滅／②解約者／③職業だけ","①増加／②契約高／③会社","①確定／②募集人／③商品名"],a:0,e:"完成：発生／残存者／性・年齢。教科書1.4.1。"},
+    {id:"c1q13",level:"basic",type:"input",tag:"予定利率",q:"予定利率は、将来の（①）による収益をあらかじめ見込み、その分だけ営業保険料を（②）する基礎率である。高く設定するほど一般に保険料は（③）なる。",fields:[{label:"①",answers:["資産運用","運用"]},{label:"②",answers:["割り引く","割引く","割引"]},{label:"③",answers:["低く","安く"]}],e:"完成：資産運用／割り引く／低く。商品構造により感応度には差があります。教科書1.4.3。"},
+    {id:"c1q14",level:"basic",type:"choice",tag:"予定事業費",q:"予定事業費を代表的な発生局面に分けると（①）、（②）、（③）である。",c:["①新契約費／②維持費／③集金費","①死亡費／②生存費／③解約費","①固定費／②変動費／③資本費","①直接費／②間接費／③税金"],a:0,e:"完成：新契約費／維持費／集金費。教科書1.4.4。"},
+    {id:"c1q15",level:"basic",type:"input",tag:"予定解約率",q:"低・無解約返戻金型商品では、解約給付を責任準備金より（①）することで生じる効果を保険料に織り込むため（②）を用いる。実績が予定を（③）と収支が悪化し得る。",fields:[{label:"①",answers:["低く","少なく"]},{label:"②",answers:["予定解約率"]},{label:"③",answers:["下回る","下回った"]}],e:"完成：低く／予定解約率／下回る。教科書1.4.2。"},
+    {id:"c1q16",level:"exam",type:"choice",tag:"過去問型・標準責任準備金",q:"空欄の正しい組合せを選べ。\n\n営業保険料の計算基礎率は各社が判断して決定し、標準責任準備金の（①）と必ずしも一致させる必要はない。責任準備金の積立水準は、期間通算の単純合計よりも収益認識の（②）に影響する。",c:["①標準基礎率／②時期","①予定事業費／②金額","①最良推定／②確率","①解約率／②販売量"],a:0,e:"完成：標準基礎率／時期。過去問で繰り返し問われる標準責任準備金との関係です。教科書1.2.3。"},
+    {id:"c1q17",level:"exam",type:"input",tag:"初期積立負担",q:"標準利率より（①）予定利率を設定した商品、特に（②）契約では、契約初期に大きな責任準備金の（③）が生じることがある。",fields:[{label:"①",answers:["高い"]},{label:"②",answers:["一時払","一時払い"]},{label:"③",answers:["積立負担"]}],e:"完成：高い／一時払／積立負担。教科書1.2.3。"},
+    {id:"c1q18",level:"exam",type:"choice",tag:"将来収入現価の制限",q:"標準基礎率による責任準備金計算で、将来収入現価としての純保険料Pが営業保険料πを（①）場合、（②）による将来収入現価を用いる。",c:["①上回る／②営業保険料","①下回る／②純保険料","①上回る／②標準保険料","①一致する／②付加保険料"],a:0,e:"完成：上回る／営業保険料。初期の積立負担が大きくなり得る点も重要です。教科書1.2.3。"},
+    {id:"c1q19",level:"exam",type:"keywords",tag:"Equation typeの利点",q:"【列挙】Equation typeの主な利点を示すキーワードを3つ入力せよ。",keys:[["一意","一意に定まる"],["再現性"],["利源分析","収支管理","リスク管理"]],e:"正答例：計算結果が一意に定まる、再現性がある、利源分析が容易（収支管理・リスク管理上分析しやすい）。教科書1.3.1。"},
+    {id:"c1q20",level:"exam",type:"input",tag:"Equation typeの安全割増",q:"日本実務のEquation typeは、各計算基礎率に（①）を織り込む（②）方式である。総合的な十分性は確保されやすいが、十分性・収益性の程度や（③）は明示されにくい。",fields:[{label:"①",answers:["安全割増"]},{label:"②",answers:["内枠","内枠方式"]},{label:"③",answers:["構造"]}],e:"完成：安全割増／内枠方式／構造。教科書1.3.1。"},
+    {id:"c1q21",level:"exam",type:"choice",tag:"Accumulation typeの前提",q:"Accumulation typeでは、一般に計算基礎率や前提に（①）を行わないものを用い、必要利益を（②）に織り込む（③）方式と整理できる。",c:["①安全割増／②利益目標／③外枠","①平準化／②死亡率／③内枠","①割引／②標準基礎率／③外枠","①補間／②事業費／③内枠"],a:0,e:"完成：安全割増／利益目標／外枠方式。教科書1.3.2。"},
+    {id:"c1q22",level:"exam",type:"keywords",tag:"Accumulation typeで見えるもの",q:"【列挙】Accumulation typeで時系列に把握・可視化できる代表例を3つ入力せよ。",keys:[["新契約費","新契約費支出","新契約費回収"],["責任準備金","積立負担"],["ソルベンシーマージン","内部留保","必要内部留保"]],e:"正答例：新契約費支出の回収、責任準備金の積立負担、ソルベンシー・マージン確保のための必要内部留保の推移。教科書1.3.2。"},
+    {id:"c1q23",level:"exam",type:"input",tag:"死亡率設定",q:"死亡率設定では、データの（①）を確認し、必要に応じて補整する。死亡保障で死亡率上昇が危険なら最良推定に安全割増を（②）し、生存保障で長寿が危険なら死亡率を安全割（③）方向があり得る。",fields:[{label:"①",answers:["信頼性","十分性"]},{label:"②",answers:["加算","上乗せ"]},{label:"③",answers:["引","引く"]}],e:"完成：信頼性／加算／引く。保障内容によりリスク方向が逆になる点が頻出です。教科書1.4.1。"},
+    {id:"c1q24",level:"exam",type:"choice",tag:"リスク細分",q:"健康優良体や引受緩和型商品の料率区分では、データに基づく（①）に加え、（②）を含む公平性を丁寧に検討する。",c:["①保険数理的合理性／②社会的容認性","①営業目標／②広告効果","①標準利率／②販売件数","①収支相等／②再現性"],a:0,e:"完成：保険数理的合理性／社会的容認性。教科書1.4.1・1.5。"},
+    {id:"c1q25",level:"exam",type:"keywords",tag:"保険料率の代表的区分",q:"【列挙】保険料率を区分する代表的な属性・単位を5つ入力せよ。",keys:[["保険種類","商品"],["年齢"],["性別","男女"],["保険金額","金額"],["払方","払込方法","保険料払込方法"]],e:"正答例：保険種類、年齢、性別、保険金額、保険料払込方法。商品により健康状態、職業、喫煙状況等も料率区分となります。"},
+    {id:"c1q26",level:"exam",type:"input",tag:"解約率の特徴",q:"解約率は商品、販売チャネル、経過年数、（①）環境等に左右される。低解約返戻金型で予定解約率を高くすると保険料を（②）できる一方、実績解約率の（③）が収益悪化要因となる。",fields:[{label:"①",answers:["経済","金利"]},{label:"②",answers:["低廉化","引き下げ","安く"]},{label:"③",answers:["下振れ","低下"]}],e:"完成例：経済／低廉化／下振れ。教科書1.4.2。"},
+    {id:"c1q27",level:"exam",type:"choice",tag:"リスク濃縮",q:"健康な契約者ほど解約して高リスク者が残り、残存群団の給付発生率が上昇する現象は（①）。この影響は契約者の（②）と給付リスクの相関から生じる。",c:["①リスク濃縮／②行動","①危険分散／②年齢","①収支相等／②配当","①平準化／②募集"],a:0,e:"完成：リスク濃縮／行動。予定解約率は件数減少だけでなく残存群団の質にも影響します。"},
+    {id:"c1q28",level:"exam",type:"input",tag:"予定利率の留意点",q:"予定利率設定では、自社の運用利回り、（①）投資利回り、将来の運用方針、商品特性、価格競争力等を考慮する。平準払では将来流入保険料の（②）リスク、一時払では金利上昇時の（③）リスクにも留意する。",fields:[{label:"①",answers:["新規","新規投資"]},{label:"②",answers:["再投資"]},{label:"③",answers:["解約","債券売却損","売却損"]}],e:"完成例：新規／再投資／解約（債券売却損）。2023年度過去問でも予定利率設定の留意事項が問われています。"},
+    {id:"c1q29",level:"exam",type:"choice",tag:"商品別金利感応度",q:"一般に積立部分が大きい（①）は予定利率の影響が大きく、積立部分が小さい（②）は相対的に影響が小さい。",c:["①養老保険／②定期保険","①定期保険／②養老保険","①医療特約／②終身保険","①団体定期／②年金保険"],a:0,e:"完成：養老保険／定期保険。ただし保険料の変化方向・程度は算式や費用構造にも依存します。"},
+    {id:"c1q30",level:"exam",type:"keywords",tag:"予定利率設定の観点",q:"【過去問型・列挙】保険料計算基礎率として予定利率を設定する際の留意事項を4つ入力せよ。",keys:[["運用利回り","自社運用利回り"],["新規投資利回り","新規投資"],["将来の運用方針","運用方針"],["商品特性","価格競争力","ALM","金利リスク"]],e:"正答例：自社運用利回り、新規投資利回り、将来の運用方針、商品特性・価格競争力・ALM。2023年度生保1の出題テーマを穴埋め化。"},
+    {id:"c1q31",level:"exam",type:"input",tag:"予定事業費の原則",q:"原則として、ある保険（①）の運営に必要な事業費は、その群団の（②）で賄うことが望ましい。恒常的な他群団からの補填は群団間の（③）を損ない得る。",fields:[{label:"①",answers:["群団"]},{label:"②",answers:["予定事業費","付加保険料"]},{label:"③",answers:["公平性"]}],e:"完成：群団／予定事業費／公平性。教科書1.4.4・1.5。"},
+    {id:"c1q32",level:"exam",type:"choice",tag:"事業費賦課原則",q:"実際の費用発生構造に対応して負担させる考え方を（①）、契約者が得る便益・効用に応じて負担させる考え方を（②）という。",c:["①費用主義／②効用主義","①効用主義／②費用主義","①十分性原則／②公平性原則","①内枠方式／②外枠方式"],a:0,e:"完成：費用主義／効用主義。教科書1.4.4。"},
+    {id:"c1q33",level:"exam",type:"keywords",tag:"α-β-γ方式",q:"【列挙】α-β-γ方式が対応させる3種類の予定事業費を入力せよ。",keys:[["新契約費","α","アルファ"],["維持費","β","ベータ"],["集金費","γ","ガンマ"]],e:"正答：新契約費、維持費、集金費。順不同で判定します。教科書1.4.4。"},
+    {id:"c1q34",level:"exam",type:"input",tag:"インフレーション",q:"予定事業費設定では、将来の（①）による費用上昇や、顧客（②）の高度化によるコストも見込む。長期契約では固定額費用の実質負担が変化するため（③）検証が重要である。",fields:[{label:"①",answers:["インフレーション","物価上昇"]},{label:"②",answers:["サービス","service"]},{label:"③",answers:["将来収支","収益性","ストレス"]}],e:"完成例：インフレーション／サービス／将来収支。2023年度過去問の物価上昇と収益性の論点にも対応。"},
+    {id:"c1q35",level:"exam",type:"choice",tag:"有配当・無配当",q:"有配当保険は基礎率に相応の（①）を含め、剰余の一部を（②）として還元する。無配当保険は還元見合いを除き、表面保険料を（③）できる場合がある。",c:["①安全割増／②契約者配当／③低廉化","①解約控除／②責任準備金／③増額","①標準基礎率／②事業費／③固定","①危険差／②保険金／③平準化"],a:0,e:"完成：安全割増／契約者配当／低廉化。教科書1.4.5。"},
+    {id:"c1q36",level:"exam",type:"input",tag:"公平性原則",q:"同じ保険料で保障される被保険者集団は同一の（①）を有するべきだという考えを（②）的公平性という。ただし細分化は統計的信頼性や（③）的容認性との均衡が必要である。",fields:[{label:"①",answers:["危険度","リスク"]},{label:"②",answers:["保険技術","保険技術的"]},{label:"③",answers:["社会","社会的"]}],e:"完成：危険度／保険技術的／社会的。教科書1.5.1。"},
+    {id:"c1q37",level:"exam",type:"keywords",tag:"十分性と公平性",q:"【過去問型・列挙】保険料率改定を検討する際、少なくとも説明すべき3つの基本観点を入力せよ。",keys:[["十分性"],["公平性"],["収益性"]],e:"正答：十分性、公平性、収益性。2023年度生保1では終身保険の料率改定について、この3観点からの説明が求められました。"},
+    {id:"c1q38",level:"exam",type:"choice",tag:"金利上昇と終身保険",q:"低金利時に設定した平準払終身保険で市中金利が上昇した場合、価格競争力は（①）し得る一方、保有資産の含み損や（②）の増加、将来保険料の運用利回り改善等を総合評価する。",c:["①低下／②解約","①上昇／②死亡","①不変／②新契約","①消滅／②配当"],a:0,e:"完成：低下／解約。金利上昇の影響は新契約価格・保有契約・資産運用で方向が異なります。2023年度過去問テーマ。"},
+    {id:"c1q39",level:"exam",type:"input",tag:"物価上昇と収益性",q:"平準払終身保険で物価上昇率が高まると、名目額固定の保険料収入に対し、維持費等の（①）が増えて（②）が悪化し得る。一方、名目金利上昇による運用収益改善の可能性も含め（③）的に検証する。",fields:[{label:"①",answers:["事業費","費用"]},{label:"②",answers:["費差収支","収益性","費差益"]},{label:"③",answers:["総合","総合的"]}],e:"完成例：事業費／費差収支／総合的。2023年度過去問テーマ。"},
+    {id:"c1q40",level:"exam",type:"choice",tag:"販売後モニタリング",q:"予定解約率と予定利率を高めに設定した低解約返戻金型終身保険では、（①）、（②）、新契約費回収、責任準備金積立負担を複合的にモニタリングする。",c:["①実績解約率／②資産運用利回り","①広告閲覧数／②募集人数","①標準死亡率だけ／②株価だけ","①契約者住所／②商品名"],a:0,e:"完成：実績解約率／資産運用利回り。複数のリスクドライバーを一体で追います。"},
+    {id:"c1q41",level:"hard",type:"keywords",tag:"総合料率区分",q:"【難問・列挙】個人保険の料率細分で検討し得る区分を8つ入力せよ。",keys:[["保険種類","商品"],["年齢"],["性別","男女"],["保険金額","金額"],["払方","払込方法"],["健康状態","健康"],["職業"],["喫煙","喫煙状況"]],e:"正答例：保険種類、年齢、性別、保険金額、払込方法、健康状態、職業、喫煙状況。商品特性とデータの合理性に応じて選びます。"},
+    {id:"c1q42",level:"hard",type:"input",tag:"標準責任準備金と資本",q:"低廉な保険料により標準責任準備金の積立を群団内で賄えない場合、他群団の（①）または会社勘定である（②）から立て替える。恒常的な立替えは（③）しくない。",fields:[{label:"①",answers:["剰余"]},{label:"②",answers:["内部留保"]},{label:"③",answers:["好ま","望ま"]}],e:"完成：剰余／内部留保／好ましくない。教科書1.2.3。"},
+    {id:"c1q43",level:"hard",type:"choice",tag:"初期投資の見方",q:"標準責任準備金の積立を将来収益のための（①）とみる考え方があるが、保険料の（②）を招きやすい可能性があり、十分性判断には（③）な検討が必要である。",c:["①初期投資／②不足／③慎重","①配当／②超過／③簡略","①解約益／②平準化／③短期的","①費差益／②一致／③形式的"],a:0,e:"完成：初期投資／不足／慎重。教科書1.2.3。"},
+    {id:"c1q44",level:"hard",type:"keywords",tag:"基礎率設定プロセス",q:"【難問・列挙】データの乏しい新医療保障で予定給付発生率を設定する際の検討キーワードを5つ入力せよ。",keys:[["データ定義","定義整合","整合性"],["補整","補間","補外"],["将来トレンド","トレンド"],["不確実性"],["安全割増"]],e:"正答例：データ定義の整合、補整・補間・補外、将来トレンド、不確実性、安全割増。教科書1.4.1。"},
+    {id:"c1q45",level:"hard",type:"input",tag:"方式の併用",q:"Equation typeは料率の（①）と利源別把握に強く、Accumulation typeは利益・資本・費用回収の（②）的検証に強い。実務では両者を（③）して十分性と収益性を確認できる。",fields:[{label:"①",answers:["再現性"]},{label:"②",answers:["時系列"]},{label:"③",answers:["併用"]}],e:"完成：再現性／時系列／併用。方式の長所を目的別に使い分けます。"},
+    {id:"c1q46",level:"hard",type:"choice",tag:"予定利率変動型",q:"予定利率変動型商品では、利率の（①）期間に対応する資産運用を検討する。資産を短期化すると長期の（②）リスクは軽減し得るが、見直し時の利回り低下を負う。",c:["①見直し／②再投資","①据置／②死亡","①払込／②解約控除","①保障／②事業費"],a:0,e:"完成：見直し／再投資。ALMと保証期間の整合が重要です。教科書1.4.5。"},
+    {id:"c1q47",level:"hard",type:"keywords",tag:"総合モニタリング",q:"【難問・列挙】競争力重視で保険料を引き下げた商品の販売後に確認すべき項目を6つ入力せよ。",keys:[["死亡率","給付発生率"],["解約率"],["運用利回り","金利"],["事業費","費用"],["責任準備金","積立負担"],["収益性","利益","資本"]],e:"正答例：死亡・給付発生率、解約率、運用利回り、事業費、責任準備金積立負担、収益性・資本。"},
+    {id:"c1q48",level:"hard",type:"input",tag:"有配当・無配当の比較",q:"有配当・無配当商品の比較では、表面保険料だけでなく、基礎率の（①）、配当後の（②）的負担、収支悪化時の（③）力を比較する。",fields:[{label:"①",answers:["安全割増"]},{label:"②",answers:["実質","実質的"]},{label:"③",answers:["対応","リスク対応"]}],e:"完成：安全割増／実質的／対応。無配当が常に有利とは限りません。"},
+    {id:"c1q49",level:"hard",type:"choice",tag:"総合ケース",q:"料率改定では、十分性・公平性・収益性に加え、標準責任準備金の（①）、価格（②）、販売量、資本・流動性への影響を（③）的に判断する。",c:["①積立負担／②競争力／③総合","①予定死亡率／②弾力性だけ／③短期","①解約控除／②表示／③機械","①利源／②統制／③個別"],a:0,e:"完成：積立負担／競争力／総合。2023年度の料率改定型論述をキーワード穴埋めに再構成。"},
+    {id:"c1q50",level:"hard",type:"keywords",tag:"最終総点検",q:"【最終・列挙】営業保険料設定を総合判断する際の重要語を7つ入力せよ。",keys:[["十分性"],["公平性"],["収益性"],["標準責任準備金","積立負担"],["価格競争力"],["不確実性","安全割増"],["モニタリング","事後検証"]],e:"正答例：十分性、公平性、収益性、標準責任準備金・積立負担、価格競争力、不確実性・安全割増、モニタリング。第1章の総まとめです。"}
+  ];
+  const explanationDetails = {
+    c1q1:["純保険料は保険給付、付加保険料は契約の獲得・維持・保険料収納などの事業費に対応します。","『純＋付加＝営業』を式のように即答できるようにします。"],
+    c1q2:["十分性は支払能力、公平性は負担配分、収益性は利益、標準責任準備金は積立負担、価格競争力は売れやすさに対応します。","5項目の列挙だけでなく、それぞれを一文で説明できるようにします。"],
+    c1q3:["5項目には相互関係があります。保険料を下げると価格競争力は上がる一方、十分性・収益性は弱くなりやすくなります。","『十分・公平・収益・標準・価格』の順で塊として暗記します。"],
+    c1q4:["生命保険は長期契約で、販売後に保険料を自由に変更できません。料率不足が長期間累積するため十分性が最重要です。","支払能力には責任準備金の十分な積立や適切な配当水準も関係します。"],
+    c1q5:["危険度を細分すれば理論上の公平性は高まりますが、データ不足・事務負荷・説明困難が生じます。","公平性は『細かいほどよい』ではなく、簡素性との均衡で説明します。"],
+    c1q6:["ベスト・エスティメイトは安全割増を含まない最良推定です。実績がそのとおりでも利益が残る料率設計を考えます。","『長期契約だから将来収支で評価』が収益性の核です。"],
+    c1q7:["乗り合い代理店は他社商品と比較されやすく、専属募集人では相談サービスも付加価値になります。","チャネルによる価格競争と事業費構造の違いを一緒に整理します。"],
+    c1q8:["Equation typeは収支相等式から逆算し、Accumulation typeは将来収支を積み上げて利益目標から決めます。","日本実務の主流はEquation type、profit testing approachはAccumulation type側です。"],
+    c1q9:["保険料等の収入現価と、保険給付・事業費等の支出現価を等しくする保険料を求めます。","『現価・収支相等・方程式』の3語をセットで覚えます。"],
+    c1q10:["年度別収支を積み上げるため、利益総額だけでなく利益がいつ生じるかも把握できます。","アセット・シェア、新契約費回収、積立負担、内部留保が代表語です。"],
+    c1q11:["死亡・給付発生率は給付、利率は運用、事業費率は費用、解約率は契約者行動を表します。","名称に加え、前提悪化時に利益がどう動くかも説明できるようにします。"],
+    c1q12:["死亡率等は給付の発生確率と、次年度まで残る被保険者数の双方に使います。","性・年齢別が基本ですが、影響の小さい付随給付では一律設定もあり得ます。"],
+    c1q13:["予定利率が高いほど運用収益を多く見込み、保険料を低くできますが、実際の運用が届かなければ利差損になります。","『高予定利率＝安い保険料＝金利リスク増』で覚えます。"],
+    c1q14:["新契約費は契約時、維持費は契約継続中、集金費は保険料収納時に発生します。","α・β・γ方式との対応も同時に暗記します。"],
+    c1q15:["低い解約返戻金により生じる解約益を、あらかじめ保険料の低廉化に使います。","予定より解約が少ないと解約益が不足するため、高い予定解約率ほど保守的とは限りません。"],
+    c1q16:["営業保険料は各社の価格判断、標準責任準備金は契約者保護の積立規制で目的が異なります。","基礎率の一致は不要ですが、不一致による積立負担の検証は必要です。"],
+    c1q17:["標準利率より高い予定利率は保険料を安くする一方、標準責任準備金の初期負担を厚くします。","特に一時払・大量販売では資本と流動性まで確認します。"],
+    c1q18:["Pを使うと実際に受け取る営業保険料πより大きな将来収入を見込むため、πを上限として評価します。","『P＞πなら営業保険料を使用』と初期積立負担をセットで覚えます。"],
+    c1q19:["一意性・再現性により同じ算式と基礎率なら同じ結果となり、基礎率別の利源分析もしやすくなります。","利点と、利益の時系列構造が見えにくい弱点を対比します。"],
+    c1q20:["内枠方式は死亡率・利率・事業費率など個々の基礎率に安全性を持たせます。","『各基礎率に安全割増＝内枠』を確実にします。"],
+    c1q21:["外枠方式は基礎率を最良推定で置き、別に定めた利益目標を満たす料率を探します。","内枠と外枠は、どこにマージンを置くかで対比します。"],
+    c1q22:["新契約費は初期に先行し、責任準備金・必要内部留保も年度ごとに変化します。","期間合計ではなく『いつ、いくら資金が必要か』を答える論点です。"],
+    c1q23:["死亡保障では死亡率上昇、年金など生存保障では死亡率低下が危険方向です。","商品の給付リスクが増える方向に安全割増を置く、と原則で覚えます。"],
+    c1q24:["統計上の差があっても、その料率区分が社会的に受け入れられるとは限りません。","数理的合理性だけでなく社会的容認性も書くのが記述の得点ポイントです。"],
+    c1q25:["年齢・性別は危険度、保険金額・払方は費用構造や選択効果の差も反映します。","区分を列挙した後、その区分の合理性を説明する問題へ発展します。"],
+    c1q26:["解約率は商品・チャネル・経過年数・経済環境で変動し、全期間一定とは限りません。","低解約返戻金型では実績解約率の下振れストレスが重要です。"],
+    c1q27:["健康な契約者ほど乗り換えると、高リスク者が残り残存群団の給付率が上がります。","件数減少と群団の質の変化を分けて説明します。"],
+    c1q28:["平準払には将来保険料の再投資リスク、一時払には金利上昇時の解約・債券売却損があります。","予定利率の論述では運用・ALM・商品性・競争力を漏れなく書きます。"],
+    c1q29:["養老保険は積立金が大きく運用収益の影響も大きい一方、定期保険は危険保険料の比重が高くなります。","予定利率低下で全商品一律に保険料上昇、と決めつけない点が重要です。"],
+    c1q30:["過去実績だけでなく、これから投資する資産の利回りと将来の運用方針を使って予定利率を設定します。","列挙後に各項目を商品収支へ結び付けると記述得点が伸びます。"],
+    c1q31:["別群団が費用を恒常的に補填すると、契約者群団間の負担が不公平になります。","会社全体の十分性だけでなく商品・群団別の十分性も確認します。"],
+    c1q32:["費用主義は発生費用、効用主義は契約者が受ける便益に対応して負担させます。","『何に比例させるか』と『なぜ負担させるか』をセットで整理します。"],
+    c1q33:["αは新契約費、βは維持費、γは集金費を表すのが基本です。","保険金額比例・件数比例・保険料比例などの賦課単位にも注意します。"],
+    c1q34:["保険料が固定でも人件費・システム費は物価とともに増え、長期契約の費差収支を圧迫します。","物価上昇と金利上昇の影響を分け、最後に総合評価します。"],
+    c1q35:["有配当は安全割増を持ち好転時の剰余を配当で返し、無配当は還元見合いを保険料から除けます。","表面保険料だけでなく配当後負担と悪化時の余裕を比較します。"],
+    c1q36:["同一料率群団の危険度同質性を求めるのが保険技術的公平性です。","完全な細分化ではなく、統計的信頼性・社会的公平性との均衡が必要です。"],
+    c1q37:["十分性は支払能力、公平性は負担配分、収益性は事業利益です。料率改定では三者への影響を別々に述べます。","価格競争力の改善だけでなく三観点の悪化リスクも書きます。"],
+    c1q38:["金利上昇で新商品の価格が下がると旧料率商品の競争力が低下し、含み損と解約増加が重なる可能性があります。","将来保険料の運用利回り改善というプラス面も併記します。"],
+    c1q39:["物価上昇は人件費等を押し上げ、固定保険料の長期契約では費差損を生みやすくなります。","利差・費差・解約行動に分けてから総合評価します。"],
+    c1q40:["高い予定解約率・予定利率は保険料を下げますが、解約下振れ・運用不足への耐性が弱くなります。","前提実績だけでなく新契約費回収と積立負担も追います。"],
+    c1q41:["料率区分には危険度差を表すものと、費用・契約者行動の差を表すものがあります。","列挙後に数理的合理性・社会的容認性・実務可能性を添えます。"],
+    c1q42:["群団内で積立を賄えないと別群団の剰余や内部留保が拘束され、大量販売時は資本問題へ拡大します。","将来利益が見込めても恒常的立替えを当然視しないことが重要です。"],
+    c1q43:["初期投資の考えは先に資本を出して将来利益を回収するものですが、将来利益には不確実性があります。","販売量ストレスと回収期間を含めて慎重に検証します。"],
+    c1q44:["類似商品・外部統計を使う場合も定義差を補整し、医療技術や受療行動の将来変化を反映します。","最良推定を作る工程と安全割増を置く工程を分けて説明します。"],
+    c1q45:["Equation typeは算式の透明性、Accumulation typeは利益の時系列可視化に優れます。","料率算出と収益検証を併用し、前提ストレスも加えます。"],
+    c1q46:["利率見直し期間と資産期間を合わせると金利変動を反映しやすくなります。","保証期間・見直しルール・資産デュレーションを一体で説明します。"],
+    c1q47:["前提実績だけでなく、差異が利益・責任準備金・資本へどう波及したかを確認します。","死亡・解約・金利・費用・積立・利益の6方向をチェックします。"],
+    c1q48:["無配当は保険料を抑えやすい一方、安全割増が小さくなり得ます。有配当には配当還元の柔軟性があります。","どちらが常に有利とはせず、リスク負担と実質負担で比較します。"],
+    c1q49:["料率引下げは販売増を期待できますが、1件当たり利益・初期積立・必要資本を悪化させ得ます。","三原則に積立負担・競争力・資本を加え、相互作用まで述べます。"],
+    c1q50:["第1章は安さと保守性の一方だけを選ぶ話ではなく、契約者保護・事業継続・競争力を両立させる章です。","7語を骨格に、商品特性・販売量・ストレス・事後検証を肉付けします。"]
+  };
+  questions.forEach(q=>{
+    if(!q.c) return;
+    const shift=Number(q.id.replace("c1q",""))%4;
+    q.c=q.c.slice(shift).concat(q.c.slice(0,shift));
+    q.a=(q.a-shift+4)%4;
+  });
   const letters = ["A","B","C","D"];
   const panels = {
     home: document.getElementById("homePanel"),
@@ -381,14 +566,47 @@
   let pos = 0;
   let sessionAnswers = {};
   let sessionChecked = {};
+  let sessionRevealed = {};
 
-  function defaultState(){ return { attempts:0, correct:0, weak:[] }; }
+  function normalize(value){
+    return String(value||"").normalize("NFKC").toLowerCase().replace(/[\s\u3000、,，・\/／。\.「」『』（）()\-ー]/g,"");
+  }
+  function matchesAny(value,answers){
+    const v=normalize(value);
+    return answers.some(answer=>{
+      const a=normalize(answer);
+      return v===a || (a.length>=2 && v.includes(a));
+    });
+  }
+  function isCorrect(q,answer=sessionAnswers[q.id]){
+    if(q.type==="choice") return answer===q.a;
+    if(q.type==="input") return Array.isArray(answer) && q.fields.every((field,i)=>matchesAny(answer[i],field.answers));
+    if(q.type==="keywords") return typeof answer==="string" && q.keys.every(group=>matchesAny(answer,group));
+    return false;
+  }
+  function answerLabel(q,answer=sessionAnswers[q.id]){
+    if(answer===undefined) return "未回答";
+    if(q.type==="choice") return letters[answer]||"未回答";
+    if(q.type==="input") return (answer||[]).map((v,i)=>`${q.fields[i].label} ${v||"（空欄）"}`).join(" ／ ");
+    return answer||"未回答";
+  }
+  function correctLabel(q){
+    if(q.type==="choice") return `${letters[q.a]}：${q.c[q.a]}`;
+    if(q.type==="input") return q.fields.map(field=>`${field.label} ${field.answers[0]}`).join(" ／ ");
+    return q.keys.map(group=>group[0]).join("、");
+  }
+  function explanationHtml(q){
+    const detail=explanationDetails[q.id]||["教科書の該当箇所と結び付けて確認しましょう。","正答のキーワードを自分の言葉でも説明できるようにします。"];
+    return `<div class="explain-grid"><div class="explain-item"><b>なぜ重要？</b>${detail[0]}</div><div class="explain-item"><b>試験での押さえ方</b>${detail[1]}</div></div>`;
+  }
+
+  function defaultState(){ return { attempts:0, correct:0, weak:[], favorites:[] }; }
   function loadState(){
     try{
       const raw=localStorage.getItem(STORAGE_KEY);
       if(!raw) return defaultState();
       const parsed=JSON.parse(raw);
-      return {attempts:Number(parsed.attempts)||0,correct:Number(parsed.correct)||0,weak:Array.isArray(parsed.weak)?parsed.weak:[]};
+      return {attempts:Number(parsed.attempts)||0,correct:Number(parsed.correct)||0,weak:Array.isArray(parsed.weak)?parsed.weak:[],favorites:Array.isArray(parsed.favorites)?parsed.favorites:[]};
     }catch(e){ return defaultState(); }
   }
   function saveState(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); updateStats(); }
@@ -404,29 +622,55 @@
     document.getElementById("statWeak").textContent=state.weak.length;
   }
   function buildOrder(mode="all"){
+    const shuffled=list=>{
+      const copy=[...list];
+      for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
+      return copy;
+    };
+    let candidates=questions.map((q,i)=>({q,i}));
+    if(mode==="all"){
+      const basic=shuffled(candidates.filter(item=>item.q.level==="basic")).slice(0,3);
+      const exam=shuffled(candidates.filter(item=>item.q.level==="exam")).slice(0,5);
+      const hard=shuffled(candidates.filter(item=>item.q.level==="hard")).slice(0,2);
+      candidates=shuffled([...basic,...exam,...hard]);
+    }
+    if(["basic","exam","hard"].includes(mode)) candidates=candidates.filter(item=>item.q.level===mode);
     if(mode==="weak"){
-      const set=new Set(state.weak);
-      order=questions.map((q,i)=>set.has(q.id)?i:null).filter(i=>i!==null);
-      if(!order.length){ alert("復習対象の問題はありません。まず全問モードに挑戦してください。"); order=questions.map((_,i)=>i); document.getElementById("mode").value="all"; }
-    }else order=questions.map((_,i)=>i);
-    pos=0; sessionAnswers={}; sessionChecked={};
+      const set=new Set(state.weak); candidates=candidates.filter(item=>set.has(item.q.id));
+    }
+    if(mode==="favorite"){
+      const set=new Set(state.favorites); candidates=candidates.filter(item=>set.has(item.q.id));
+    }
+    if(!candidates.length){
+      alert(mode==="favorite"?"お気に入りの問題はありません。":"対象の問題はありません。まず全レベルに挑戦してください。");
+      candidates=questions.map((q,i)=>({q,i})); document.getElementById("mode").value="all";
+    }
+    order=candidates.map(item=>item.i);
+    for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+    order=order.slice(0,10);
+    pos=0; sessionAnswers={}; sessionChecked={}; sessionRevealed={};
   }
   function startQuiz(mode="all"){
     buildOrder(mode); showPanel("quiz"); renderQuestion();
   }
   function renderQuestion(){
     const qi=order[pos], q=questions[qi];
-    document.getElementById("qTag").textContent=`Q${pos+1} ・ ${q.tag}`;
+    const levelLabel={basic:"基礎",exam:"本番",hard:"難問"}[q.level]||"";
+    document.getElementById("qTag").textContent=`Q${pos+1} ・ ${levelLabel} ・ ${q.tag}`;
     document.getElementById("question").textContent=q.q.replace(/\\n/g,"\n");
+    const favorite=state.favorites.includes(q.id);
+    const favoriteBtn=document.getElementById("favoriteBtn");
+    favoriteBtn.textContent=favorite?"★ お気に入り":"☆ お気に入り";
+    favoriteBtn.setAttribute("aria-pressed",String(favorite));
     const form=document.getElementById("choiceForm"); form.innerHTML="";
-    q.c.forEach((txt,idx)=>{
+    if(q.type==="choice") q.c.forEach((txt,idx)=>{
       const lab=document.createElement("label"); lab.className="choice";
       if(sessionAnswers[q.id]===idx) lab.classList.add("selected");
       if(sessionChecked[q.id]){
         if(idx===q.a) lab.classList.add("correct");
         else if(idx===sessionAnswers[q.id] && idx!==q.a) lab.classList.add("wrong");
       }
-      const input=document.createElement("input"); input.type="radio"; input.name="answer"; input.value=String(idx); input.checked=sessionAnswers[q.id]===idx; input.disabled=!!sessionChecked[q.id];
+      const input=document.createElement("input"); input.type="radio"; input.name="answer"; input.value=String(idx); input.checked=sessionAnswers[q.id]===idx; input.disabled=!!(sessionChecked[q.id]||sessionRevealed[q.id]);
       input.addEventListener("change",()=>{
         sessionAnswers[q.id]=idx;
         form.querySelectorAll(".choice").forEach(el=>el.classList.remove("selected"));
@@ -436,30 +680,63 @@
       const text=document.createElement("span"); text.textContent=txt;
       lab.append(input,letter,text); form.appendChild(lab);
     });
+    if(q.type==="input"){
+      const box=document.createElement("div");box.className="input-answer";
+      const values=Array.isArray(sessionAnswers[q.id])?sessionAnswers[q.id]:q.fields.map(()=>"");
+      q.fields.forEach((field,idx)=>{
+        const label=document.createElement("label");label.textContent=`空欄 ${field.label}`;
+        const answerInput=document.createElement("input");answerInput.type="text";answerInput.autocomplete="off";answerInput.placeholder="キーワードを入力";answerInput.value=values[idx]||"";answerInput.disabled=!!(sessionChecked[q.id]||sessionRevealed[q.id]);
+        answerInput.addEventListener("input",()=>{const next=[...values];next[idx]=answerInput.value;sessionAnswers[q.id]=next;});
+        label.appendChild(answerInput);box.appendChild(label);
+      });
+      const hint=document.createElement("div");hint.className="input-hint";hint.textContent="漢字・ひらがな、全角・半角などの軽微な違いは吸収します。";box.appendChild(hint);form.appendChild(box);
+    }
+    if(q.type==="keywords"){
+      const box=document.createElement("div");box.className="input-answer";
+      const label=document.createElement("label");label.textContent="キーワードを列挙";
+      const area=document.createElement("textarea");area.placeholder="順不同で入力（読点・スペース・改行のいずれでもOK）";area.value=typeof sessionAnswers[q.id]==="string"?sessionAnswers[q.id]:"";area.disabled=!!(sessionChecked[q.id]||sessionRevealed[q.id]);
+      area.addEventListener("input",()=>{sessionAnswers[q.id]=area.value;});label.appendChild(area);box.appendChild(label);
+      const hint=document.createElement("div");hint.className="input-hint";hint.textContent=`必要なキーワード：${q.keys.length}個（順不同）`;box.appendChild(hint);form.appendChild(box);
+    }
     const feedback=document.getElementById("feedback");
-    if(sessionChecked[q.id]){
-      const ok=sessionAnswers[q.id]===q.a;
-      feedback.className=`feedback show ${ok?"good":"bad"}`;
-      feedback.innerHTML=`<h4>${ok?"正解！":"不正解"}</h4><p><b>正解：${letters[q.a]}</b><br>${q.e}</p><div class="source">${sourceText}</div>`;
+    if(sessionChecked[q.id]||sessionRevealed[q.id]){
+      const ok=isCorrect(q);
+      const revealed=sessionRevealed[q.id]&&!sessionChecked[q.id];
+      feedback.className=`feedback show ${revealed||ok?"good":"bad"}`;
+      feedback.innerHTML=`<h4>${revealed?"答え・解説":ok?"正解！":"不正解"}</h4><p><b>正解：${correctLabel(q)}</b><br>${q.e}</p>${explanationHtml(q)}<div class="source">${sourceText}</div>`;
     } else { feedback.className="feedback"; feedback.innerHTML=""; }
-    document.getElementById("checkBtn").style.display=sessionChecked[q.id]?"none":"";
-    const next=document.getElementById("nextBtn"); next.style.display=sessionChecked[q.id]?"":"none"; next.textContent=pos===order.length-1?"結果を見る":"次へ →";
+    const answered=sessionChecked[q.id]||sessionRevealed[q.id];
+    document.getElementById("checkBtn").style.display=answered?"none":"";
+    document.getElementById("revealBtn").style.display=answered?"none":"";
+    const next=document.getElementById("nextBtn"); next.style.display=answered?"":"none"; next.textContent=pos===order.length-1?"結果を見る":"次へ →";
     document.getElementById("prevBtn").disabled=pos===0;
     document.getElementById("progressBar").style.width=((pos+1)/order.length*100)+"%";
     document.getElementById("progressText").textContent=`${pos+1} / ${order.length}`;
     const checkedCount=order.filter(i=>sessionChecked[questions[i].id]).length;
-    const correctCount=order.filter(i=>sessionChecked[questions[i].id] && sessionAnswers[questions[i].id]===questions[i].a).length;
+    const correctCount=order.filter(i=>sessionChecked[questions[i].id] && isCorrect(questions[i])).length;
     document.getElementById("liveScore").textContent=`正解 ${correctCount} / ${checkedCount}`;
+    const nav=document.getElementById("questionNav"); nav.innerHTML="";
+    order.forEach((index,navPos)=>{
+      const item=questions[index],button=document.createElement("button");
+      button.type="button"; button.textContent=String(navPos+1);
+      if(navPos===pos) button.classList.add("current");
+      if(sessionChecked[item.id]) button.classList.add(isCorrect(item)?"correct":"wrong");
+      button.setAttribute("aria-label",`問題${navPos+1}へ移動`);
+      button.addEventListener("click",()=>{pos=navPos;renderQuestion();});
+      nav.appendChild(button);
+    });
   }
   function checkAnswer(){
     const q=questions[order[pos]];
-    if(sessionAnswers[q.id]===undefined){
-      const f=document.getElementById("feedback"); f.className="feedback show"; f.innerHTML="<p>選択肢を1つ選んでください。</p>"; return;
+    const answer=sessionAnswers[q.id];
+    const empty=answer===undefined || (Array.isArray(answer)&&answer.every(v=>!String(v).trim())) || (typeof answer==="string"&&!answer.trim());
+    if(empty){
+      const f=document.getElementById("feedback"); f.className="feedback show"; f.innerHTML=`<p>${q.type==="choice"?"選択肢を1つ選んでください。":"回答を入力してください。"}</p>`; return;
     }
     if(!sessionChecked[q.id]){
       sessionChecked[q.id]=true;
       state.attempts++;
-      if(sessionAnswers[q.id]===q.a){
+      if(isCorrect(q)){
         state.correct++;
         state.weak=state.weak.filter(id=>id!==q.id);
       }else if(!state.weak.includes(q.id)) state.weak.push(q.id);
@@ -469,7 +746,7 @@
   }
   function finish(){
     const attempted=order.filter(i=>sessionChecked[questions[i].id]).length;
-    const correct=order.filter(i=>sessionChecked[questions[i].id] && sessionAnswers[questions[i].id]===questions[i].a).length;
+    const correct=order.filter(i=>sessionChecked[questions[i].id] && isCorrect(questions[i])).length;
     const total=order.length;
     document.getElementById("finalScore").textContent=`${correct} / ${total}`;
     let grade,msg;
@@ -483,10 +760,10 @@
     const list=document.getElementById("reviewList"); list.innerHTML="";
     order.forEach(i=>{
       const q=questions[i];
-      if(!sessionChecked[q.id] || sessionAnswers[q.id]!==q.a){
+      if(!sessionChecked[q.id] || !isCorrect(q)){
         const d=document.createElement("div"); d.className="review-item";
-        const yours=sessionAnswers[q.id]===undefined?"未回答":letters[sessionAnswers[q.id]];
-        d.innerHTML=`<b>${q.tag}</b>あなたの回答：${yours} ／ 正解：${letters[q.a]}<br>${q.e}`;
+        const yours=answerLabel(q);
+        d.innerHTML=`<b>${q.tag}</b>あなたの回答：${yours}<br>正解：${correctLabel(q)}<br>${q.e}${explanationHtml(q)}`;
         list.appendChild(d);
       }
     });
@@ -500,6 +777,11 @@
   document.getElementById("homeBtn").addEventListener("click",()=>showPanel("home"));
   document.getElementById("resultHomeBtn").addEventListener("click",()=>showPanel("home"));
   document.getElementById("checkBtn").addEventListener("click",checkAnswer);
+  document.getElementById("revealBtn").addEventListener("click",()=>{
+    const q=questions[order[pos]];
+    sessionRevealed[q.id]=true;
+    renderQuestion();
+  });
   document.getElementById("nextBtn").addEventListener("click",()=>{ if(pos===order.length-1) finish(); else {pos++;renderQuestion();} });
   document.getElementById("prevBtn").addEventListener("click",()=>{if(pos>0){pos--;renderQuestion();}});
   document.getElementById("retryBtn").addEventListener("click",()=>{document.getElementById("mode").value="all";startQuiz("all");});
@@ -507,11 +789,22 @@
   document.getElementById("mode").addEventListener("change",e=>startQuiz(e.target.value));
   document.getElementById("shuffleBtn").addEventListener("click",()=>{
     for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
-    pos=0;sessionAnswers={};sessionChecked={};renderQuestion();
+    pos=0;sessionAnswers={};sessionChecked={};sessionRevealed={};renderQuestion();
+  });
+  document.getElementById("favoriteBtn").addEventListener("click",()=>{
+    const id=questions[order[pos]].id;
+    state.favorites=state.favorites.includes(id)?state.favorites.filter(item=>item!==id):[...state.favorites,id];
+    saveState();renderQuestion();
   });
   document.getElementById("resetBtn").addEventListener("click",()=>{
     if(confirm("累計正答率・復習対象をすべてリセットしますか？")){
       state=defaultState();localStorage.removeItem(STORAGE_KEY);updateStats();alert("学習記録をリセットしました。");
+    }
+  });
+  document.getElementById("logoutBtn").addEventListener("click",()=>{
+    if(confirm("ログアウトしますか？")){
+      localStorage.removeItem("seiho1QuizAuthV1");
+      location.reload();
     }
   });
   updateStats();
