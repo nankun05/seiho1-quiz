@@ -42,7 +42,7 @@ function matchesAny(v,arr){const x=normalize(v);return arr.some(a=>x===normalize
 function inputFieldResults(q,a=answers[q.id]){
   const vals=Array.isArray(a)?a:q.fields.map(()=>"");
   return q.fields.map((f,i)=>({label:f.label,value:vals[i]||"",ok:matchesAny(vals[i],f.answers),correct:f.answers[0]}))
-})}
+}
 function isCorrect(q,a=answers[q.id]){if(q.type==="choice")return a===q.a;if(q.type==="input")return Array.isArray(a)&&q.fields.every((f,i)=>matchesAny(a[i],f.answers));if(q.type==="keywords")return typeof a==="string"&&q.keys.every(g=>matchesAny(a,g));return false}
 function correctLabel(q){if(q.type==="choice")return `${letters[q.a]}：${q.c[q.a]}`;if(q.type==="input")return q.fields.map(f=>`${f.label} ${f.answers[0]}`).join(" ／ ");return q.keys.map(g=>g[0]).join("、")}
 function showPanel(id){["homePanel","quizPanel","resultPanel"].forEach(x=>$(x).classList.toggle("show",x===id));window.scrollTo({top:0,behavior:"smooth"})}
