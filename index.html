@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#07111f">
+<meta name="theme-color" content="#f7fbff">
 <title>生保1 合格クイズ</title>
 
 <style>
@@ -293,6 +293,197 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 }
 </style>
 
+
+<style id="light-mode-override">
+:root{
+  --bg:#f7fbff;--bg2:#eef6fb;--panel:#ffffff;--panel2:#f4f9fc;--panel3:#edf5fa;
+  --text:#102033;--muted:#62778a;--line:#d7e4ed;--line2:#bed4e3;
+  --accent:#0891b2;--accent2:#0284c7;--accent3:#4f46e5;
+  --good:#16a34a;--good2:#15803d;--bad:#e11d48;--warn:#d97706;
+  --goodbg:rgba(22,163,74,.08);--badbg:rgba(225,29,72,.07);
+  --shadow:0 16px 40px rgba(30,64,96,.10);--glow:0 0 0 1px rgba(8,145,178,.08),0 18px 45px rgba(30,64,96,.09);
+}
+body{
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(34,211,238,.10),transparent 28%),
+    radial-gradient(circle at 90% 10%,rgba(129,140,248,.07),transparent 25%),
+    linear-gradient(180deg,#fbfdff 0%,#f4f9fc 52%,#f8fbfd 100%);
+}
+body:before{
+  opacity:.65;
+  background-image:linear-gradient(rgba(15,23,42,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.025) 1px,transparent 1px);
+}
+.auth-card{
+  background:linear-gradient(180deg,#ffffff,#f4f9fc);
+  border-color:var(--line2);box-shadow:var(--shadow)
+}
+.auth-card:before{background:rgba(34,211,238,.08)}
+.auth-card input{background:#ffffff;color:var(--text);border-color:var(--line2)}
+.auth-card input:focus{background:#ffffff}
+
+.btn{
+  background:linear-gradient(180deg,#ffffff,#eef5f9);color:var(--text);border-color:var(--line2);
+  box-shadow:0 5px 14px rgba(30,64,96,.08)
+}
+.btn:hover{border-color:#8fb5c9;box-shadow:0 9px 20px rgba(30,64,96,.12)}
+.btn.primary{
+  color:#ffffff;background:linear-gradient(135deg,#0891b2,#0284c7);
+  border-color:#0891b2;box-shadow:0 10px 24px rgba(8,145,178,.18)
+}
+.btn.primary:hover{box-shadow:0 12px 28px rgba(8,145,178,.23)}
+.btn.danger{color:#be123c;background:#fff;border-color:rgba(225,29,72,.18)}
+.btn.danger:hover{background:#fff1f4;border-color:var(--bad)}
+
+.hero{
+  background:
+    radial-gradient(circle at 90% 0%,rgba(34,211,238,.10),transparent 28%),
+    linear-gradient(135deg,#ffffff,#f1f8fc);
+  border-color:var(--line2);box-shadow:var(--glow)
+}
+.hero:after{color:rgba(15,23,42,.035)}
+.hero-kicker{color:var(--accent)}
+.hero p{color:var(--muted)}
+.stat{background:rgba(255,255,255,.78);border-color:var(--line)}
+.stat:hover{border-color:var(--line2)}
+
+.study-command{
+  background:linear-gradient(145deg,#ffffff,#f2f8fb);
+  border-color:var(--line2);box-shadow:var(--shadow)
+}
+.command-item{background:#ffffff;border-color:var(--line)}
+.weak-chip{background:#fff4f6;color:#be123c;border-color:#fecdd3}
+
+.dashboard{
+  background:linear-gradient(180deg,#ffffff,#f5fafc);
+  border-color:var(--line2);box-shadow:var(--shadow)
+}
+.dashboard th{color:var(--muted)}
+.mini-track{background:#eaf2f7;border-color:#dfeaf1}
+.mini-fill{background:linear-gradient(90deg,#06b6d4,#0284c7,#6366f1);box-shadow:0 0 10px rgba(8,145,178,.14)}
+
+.chapter{
+  background:linear-gradient(155deg,#ffffff,#f5fafc);
+  border-color:var(--line);color:var(--text)
+}
+.chapter:before{background:rgba(8,145,178,.045)}
+.chapter:hover{border-color:rgba(8,145,178,.52);box-shadow:0 14px 30px rgba(30,64,96,.11),0 0 18px rgba(8,145,178,.05)}
+.chapter:hover:before{background:rgba(8,145,178,.07)}
+.pill{background:#f1f6fa;border-color:var(--line2);color:#39556a}
+
+.quiz-top{background:rgba(255,255,255,.80);border-color:var(--line2)}
+.mode-row select{background:#ffffff;color:var(--text);border-color:var(--line2)}
+.streak-box{background:#ffffff;border-color:var(--line2)}
+.streak-best{border-left-color:var(--line)}
+
+.progress-track{background:#e8f0f5;border-color:#d3e1ea;box-shadow:inset 0 1px 4px rgba(30,64,96,.10)}
+.progress-bar{
+  background:linear-gradient(90deg,#06b6d4,#0284c7,#6366f1);
+  box-shadow:0 0 13px rgba(8,145,178,.18)
+}
+
+.question-nav button{background:#ffffff;color:var(--text);border-color:var(--line)}
+.question-nav button:hover{border-color:var(--line2)}
+.question-nav button.current{border-color:var(--accent);color:#0e7490;outline-color:rgba(8,145,178,.10)}
+.question-nav button.correct{background:#effcf3;border-color:#86efac;color:#166534}
+.question-nav button.wrong{background:#fff1f4;border-color:#fda4af;color:#9f1239}
+
+.question-card,.result-card{
+  background:linear-gradient(160deg,#ffffff,#f8fbfd);
+  border-color:var(--line2);box-shadow:var(--glow)
+}
+.qtag{background:#f1f6fa;border-color:var(--line);color:#334e63}
+
+.choice{background:#ffffff;border-color:var(--line);color:var(--text)}
+.choice:hover{border-color:var(--line2)}
+.choice.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(8,145,178,.07)}
+.choice.correct{background:#effcf3;border-color:#86efac}
+.choice.wrong{background:#fff1f4;border-color:#fda4af}
+
+.input-answer{background:#f8fbfd;border-color:var(--line)}
+.input-answer input,.input-answer textarea{
+  background:#ffffff;color:var(--text);border-color:var(--line2)
+}
+.input-answer input:focus,.input-answer textarea:focus{
+  background:#ffffff;border-color:var(--accent);box-shadow:0 0 0 4px rgba(8,145,178,.08)
+}
+
+.mastery-badge{background:#f1f6fa;border-color:var(--line);color:var(--muted)}
+.mastery-badge.done{background:#effcf3;border-color:#bbf7d0;color:#166534;box-shadow:0 0 10px rgba(22,163,74,.07)}
+.feedback{background:#f7fafc;border-color:var(--line)}
+.review{background:#f8fbfd;border-color:var(--line)}
+
+.focus-overlay{
+  background:rgba(247,251,255,.94);
+  backdrop-filter:blur(10px);
+}
+.focus-kicker{color:var(--accent)}
+.focus-chapter{color:var(--muted)}
+.focus-title{color:var(--text)}
+.focus-count{color:#0369a1}
+
+.mastered-toast{
+  background:linear-gradient(135deg,#effcf3,#f7fffb);
+  border-color:#86efac;
+  box-shadow:0 0 40px rgba(22,163,74,.16),0 18px 45px rgba(30,64,96,.12)
+}
+.mastered-word{color:#15803d}.mastered-sub{color:#166534}
+
+@keyframes correctGlow{
+  0%{box-shadow:var(--glow)}
+  35%{border-color:#22c55e;box-shadow:0 0 0 2px rgba(34,197,94,.15),0 0 34px rgba(34,197,94,.16)}
+  100%{box-shadow:var(--glow)}
+}
+</style>
+
+
+<style id="ox-effect-style">
+.answer-result-wrap{position:relative}
+.ox-mark{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%) scale(.4);
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  font-size:30px;font-weight:950;line-height:1;opacity:0;pointer-events:none;
+  z-index:4
+}
+.ox-mark.ok{
+  color:#16a34a;background:#f0fdf4;border:2px solid #22c55e;
+  box-shadow:0 0 0 5px rgba(34,197,94,.10),0 8px 20px rgba(22,163,74,.15);
+}
+.ox-mark.ng{
+  color:#e11d48;background:#fff1f2;border:2px solid #fb7185;
+  box-shadow:0 0 0 5px rgba(244,63,94,.09),0 8px 20px rgba(225,29,72,.14);
+}
+.ox-mark.show{animation:oxPop .56s cubic-bezier(.2,1.45,.3,1) forwards}
+@keyframes oxPop{
+  0%{opacity:0;transform:translateY(-50%) scale(.35) rotate(-10deg)}
+  55%{opacity:1;transform:translateY(-50%) scale(1.18) rotate(4deg)}
+  100%{opacity:1;transform:translateY(-50%) scale(1) rotate(0)}
+}
+.input-answer label.answered-ok input{border-color:#22c55e!important;background:#f7fff9!important;padding-right:62px}
+.input-answer label.answered-ng input{border-color:#fb7185!important;background:#fff7f8!important;padding-right:62px}
+.enum-row.answered-ok input{border-color:#22c55e!important;background:#f7fff9!important;padding-right:62px}
+.enum-row.answered-ng input{border-color:#fb7185!important;background:#fff7f8!important;padding-right:62px}
+
+.global-ox{
+  position:fixed;left:50%;top:42%;z-index:1200;
+  transform:translate(-50%,-50%) scale(.35);opacity:0;pointer-events:none;
+  font-size:clamp(90px,22vw,180px);font-weight:950;line-height:1;
+  text-shadow:0 10px 35px rgba(0,0,0,.12)
+}
+.global-ox.ok{color:#22c55e}
+.global-ox.ng{color:#f43f5e}
+.global-ox.show{animation:globalOx .68s cubic-bezier(.2,1.35,.3,1)}
+@keyframes globalOx{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(-12deg)}
+  42%{opacity:.96;transform:translate(-50%,-50%) scale(1.16) rotate(4deg)}
+  72%{opacity:.92;transform:translate(-50%,-50%) scale(.96) rotate(0)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.03)}
+}
+@media(prefers-reduced-motion:reduce){
+  .ox-mark.show,.global-ox.show{animation-duration:.001ms!important}
+}
+</style>
+
 </head>
 <body>
 <section id="auth" class="auth"><form id="authForm" class="auth-card"><div class="auth-logo">生1</div><h1>生保1 合格クイズ</h1><p class="muted">閲覧するにはパスワードを入力してください。</p><input id="pw" type="password" inputmode="numeric" autofocus><button class="btn primary" style="width:100%;margin-top:14px">クイズを開く</button><p id="authError" class="auth-error"></p></form></section>
@@ -349,6 +540,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 10</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">新しい10問</button></div></div></section></main>
 <footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a></footer>
 </div>
+<div id="globalOx" class="global-ox" aria-hidden="true"></div>
 <div id="focusOverlay" class="focus-overlay" aria-hidden="true">
   <div class="focus-core">
     <div class="focus-kicker">FOCUS MODE</div>
@@ -430,12 +622,20 @@ function showMasteredToast(){
   t.classList.remove("show");void t.offsetWidth;t.classList.add("show");t.setAttribute("aria-hidden","false");
   clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.classList.remove("show");t.setAttribute("aria-hidden","true")},1550)
 }
+
+function showGlobalOx(ok){
+  const el=$("globalOx");if(!el)return;
+  el.className=`global-ox ${ok?"ok":"ng"}`;el.textContent=ok?"○":"×";
+  void el.offsetWidth;el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),720)
+}
 function playResultEffect(ok,newlyMastered){
   const card=$("questionCard");if(card){
     card.classList.remove("flash-good","shake-bad");void card.offsetWidth;
     card.classList.add(ok?"flash-good":"shake-bad");
     setTimeout(()=>card.classList.remove("flash-good","shake-bad"),700)
   }
+  showGlobalOx(ok);
   if(newlyMastered)showMasteredToast()
 }
 
@@ -560,7 +760,13 @@ function renderQuestion(){
       const lab=document.createElement("label");lab.textContent=`空欄 ${f.label}`;
       const inp=document.createElement("input");inp.value=vals[i]||"";inp.disabled=disabled;
       inp.oninput=()=>{const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.fields.map(()=>"");v[i]=inp.value;answers[q.id]=v};
-      lab.append(inp);box.append(lab)
+      if(checked[q.id]){
+        const r=inputFieldResults(q)[i];
+        lab.classList.add(r.ok?"answered-ok":"answered-ng");
+        const mark=document.createElement("span");mark.className=`ox-mark ${r.ok?"ok":"ng"} show`;mark.textContent=r.ok?"○":"×";
+        lab.classList.add("answer-result-wrap");lab.append(inp,mark)
+      }else{lab.append(inp)}
+      box.append(lab)
     });
     const hint=document.createElement("div");hint.className="input-hint";hint.textContent="意味は厳密に判定し、全角/半角・空白・中黒・一般的なハイフン等の表記差は吸収します。";box.append(hint);$("choiceForm").append(box)
   }else if(q.type==="enumeration"){
@@ -572,7 +778,13 @@ function renderQuestion(){
       const n=document.createElement("span");n.textContent=i+1;
       const inp=document.createElement("input");inp.placeholder=`項目 ${i+1}`;inp.value=vals[i]||"";inp.disabled=disabled;
       inp.oninput=()=>{const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.items.map(()=>"");v[i]=inp.value;answers[q.id]=v};
-      row.append(n,inp);grid.append(row)
+      if(checked[q.id]){
+        const er=enumerationMatch(q).rows[i];
+        row.classList.add(er.ok?"answered-ok":"answered-ng","answer-result-wrap");
+        const mark=document.createElement("span");mark.className=`ox-mark ${er.ok?"ok":"ng"} show`;mark.textContent=er.ok?"○":"×";
+        row.append(n,inp,mark)
+      }else{row.append(n,inp)}
+      grid.append(row)
     });
     box.append(grid);
     const hint=document.createElement("div");hint.className="input-hint";hint.textContent=`順不同。${q.items.length}項目すべて正しければ正解です。`;box.append(hint);$("choiceForm").append(box)
