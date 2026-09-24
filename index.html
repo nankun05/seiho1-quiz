@@ -484,6 +484,26 @@ body:before{
 }
 </style>
 
+
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="生保1クイズ">
+
+
+<style id="offline-status-style">
+.offline-status{
+  position:fixed;right:12px;bottom:12px;z-index:1400;
+  padding:7px 11px;border-radius:999px;font-size:11px;font-weight:850;
+  color:#0f766e;background:#ecfeff;border:1px solid #a5f3fc;
+  box-shadow:0 8px 22px rgba(30,64,96,.12);
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:.18s ease;
+}
+.offline-status.show{opacity:1;transform:none}
+</style>
+
 </head>
 <body>
 <section id="auth" class="auth"><form id="authForm" class="auth-card"><div class="auth-logo">生1</div><h1>生保1 合格クイズ</h1><p class="muted">閲覧するにはパスワードを入力してください。</p><input id="pw" type="password" inputmode="numeric" autofocus><button class="btn primary" style="width:100%;margin-top:14px">クイズを開く</button><p id="authError" class="auth-error"></p></form></section>
@@ -540,6 +560,7 @@ body:before{
 <main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 10</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">新しい10問</button></div></div></section></main>
 <footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a></footer>
 </div>
+<div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 <div id="globalOx" class="global-ox" aria-hidden="true"></div>
 <div id="focusOverlay" class="focus-overlay" aria-hidden="true">
   <div class="focus-core">
@@ -874,5 +895,20 @@ $("favoriteBtn").onclick=()=>{const id=set[pos].id;state.favorites=state.favorit
 $("retryBtn").onclick=()=>startChapter(chapterId,"all");
 $("weakRetryBtn").onclick=()=>startChapter(chapterId,"weak");
 renderChapters();renderDashboard();updateStats();renderStudyCommand();renderStreak();
+
+function updateOnlineStatus(){
+  const el=$("offlineStatus");if(!el)return;
+  el.classList.toggle("show",!navigator.onLine)
+}
+window.addEventListener("online",updateOnlineStatus);
+window.addEventListener("offline",updateOnlineStatus);
+updateOnlineStatus();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
+}
+
 </script>
 </body></html>

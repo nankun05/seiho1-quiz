@@ -1,0 +1,22 @@
+{
+  "name": "生保1 合格クイズ",
+  "short_name": "生保1クイズ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7fbff",
+  "theme_color": "#f7fbff",
+  "description": "アクチュアリー試験 生保1の穴埋め学習アプリ",
+  "icons": [
+    {
+      "src": "./icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
