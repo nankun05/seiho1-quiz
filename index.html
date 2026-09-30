@@ -576,6 +576,108 @@ body:before{
 }
 </style>
 
+
+<style id="ver12-usability-style">
+/* ver1.2: long-question navigation, stronger choice states, folding fields, mastery celebration */
+.question-sticky{
+  position:sticky;top:max(8px,env(safe-area-inset-top));z-index:28;
+  margin:14px -8px 18px;padding:0 12px 10px;
+  max-height:36vh;overflow:auto;overscroll-behavior:contain;
+  background:rgba(255,255,255,.97);border:1px solid #cbddea;border-radius:16px;
+  box-shadow:0 10px 26px rgba(30,64,96,.13);backdrop-filter:blur(10px)
+}
+.question-sticky.collapsed{max-height:104px;overflow:hidden}
+.question-sticky.collapsed .question{max-height:3.7em;overflow:hidden;mask-image:linear-gradient(to bottom,#000 62%,transparent 100%)}
+.question-sticky-bar{
+  position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 0 6px;background:rgba(255,255,255,.97);border-bottom:1px solid #e3edf4
+}
+.active-blank-label{font-size:11px;font-weight:950;color:#1d4ed8;letter-spacing:.02em}
+.question-toggle-btn{
+  appearance:none;border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#1d4ed8;
+  padding:5px 9px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap
+}
+.question-toggle-btn:active{transform:scale(.97)}
+.question-sticky .question{margin:8px 0 2px;line-height:1.76}
+.blank-token{display:inline;border-radius:6px;padding:1px 3px;background:#eef6ff;color:#1e3a8a;font-weight:950;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.blank-token.active{background:#dbeafe;color:#1d4ed8;outline:2px solid #2563eb;outline-offset:1px;animation:activeBlankPulse 1.45s ease-in-out infinite}
+@keyframes activeBlankPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.08)}50%{box-shadow:0 0 0 5px rgba(37,99,235,.10)}}
+
+.mc-field{padding:0;overflow:hidden;transition:border-color .18s ease,box-shadow .18s ease,background .18s ease}
+.mc-field.active-field{border-color:#93c5fd;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.mc-field-head{
+  width:100%;margin:0;padding:12px 13px;border:0;background:transparent;color:inherit;cursor:pointer;text-align:left;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;font:inherit
+}
+.mc-field-head:active{background:#f5f9fd}
+.mc-field-title-wrap{display:grid;gap:3px;min-width:0}
+.mc-field-title{font-weight:950;color:#172b3d}
+.mc-field-summary{font-size:11px;font-weight:800;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(62vw,620px)}
+.mc-field-summary.done{color:#1d4ed8}.mc-field-summary.ok{color:#15803d}.mc-field-summary.ng{color:#be123c}
+.mc-field-head-right{display:flex;align-items:center;gap:9px;flex:none}
+.mc-field-chevron{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:#f1f5f9;color:#475569;font-weight:950;transition:.16s ease}
+.mc-field.open .mc-field-chevron{transform:rotate(180deg);background:#eff6ff;color:#1d4ed8}
+.mc-field-body{padding:0 13px 13px}.mc-field.collapsed .mc-field-body{display:none}
+.mc-field.correct-field .mc-field-head{background:#f0fdf4}.mc-field.wrong-field .mc-field-head{background:#fff1f2}
+
+.mc-option{position:relative;display:flex;align-items:center;gap:7px;min-height:50px;overflow:hidden;transition:transform .10s ease,background .14s ease,border-color .14s ease,box-shadow .14s ease,color .14s ease}
+.mc-option:active:not(:disabled){transform:scale(.985)}
+.mc-option.selected{
+  background:#1d4ed8!important;border-color:#1e40af!important;color:#ffffff!important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.16),0 8px 18px rgba(30,64,175,.18)!important;
+  animation:selectedChoicePop .22s ease
+}
+.mc-option.selected .mc-letter{background:#ffffff;color:#1d4ed8}
+.mc-option.correct,.mc-option.selected.correct{
+  background:#15803d!important;border-color:#166534!important;color:#ffffff!important;
+  box-shadow:0 0 0 3px rgba(22,163,74,.12)!important
+}
+.mc-option.correct .mc-letter,.mc-option.selected.correct .mc-letter{background:#ffffff;color:#15803d}
+.mc-option.wrong,.mc-option.selected.wrong{
+  background:#be123c!important;border-color:#9f1239!important;color:#ffffff!important;
+  box-shadow:0 0 0 3px rgba(225,29,72,.12)!important
+}
+.mc-option.wrong .mc-letter,.mc-option.selected.wrong .mc-letter{background:#ffffff;color:#be123c}
+.mc-option-text{min-width:0;flex:1}
+.selection-state{margin-left:auto;border-radius:999px;padding:3px 7px;background:rgba(255,255,255,.20);border:1px solid rgba(255,255,255,.55);font-size:10px;font-weight:950;white-space:nowrap}
+@keyframes selectedChoicePop{0%{transform:scale(.97)}70%{transform:scale(1.015)}100%{transform:scale(1)}}
+
+/* basic mastery = compact, full mastery = celebratory */
+.mastered-toast.basic{
+  top:17%;min-width:min(86vw,350px);padding:18px 24px;background:#eff6ff;border:2px solid #60a5fa;
+  box-shadow:0 18px 45px rgba(37,99,235,.18);color:#1e3a8a
+}
+.mastered-toast.basic .mastered-word{color:#1d4ed8}.mastered-toast.basic .mastered-sub{color:#1e40af}
+.mastered-toast.full{
+  top:50%;min-width:min(90vw,460px);padding:34px 34px 30px;transform:translate(-50%,-50%) scale(.82);
+  background:linear-gradient(145deg,#ffffff,#f0fdf4);border:3px solid #22c55e;
+  box-shadow:0 0 0 10px rgba(34,197,94,.08),0 30px 80px rgba(22,101,52,.24)
+}
+.mastered-toast.full.show{transform:translate(-50%,-50%) scale(1);animation:fullMasteredCelebrate .78s cubic-bezier(.18,1.4,.3,1)}
+.mastered-toast.full .mastered-icon{font-size:58px;line-height:1;color:#16a34a;filter:drop-shadow(0 6px 12px rgba(22,163,74,.18))}
+.mastered-toast.full .mastered-word{font-size:clamp(34px,8vw,52px);color:#15803d;letter-spacing:.10em}
+.mastered-toast.full .mastered-sub{font-size:14px;color:#166534;margin-top:8px}
+.mastered-toast.full:before,.mastered-toast.full:after{content:"";position:absolute;inset:-14px;border-radius:32px;border:2px solid rgba(34,197,94,.22);animation:masteryRing 1.5s ease-out infinite;pointer-events:none}
+.mastered-toast.full:after{inset:-28px;animation-delay:.25s}
+@keyframes fullMasteredCelebrate{0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-3deg)}55%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(1deg)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes masteryRing{0%{opacity:.65;transform:scale(.86)}100%{opacity:0;transform:scale(1.14)}}
+.mastery-burst{position:fixed;inset:0;z-index:1095;pointer-events:none;overflow:hidden;display:none}
+.mastery-burst.show{display:block}
+.confetti-piece{position:absolute;left:50%;top:50%;width:9px;height:14px;border-radius:2px;opacity:0;animation:confettiBurst 1.8s cubic-bezier(.14,.76,.28,1) forwards;animation-delay:var(--delay);background:var(--confetti)}
+@keyframes confettiBurst{0%{opacity:0;transform:translate(-50%,-50%) rotate(0) scale(.5)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot)) scale(1)}}
+
+@media(max-width:620px){
+  .question-sticky{max-height:33vh;margin-left:-5px;margin-right:-5px;padding-left:10px;padding-right:10px}
+  .question-sticky.collapsed{max-height:96px}
+  .question-sticky .question{font-size:15px;line-height:1.68}
+  .mc-field-summary{max-width:58vw}
+  .mastered-toast.full{min-width:88vw;padding:30px 22px 26px}
+}
+@media(prefers-reduced-motion:reduce){
+  .blank-token.active,.mc-option.selected,.mastered-toast.full.show,.mastered-toast.full:before,.mastered-toast.full:after,.confetti-piece{animation:none!important}
+}
+</style>
+
 </head>
 <body>
 <section id="auth" class="auth"><form id="authForm" class="auth-card"><div class="auth-logo">生1</div><h1>生保1 合格クイズ</h1><p class="muted">閲覧するにはパスワードを入力してください。</p><input id="pw" type="password" inputmode="numeric" autofocus><button class="btn primary" style="width:100%;margin-top:14px">クイズを開く</button><p id="authError" class="auth-error"></p></form></section>
@@ -631,14 +733,20 @@ body:before{
 <nav id="questionNav" class="question-nav"></nav>
 <section id="questionCard" class="question-card">
   <div style="display:flex;justify-content:space-between;gap:10px"><div id="qTag" class="qtag"></div><button id="favoriteBtn" class="btn">☆ お気に入り</button></div>
-  <p id="question" class="question"></p>
+  <div id="questionSticky" class="question-sticky">
+    <div class="question-sticky-bar">
+      <span id="activeBlankLabel" class="active-blank-label">問題文</span>
+      <button id="questionToggleBtn" class="question-toggle-btn" type="button">問題文を縮小</button>
+    </div>
+    <p id="question" class="question"></p>
+  </div>
   <form id="choiceForm" class="choices"></form>
   <div id="feedback" class="feedback"></div>
   <div class="actions"><button id="prevBtn" class="btn">← 前へ</button><div class="right"><button id="revealBtn" class="btn">答えを見る</button><button id="checkBtn" class="btn primary">判定する</button><button id="nextBtn" class="btn primary" style="display:none">次へ →</button></div></div>
 </section>
 </main>
 <main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題</button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.1_20260930</footer>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.2_20260930</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 <div id="globalOx" class="global-ox" aria-hidden="true"></div>
@@ -650,6 +758,7 @@ body:before{
     <div id="focusCount" class="focus-count">10 QUESTIONS</div>
   </div>
 </div>
+<div id="masteryBurst" class="mastery-burst" aria-hidden="true"></div>
 <div id="masteredToast" class="mastered-toast" aria-hidden="true">
   <div class="mastered-icon">✓</div>
   <div id="masteredWord" class="mastered-word">MASTERED</div>
@@ -665,6 +774,7 @@ const REMOVED_LEGACY_PAST_IDS=["pe2000_1_2","pe2000_1_6","pe2000_1_7","pe2003_1_
 const CURRENT_QUESTION_IDS=new Set(Object.values(CHAPTERS).flatMap(ch=>ch.bank.map(q=>q.id)));
 const $=id=>document.getElementById(id),letters=["A","B","C","D","E","F","G","H","I","J","K","L"];
 let state=loadState(),chapterId="1",bank=CHAPTERS["1"].bank,set=[],pos=0,answers={},checked={},revealed={},choiceCache={},sessionStreak=0,sessionBest=0,focusTimer=null,toastTimer=null;
+let activeFieldByQuestion={},fieldOpenByQuestion={},questionCollapsedByQuestion={},autoAdvanceTimer=null;
 
 function defaultState(){return{
   attempts:0,correct:0,favorites:[],bestStreak:0,daily:{date:"",attempts:0,correct:0},answerMode:"choice",
@@ -912,18 +1022,27 @@ function showFocusOverlay(id){
   o.classList.add("show");o.setAttribute("aria-hidden","false");
   clearTimeout(focusTimer);focusTimer=setTimeout(()=>{o.classList.remove("show");o.setAttribute("aria-hidden","true")},900)
 }
-function showMasteredToast(mode=answerMode()){
-  const t=$("masteredToast");if(!t)return;
-  const write=modeKey(mode)==="write";
-  if($("masteredWord"))$("masteredWord").textContent=write?"MASTERED":"BASIC MASTERED";
-  if($("masteredSub"))$("masteredSub").textContent=write
-    ?"3回連続正解。記述モードを完全習得！"
-    :"3回連続正解。選択肢モードを基礎習得！";
-  t.classList.remove("show");void t.offsetWidth;t.classList.add("show");t.setAttribute("aria-hidden","false");
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>{t.classList.remove("show");t.setAttribute("aria-hidden","true")},2800)
+function launchMasteryBurst(full){
+  const burst=$("masteryBurst");if(!burst)return;burst.innerHTML="";burst.classList.remove("show");
+  if(!full)return;
+  const colors=["#22c55e","#16a34a","#2563eb","#f59e0b","#f43f5e","#8b5cf6"];
+  for(let i=0;i<34;i++){
+    const p=document.createElement("span");p.className="confetti-piece";
+    const angle=(Math.PI*2*i/34)+(Math.random()-.5)*.18,dist=150+Math.random()*250;
+    const dx=Math.cos(angle)*dist,dy=Math.sin(angle)*dist+(Math.random()*110-20);
+    p.style.setProperty("--dx",`${dx.toFixed(0)}px`);p.style.setProperty("--dy",`${dy.toFixed(0)}px`);p.style.setProperty("--rot",`${Math.round((Math.random()*900)-450)}deg`);p.style.setProperty("--delay",`${(Math.random()*.16).toFixed(2)}s`);p.style.setProperty("--confetti",colors[i%colors.length]);burst.append(p)
+  }
+  burst.classList.add("show");burst.setAttribute("aria-hidden","false");setTimeout(()=>{burst.classList.remove("show");burst.setAttribute("aria-hidden","true");burst.innerHTML=""},2100)
 }
-
+function showMasteredToast(mode=answerMode()){
+  const t=$("masteredToast");if(!t)return;const write=modeKey(mode)==="write";
+  t.classList.remove("show","basic","full");t.classList.add(write?"full":"basic");
+  const icon=t.querySelector(".mastered-icon");if(icon)icon.textContent=write?"★":"✓";
+  if($("masteredWord"))$("masteredWord").textContent=write?"MASTERED":"BASIC MASTERED";
+  if($("masteredSub"))$("masteredSub").textContent=write?"3回連続正解。記述モードを完全習得！":"3回連続正解。選択肢モードを基礎習得！";
+  launchMasteryBurst(write);void t.offsetWidth;t.classList.add("show");t.setAttribute("aria-hidden","false");clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.classList.remove("show");t.setAttribute("aria-hidden","true")},write?3200:2300)
+}
 function showGlobalOx(ok){
   const el=$("globalOx");if(!el)return;
   el.className=`global-ox ${ok?"ok":"ng"}`;el.textContent=ok?"○":"×";
@@ -1121,71 +1240,159 @@ function startChapter(id,mode="mastery"){
   }
   showPanel("quizPanel");renderQuestion();showFocusOverlay(id)
 }
+
+function escapeHtmlText(v){
+  return String(v??"").replace(/[&<>\"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]))
+}
+function fieldIsComplete(f,v){
+  if(isMultiField(f))return fieldSelectedValues(v).filter(x=>String(x||"").trim()).length>=(Number(f.required_count)||f.answers.length);
+  return String(v||"").trim().length>0
+}
+function fieldAnswerSummary(f,v){
+  const vals=isMultiField(f)?fieldSelectedValues(v).filter(x=>String(x||"").trim()):[String(v||"").trim()].filter(Boolean);
+  return vals.join(" ／ ")
+}
+function ensureFieldOpenState(q){
+  if(!fieldOpenByQuestion[q.id]||typeof fieldOpenByQuestion[q.id]!=="object")fieldOpenByQuestion[q.id]={};
+  return fieldOpenByQuestion[q.id]
+}
+function activeFieldIndex(q,vals){
+  if(q.type!=="input"||!q.fields?.length)return -1;
+  const stored=Number(activeFieldByQuestion[q.id]);
+  if(Number.isInteger(stored)&&stored>=0&&stored<q.fields.length)return stored;
+  const first=q.fields.findIndex((f,i)=>!fieldIsComplete(f,vals[i]));
+  const idx=first>=0?first:0;activeFieldByQuestion[q.id]=idx;return idx
+}
+function nextIncompleteField(q,vals,after){
+  for(let i=after+1;i<q.fields.length;i++)if(!fieldIsComplete(q.fields[i],vals[i]))return i;
+  for(let i=0;i<after;i++)if(!fieldIsComplete(q.fields[i],vals[i]))return i;
+  return -1
+}
+function fieldShouldOpen(q,i,vals,result){
+  const stateMap=ensureFieldOpenState(q);
+  if(checked[q.id]){
+    if(typeof stateMap[i]==="boolean")return stateMap[i];
+    return result?!result.ok:true
+  }
+  if(revealed[q.id])return typeof stateMap[i]==="boolean"?stateMap[i]:true;
+  if(typeof stateMap[i]==="boolean")return stateMap[i];
+  return i===activeFieldIndex(q,vals)
+}
+function renderQuestionText(q,explicitIndex=null){
+  const vals=Array.isArray(answers[q.id])?answers[q.id]:(q.fields||[]).map(()=>"");
+  const idx=explicitIndex===null?activeFieldIndex(q,vals):explicitIndex;
+  let out=escapeHtmlText(q.q);
+  if(q.type==="input"){
+    q.fields.forEach((f,i)=>{
+      const cls=i===idx?"blank-token active":"blank-token";
+      const tokens=[`【${f.label}】`,`（${f.label}）`,`(${f.label})`,`［${f.label}］`,`[${f.label}]`,`〔${f.label}〕`];
+      tokens.forEach(token=>{out=out.split(token).join(`<mark class="${cls}">${token}</mark>`)})
+    })
+  }
+  $("question").innerHTML=out;
+  const sticky=$("questionSticky");
+  if(sticky)sticky.classList.toggle("collapsed",!!questionCollapsedByQuestion[q.id]);
+  if($("activeBlankLabel"))$("activeBlankLabel").textContent=(q.type==="input"&&idx>=0)?`解答中：空欄 ${q.fields[idx].label}`:"問題文";
+  if($("questionToggleBtn"))$("questionToggleBtn").textContent=questionCollapsedByQuestion[q.id]?"問題文を展開":"問題文を縮小"
+}
+function activateField(q,i,rerender=true){
+  activeFieldByQuestion[q.id]=i;
+  const stateMap=ensureFieldOpenState(q);stateMap[i]=true;
+  if(rerender)renderQuestion();else renderQuestionText(q,i)
+}
+function scrollToActiveField(q){
+  requestAnimationFrame(()=>{
+    const i=activeFieldByQuestion[q.id];
+    const el=document.querySelector(`.mc-field[data-field-index="${i}"]`);
+    if(el)el.scrollIntoView({behavior:"smooth",block:"center"})
+  })
+}
+function scheduleChoiceFieldAdvance(q,i){
+  clearTimeout(autoAdvanceTimer);
+  autoAdvanceTimer=setTimeout(()=>{
+    if(checked[q.id]||revealed[q.id])return;
+    const vals=Array.isArray(answers[q.id])?answers[q.id]:q.fields.map(()=>"");
+    if(!fieldIsComplete(q.fields[i],vals[i]))return;
+    const stateMap=ensureFieldOpenState(q);stateMap[i]=false;
+    const next=nextIncompleteField(q,vals,i);
+    if(next>=0){stateMap[next]=true;activeFieldByQuestion[q.id]=next}else{activeFieldByQuestion[q.id]=i}
+    renderQuestion();if(next>=0)scrollToActiveField(q)
+  },420)
+}
+function setPostJudgeFieldState(q){
+  if(q.type!=="input"||answerMode()!=="choice")return;
+  const rr=inputFieldResults(q),stateMap=ensureFieldOpenState(q);let firstWrong=-1;
+  rr.forEach((r,i)=>{stateMap[i]=!r.ok;if(!r.ok&&firstWrong<0)firstWrong=i});
+  if(firstWrong>=0)activeFieldByQuestion[q.id]=firstWrong
+}
+function showSelectedStateHtml(selected,showResult){return selected&&!showResult?'<span class="selection-state">✓ 選択中</span>':''}
+
 function renderQuestion(){
   const q=set[pos];renderStreak();renderAnswerModeControls();
   const verifyBadge=q.sourceType==="past_exam"?(q.verified?"<div class=\"source-verify verified\">✓ 公式照合済</div>":"<div class=\"source-verify pending\">△ 要確認</div>"):"";
   $("qTag").innerHTML=`Q${pos+1} ・ ${(q.attributes||[]).join(" ・ ")} ・ ${q.tag}${verifyBadge}<div class="mastery-badge ${isMastered(q.id)?"done":""}">${masteryLabel(q.id)}</div><div class="answer-mode-badge ${answerMode()==="write"?"write":""}">${modeLabel()}</div>`;
-  $("question").textContent=q.q;$("choiceForm").innerHTML="";
+  $("choiceForm").innerHTML="";
   const disabled=checked[q.id]||revealed[q.id],showResult=disabled;
+  const baseVals=q.type==="input"?(Array.isArray(answers[q.id])?answers[q.id]:q.fields.map(()=>"")):[];
+  renderQuestionText(q,q.type==="input"?activeFieldIndex(q,baseVals):-1);
+  $("questionToggleBtn").onclick=()=>{questionCollapsedByQuestion[q.id]=!questionCollapsedByQuestion[q.id];renderQuestionText(q)};
 
   if(q.type==="input"&&answerMode()==="choice"){
     const box=document.createElement("div");box.className="input-answer";
     const vals=Array.isArray(answers[q.id])?answers[q.id]:q.fields.map(()=>"");
+    const results=checked[q.id]?inputFieldResults(q):null;
+    const active=activeFieldIndex(q,vals);
     q.fields.forEach((f,i)=>{
-      const result=checked[q.id]?inputFieldResults(q)[i]:null;
-      const field=document.createElement("div");field.className="mc-field";
+      const result=results?results[i]:null,complete=fieldIsComplete(f,vals[i]);
+      const field=document.createElement("div");field.className="mc-field";field.dataset.fieldIndex=String(i);
+      const open=fieldShouldOpen(q,i,vals,result);field.classList.add(open?"open":"collapsed");if(i===active)field.classList.add("active-field");
       if(result)field.classList.add(result.ok?"correct-field":"wrong-field");
-      const head=document.createElement("div");head.className="mc-field-head";
-      const ttl=document.createElement("span");
+
+      const head=document.createElement("button");head.type="button";head.className="mc-field-head";
+      const titleWrap=document.createElement("span");titleWrap.className="mc-field-title-wrap";
+      const ttl=document.createElement("span");ttl.className="mc-field-title";
       ttl.textContent=isMultiField(f)?`空欄 ${f.label}：正しいものを ${Number(f.required_count)||f.answers.length} 個選択`:`空欄 ${f.label}`;
-      head.append(ttl);
-      if(result){const mark=document.createElement("span");mark.className=`mc-field-mark ${result.ok?"ok":"ng"}`;mark.textContent=result.ok?"○":"×";head.append(mark)}
+      const summary=document.createElement("span");summary.className="mc-field-summary";
+      const chosen=fieldAnswerSummary(f,vals[i]);
+      if(result){summary.textContent=result.ok?`○ 正解：${chosen||result.correct}`:`× あなたの回答：${chosen||"未回答"}`;summary.classList.add(result.ok?"ok":"ng")}
+      else if(complete){summary.textContent=`✓ 選択済み：${chosen}`;summary.classList.add("done")}
+      else if(isMultiField(f)&&fieldSelectedValues(vals[i]).length){summary.textContent=`選択 ${fieldSelectedValues(vals[i]).length}/${Number(f.required_count)||f.answers.length}`}
+      else summary.textContent="未回答";
+      titleWrap.append(ttl,summary);
+      const right=document.createElement("span");right.className="mc-field-head-right";
+      if(result){const mark=document.createElement("span");mark.className=`mc-field-mark ${result.ok?"ok":"ng"}`;mark.textContent=result.ok?"○":"×";right.append(mark)}
+      const chev=document.createElement("span");chev.className="mc-field-chevron";chev.textContent="⌄";right.append(chev);head.append(titleWrap,right);
+      head.onclick=()=>{const st=ensureFieldOpenState(q);st[i]=!open;activeFieldByQuestion[q.id]=i;renderQuestion()};
       field.append(head);
+
+      const body=document.createElement("div");body.className="mc-field-body";
       const options=document.createElement("div");options.className="mc-options";
       const selectedVals=fieldSelectedValues(vals[i]);
       fieldChoices(q,i).forEach((opt,j)=>{
         const b=document.createElement("button");b.type="button";b.className="mc-option";b.disabled=disabled;
-        const selected=isMultiField(f)
-          ? selectedVals.some(v=>normalize(v)===normalize(opt))
-          : normalize(vals[i])===normalize(opt);
+        const selected=isMultiField(f)?selectedVals.some(v=>normalize(v)===normalize(opt)):normalize(vals[i])===normalize(opt);
         const correct=choiceIsCorrectForField(opt,q,i);
-        if(selected)b.classList.add("selected");
-        if(showResult&&correct)b.classList.add("correct");
-        if(checked[q.id]&&selected&&result&&!result.ok&&!correct)b.classList.add("wrong");
-        b.innerHTML=`<span class="mc-letter">${letters[j]||j+1}</span>${opt}`;
+        if(selected)b.classList.add("selected");if(showResult&&correct)b.classList.add("correct");if(checked[q.id]&&selected&&result&&!result.ok&&!correct)b.classList.add("wrong");
+        b.innerHTML=`<span class="mc-letter">${letters[j]||j+1}</span><span class="mc-option-text">${escapeHtmlText(opt)}</span>${showSelectedStateHtml(selected,showResult)}`;
         b.onclick=()=>{
+          clearTimeout(autoAdvanceTimer);
           const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.fields.map(()=>"");
           if(isMultiField(f)){
-            let cur=fieldSelectedValues(v[i]);
-            const hit=cur.findIndex(x=>normalize(x)===normalize(opt));
-            if(hit>=0)cur.splice(hit,1);
-            else{
-              const limit=Number(f.required_count)||f.answers.length;
-              if(cur.length>=limit)return;
-              cur.push(opt)
-            }
-            v[i]=cur
-          }else{
-            v[i]=opt
-          }
-          answers[q.id]=v;renderQuestion()
+            let cur=fieldSelectedValues(v[i]);const hit=cur.findIndex(x=>normalize(x)===normalize(opt));
+            if(hit>=0)cur.splice(hit,1);else{const limit=Number(f.required_count)||f.answers.length;if(cur.length>=limit)return;cur.push(opt)}v[i]=cur
+          }else v[i]=opt;
+          answers[q.id]=v;activeFieldByQuestion[q.id]=i;ensureFieldOpenState(q)[i]=true;renderQuestion();
+          if(fieldIsComplete(f,v[i]))scheduleChoiceFieldAdvance(q,i)
         };
         options.append(b)
       });
-      if(isMultiField(f)){
-        const c=document.createElement("div");c.className="mode-note";
-        c.textContent=`選択 ${selectedVals.length}/${Number(f.required_count)||f.answers.length}（順不同）`;
-        field.append(options,c)
-      }else field.append(options);
-      box.append(field)
+      body.append(options);
+      if(isMultiField(f)){const c=document.createElement("div");c.className="mode-note";c.textContent=`選択 ${selectedVals.length}/${Number(f.required_count)||f.answers.length}（順不同）`;body.append(c)}
+      field.append(body);box.append(field)
     });
     const note=document.createElement("div");note.className="mode-note";
-    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>q.fields[i].label).join("・")).join("、");
-    const hasMulti=q.fields.some(isMultiField);
-    note.textContent=hasMulti
-      ?"複数選択の空欄は、指定個数をすべて選べば順不同で正解です。"
-      :ug?`各空欄について1つ選択してください。空欄 ${ug} は順不同で正解です（同じ答えの重複選択は不可）。`
-      :"各空欄について1つ選択してください。慣れたら上の回答モードから記述へ切り替えられます。";
+    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>q.fields[i].label).join("・")).join("、"),hasMulti=q.fields.some(isMultiField);
+    note.textContent=hasMulti?"複数選択の空欄は、指定個数をすべて選べば順不同で正解です。":ug?`各空欄について1つ選択してください。空欄 ${ug} は順不同で正解です（同じ答えの重複選択は不可）。`:"各空欄について1つ選択してください。回答済みの欄は折りたたまれ、見出しを押すと再表示できます。";
     box.append(note);$("choiceForm").append(box)
   }else if(q.type==="enumeration"&&answerMode()==="choice"){
     const box=document.createElement("div");box.className="input-answer";
@@ -1200,8 +1407,8 @@ function renderQuestion(){
     enumChoices(q).forEach((opt,j)=>{
       const b=document.createElement("button");b.type="button";b.className="mc-option";b.disabled=disabled;
       const selected=vals.some(v=>normalize(v)===normalize(opt)),correct=choiceIsCorrectEnum(opt,q);
-      if(selected)b.classList.add("selected");if(showResult&&correct)b.classList.add("correct");if(checked[q.id]&&selected&&result&&!result.ok)b.classList.add("wrong");
-      b.innerHTML=`<span class="mc-letter">${letters[j]||j+1}</span>${opt}`;
+      if(selected)b.classList.add("selected");if(showResult&&correct)b.classList.add("correct");if(checked[q.id]&&selected&&!correct)b.classList.add("wrong");
+      b.innerHTML=`<span class="mc-letter">${letters[j]||j+1}</span><span class="mc-option-text">${escapeHtmlText(opt)}</span>${showSelectedStateHtml(selected,showResult)}`;
       b.onclick=()=>{let v=Array.isArray(answers[q.id])?[...answers[q.id]]:[];const k=v.findIndex(x=>normalize(x)===normalize(opt));if(k>=0)v.splice(k,1);else if(v.length<q.items.length)v.push(opt);answers[q.id]=v;renderQuestion()};grid.append(b)
     });
     box.append(grid);const note=document.createElement("div");note.className="mode-note";note.textContent="順不同。必要な数だけ選びます。選び直すときは選択済みの候補をもう一度タップ。";box.append(note);$("choiceForm").append(box)
@@ -1211,79 +1418,40 @@ function renderQuestion(){
     q.fields.forEach((f,i)=>{
       const lab=document.createElement("label");lab.textContent=`空欄 ${f.label}`;
       if(isMultiField(f)){
-        const required=Number(f.required_count)||f.answers.length;
-        const current=fieldSelectedValues(vals[i]);
+        const required=Number(f.required_count)||f.answers.length,current=fieldSelectedValues(vals[i]);
         const wrap=document.createElement("div");wrap.style.display="grid";wrap.style.gap="7px";wrap.style.marginTop="6px";
         for(let k=0;k<required;k++){
           const inp=document.createElement("input");inp.value=current[k]||"";inp.disabled=disabled;inp.placeholder=`${k+1}つ目（順不同）`;
-          inp.oninput=()=>{
-            const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.fields.map(()=>"");
-            const cur=fieldSelectedValues(v[i]);
-            while(cur.length<required)cur.push("");
-            cur[k]=inp.value;v[i]=cur;answers[q.id]=v
-          };
-          wrap.append(inp)
+          inp.onfocus=()=>activateField(q,i,false);
+          inp.oninput=()=>{const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.fields.map(()=>"");const cur=fieldSelectedValues(v[i]);while(cur.length<required)cur.push("");cur[k]=inp.value;v[i]=cur;answers[q.id]=v};wrap.append(inp)
         }
-        if(checked[q.id]){
-          const r=inputFieldResults(q)[i];lab.classList.add(r.ok?"answered-ok":"answered-ng");
-          const mark=document.createElement("span");mark.className=`ox-mark ${r.ok?"ok":"ng"} show`;mark.textContent=r.ok?"○":"×";
-          lab.classList.add("answer-result-wrap");lab.append(wrap,mark)
-        }else lab.append(wrap)
+        if(checked[q.id]){const r=inputFieldResults(q)[i];lab.classList.add(r.ok?"answered-ok":"answered-ng");const mark=document.createElement("span");mark.className=`ox-mark ${r.ok?"ok":"ng"} show`;mark.textContent=r.ok?"○":"×";lab.classList.add("answer-result-wrap");lab.append(wrap,mark)}else lab.append(wrap)
       }else{
-        const inp=document.createElement("input");inp.value=vals[i]||"";inp.disabled=disabled;
+        const inp=document.createElement("input");inp.value=vals[i]||"";inp.disabled=disabled;inp.onfocus=()=>activateField(q,i,false);
         inp.oninput=()=>{const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.fields.map(()=>"");v[i]=inp.value;answers[q.id]=v};
-        if(checked[q.id]){
-          const r=inputFieldResults(q)[i];lab.classList.add(r.ok?"answered-ok":"answered-ng");
-          const mark=document.createElement("span");mark.className=`ox-mark ${r.ok?"ok":"ng"} show`;mark.textContent=r.ok?"○":"×";
-          lab.classList.add("answer-result-wrap");lab.append(inp,mark)
-        }else{lab.append(inp)}
-      }
-      box.append(lab)
+        if(checked[q.id]){const r=inputFieldResults(q)[i];lab.classList.add(r.ok?"answered-ok":"answered-ng");const mark=document.createElement("span");mark.className=`ox-mark ${r.ok?"ok":"ng"} show`;mark.textContent=r.ok?"○":"×";lab.classList.add("answer-result-wrap");lab.append(inp,mark)}else lab.append(inp)
+      }box.append(lab)
     });
     const hint=document.createElement("div");hint.className="input-hint";
-    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>q.fields[i].label).join("・")).join("、");
-    const hasMulti=q.fields.some(isMultiField);
-    hint.textContent=hasMulti
-      ?"「順不同」の空欄は表示された個数すべてを入力してください。入力順は問いません。"
-      :ug?`空欄 ${ug} は順不同で正解です。同じ答えを重複して入力した場合は不正解です。表記差は通常どおり吸収します。`
-      :"意味は厳密に判定し、全角/半角・空白・中黒・一般的なハイフン等の表記差は吸収します。";
+    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>q.fields[i].label).join("・")).join("、"),hasMulti=q.fields.some(isMultiField);
+    hint.textContent=hasMulti?"「順不同」の空欄は表示された個数すべてを入力してください。入力順は問いません。":ug?`空欄 ${ug} は順不同で正解です。同じ答えを重複して入力した場合は不正解です。表記差は通常どおり吸収します。`:"意味は厳密に判定し、全角/半角・空白・中黒・一般的なハイフン等の表記差は吸収します。";
     box.append(hint);$("choiceForm").append(box)
   }else if(q.type==="enumeration"){
     const box=document.createElement("div");box.className="input-answer";
     const vals=Array.isArray(answers[q.id])?answers[q.id]:q.items.map(()=>"");
     const grid=document.createElement("div");grid.className="enum-grid";
-    q.items.forEach((item,i)=>{
-      const row=document.createElement("label");row.className="enum-row";
-      const n=document.createElement("span");n.textContent=i+1;
-      const inp=document.createElement("input");inp.placeholder=`項目 ${i+1}`;inp.value=vals[i]||"";inp.disabled=disabled;
-      inp.oninput=()=>{const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.items.map(()=>"");v[i]=inp.value;answers[q.id]=v};
-      if(checked[q.id]){
-        const er=enumerationMatch(q).rows[i];row.classList.add(er.ok?"answered-ok":"answered-ng","answer-result-wrap");
-        const mark=document.createElement("span");mark.className=`ox-mark ${er.ok?"ok":"ng"} show`;mark.textContent=er.ok?"○":"×";row.append(n,inp,mark)
-      }else{row.append(n,inp)}
-      grid.append(row)
-    });
+    q.items.forEach((item,i)=>{const row=document.createElement("label");row.className="enum-row";const n=document.createElement("span");n.textContent=i+1;const inp=document.createElement("input");inp.placeholder=`項目 ${i+1}`;inp.value=vals[i]||"";inp.disabled=disabled;inp.oninput=()=>{const v=Array.isArray(answers[q.id])?[...answers[q.id]]:q.items.map(()=>"");v[i]=inp.value;answers[q.id]=v};if(checked[q.id]){const er=enumerationMatch(q).rows[i];row.classList.add(er.ok?"answered-ok":"answered-ng","answer-result-wrap");const mark=document.createElement("span");mark.className=`ox-mark ${er.ok?"ok":"ng"} show`;mark.textContent=er.ok?"○":"×";row.append(n,inp,mark)}else row.append(n,inp);grid.append(row)});
     box.append(grid);const hint=document.createElement("div");hint.className="input-hint";hint.textContent=`順不同。${q.items.length}項目すべて正しければ正解です。`;box.append(hint);$("choiceForm").append(box)
   }
 
   const fav=state.favorites.includes(q.id);$("favoriteBtn").textContent=(fav?"★":"☆")+" お気に入り";
-
   if(checked[q.id]||revealed[q.id]){
-    $("feedback").className="feedback show";
-    const resultTitle=revealed[q.id]&&!checked[q.id]?"答え・解説":isCorrect(q)?"正解！":"不正解";
-    let fieldHtml="";
-    if(q.type==="input"){
-      fieldHtml='<div style="margin-top:10px;display:grid;gap:6px">'+inputFieldResults(q).map(r=>`<div style="padding:8px 10px;border:1px solid var(--line);border-radius:9px"><b>${r.ok?"✓":"✕"} ${r.label}</b>　あなたの回答：${r.value||"（未入力）"}${r.ok?"":`<br>正答：<b>${r.correct}</b>`}</div>`).join("")+'</div>';
-    }else if(q.type==="enumeration"){
-      const er=enumerationMatch(q);
-      fieldHtml='<div style="margin-top:10px;display:grid;gap:6px">'+er.rows.map((r,i)=>`<div style="padding:8px 10px;border:1px solid var(--line);border-radius:9px"><b>${r.ok?"✓":"✕"} 選択${i+1}</b>　${r.value||"（未入力）"}${r.ok?`<br><span class="muted">一致：${r.matched}</span>`:""}</div>`).join("")+(er.missing.length?`<div style="padding:8px 10px;border:1px solid var(--line);border-radius:9px"><b>不足している正答</b><br>${er.missing.join(" ／ ")}</div>`:"")+'</div>';
-    }
-    $("feedback").innerHTML=`<b>${resultTitle}</b><br><span class="muted">正答：</span>${correctLabel(q)}${fieldHtml}<hr style="border:none;border-top:1px solid var(--line);margin:12px 0"><b>解説</b><br>${q.detail}<br><br><b>試験での押さえ方</b><br>${q.tip}<br><br><span class="muted">出典：${q.year?q.year+"年度 "+q.problem:"まとめ資料"} ／ ${q.textbook}</span><br><span class="mastery-badge ${isMastered(q.id)?"done":""}">${masteryLabel(q.id)}</span>`;
+    $("feedback").className="feedback show";const resultTitle=revealed[q.id]&&!checked[q.id]?"答え・解説":isCorrect(q)?"正解！":"不正解";let fieldHtml="";
+    if(q.type==="input")fieldHtml='<div style="margin-top:10px;display:grid;gap:6px">'+inputFieldResults(q).map(r=>`<div style="padding:8px 10px;border:1px solid var(--line);border-radius:9px"><b>${r.ok?"✓":"✕"} ${r.label}</b>　あなたの回答：${r.value||"（未入力）"}${r.ok?"":`<br>正答：<b>${r.correct}</b>`}</div>`).join("")+'</div>';
+    else if(q.type==="enumeration"){const er=enumerationMatch(q);fieldHtml='<div style="margin-top:10px;display:grid;gap:6px">'+er.rows.map((r,i)=>`<div style="padding:8px 10px;border:1px solid var(--line);border-radius:9px"><b>${r.ok?"✓":"✕"} 選択${i+1}</b>　${r.value||"（未入力）"}${r.ok?`<br><span class="muted">一致：${r.matched}</span>`:""}</div>`).join("")+(er.missing.length?`<div style="padding:8px 10px;border:1px solid var(--line);border-radius:9px"><b>不足している正答</b><br>${er.missing.join(" ／ ")}</div>`:"")+'</div>'}
+    $("feedback").innerHTML=`<b>${resultTitle}</b><br><span class="muted">正答：</span>${correctLabel(q)}${fieldHtml}<hr style="border:none;border-top:1px solid var(--line);margin:12px 0"><b>解説</b><br>${q.detail}<br><br><b>試験での押さえ方</b><br>${q.tip}<br><br><span class="muted">出典：${q.year?q.year+"年度 "+q.problem:"まとめ資料"} ／ ${q.textbook}</span><br><span class="mastery-badge ${isMastered(q.id)?"done":""}">${masteryLabel(q.id)}</span>`
   }else{$("feedback").className="feedback";$("feedback").innerHTML=""}
-
-  const done=checked[q.id]||revealed[q.id];$("checkBtn").style.display=done?"none":"";$("revealBtn").style.display=done?"none":"";$("nextBtn").style.display=done?"":"none";$("nextBtn").classList.toggle("next-ready",!!done);
-  $("prevBtn").disabled=pos===0;
-  renderNav();updateProgress()
+  const done=checked[q.id]||revealed[q.id];$("checkBtn").style.display=done?"none":"";$("revealBtn").style.display=done?"none":"";$("nextBtn").style.display=done?"":"none";$("nextBtn").classList.toggle("next-ready",!!done);$("prevBtn").disabled=pos===0;renderNav();updateProgress()
 }
 function judge(){
   const q=set[pos],a=answers[q.id],judgedMode=answerMode();
@@ -1315,6 +1483,7 @@ function judge(){
     setWeakForMode(weak,judgedMode);
     ms.lastResult=ok?"correct":"wrong";ms.lastAnswered=Date.now();store[q.id]=ms;
     newlyMastered=!wasMastered&&isMastered(q.id,judgedMode);
+    if(judgedMode==="choice")setPostJudgeFieldState(q);
     saveState()
   }
   renderQuestion();
@@ -1346,7 +1515,7 @@ $("answerModeSelect").onchange=()=>setAnswerMode($("answerModeSelect").value,tru
 $("homeChoiceMode").onclick=()=>setAnswerMode("choice",false);
 $("homeWriteMode").onclick=()=>setAnswerMode("write",false);
 $("checkBtn").onclick=judge;
-$("revealBtn").onclick=()=>{revealed[set[pos].id]=true;renderQuestion()};
+$("revealBtn").onclick=()=>{const q=set[pos];revealed[q.id]=true;if(q.type==="input"){const st=ensureFieldOpenState(q);q.fields.forEach((_,i)=>st[i]=true)}renderQuestion()};
 $("prevBtn").onclick=()=>{if(pos>0){pos--;renderQuestion()}};
 $("nextBtn").onclick=()=>{if(pos===set.length-1)finish();else{pos++;renderQuestion()}};
 $("favoriteBtn").onclick=()=>{const id=set[pos].id;state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];saveState();renderQuestion()};
