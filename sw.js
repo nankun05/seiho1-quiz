@@ -1,4 +1,4 @@
-const CACHE_NAME = "seiho1-quiz-pwa-v13";
+const CACHE_NAME = "seiho1-quiz-pwa-v14";
 const CORE = ["./","./index.html","./manifest.webmanifest","./icon-180.png","./icon-512.png"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)));
