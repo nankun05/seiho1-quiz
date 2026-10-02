@@ -738,6 +738,54 @@ body:before{
 }
 </style>
 
+
+<style id="ver15-blank-badge-style">
+/* ver1.5: readable blank-number badges */
+.blank-number-badge{
+  display:inline-grid;place-items:center;vertical-align:.08em;
+  min-width:28px;height:28px;padding:0 7px;margin:0 3px;
+  border:2px solid #60a5fa;border-radius:999px;background:#fff;color:#1e3a8a;
+  font-size:.78em;font-weight:1000;line-height:1;font-variant-numeric:tabular-nums;
+  letter-spacing:0;box-sizing:border-box;white-space:nowrap;
+  box-shadow:0 1px 2px rgba(30,64,175,.06)
+}
+.blank-number-badge.active{
+  background:#1d4ed8;color:#fff;border-color:#1d4ed8;
+  box-shadow:0 0 0 3px rgba(37,99,235,.14);
+  animation:activeBlankPulse 1.45s ease-in-out infinite
+}
+.blank-number-badge.done,.blank-number-badge.correct{
+  background:#15803d;color:#fff;border-color:#15803d
+}
+.blank-number-badge.wrong{
+  background:#be123c;color:#fff;border-color:#be123c
+}
+.field-number-badge{
+  display:inline-grid;place-items:center;flex:none;
+  min-width:30px;height:30px;padding:0 7px;border-radius:999px;
+  border:2px solid #60a5fa;background:#fff;color:#1e3a8a;
+  font-size:16px;font-weight:1000;line-height:1;font-variant-numeric:tabular-nums;
+  box-sizing:border-box
+}
+.field-number-badge.active{background:#1d4ed8;color:#fff;border-color:#1d4ed8;box-shadow:0 0 0 3px rgba(37,99,235,.11)}
+.field-number-badge.done,.field-number-badge.correct{background:#15803d;color:#fff;border-color:#15803d}
+.field-number-badge.wrong{background:#be123c;color:#fff;border-color:#be123c}
+.mc-field-title{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.field-extra{font-weight:850;color:#334155}
+.write-field-title{display:flex;align-items:center;gap:7px;font-weight:950;color:#172b3d}
+.active-blank-number{
+  display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 5px;margin-left:3px;
+  border-radius:999px;background:#1d4ed8;color:#fff;font-size:12px;font-weight:1000;line-height:1
+}
+@media(max-width:620px){
+  .blank-number-badge{min-width:27px;height:27px;padding:0 6px;font-size:.82em}
+  .field-number-badge{min-width:30px;height:30px;font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .blank-number-badge.active{animation:none!important}
+}
+</style>
+
 </head>
 <body>
 <section id="auth" class="auth"><form id="authForm" class="auth-card"><div class="auth-logo">生1</div><h1>生保1 合格クイズ</h1><p class="muted">閲覧するにはパスワードを入力してください。</p><input id="pw" type="password" inputmode="numeric" autofocus><button class="btn primary" style="width:100%;margin-top:14px">クイズを開く</button><p id="authError" class="auth-error"></p></form></section>
@@ -810,7 +858,7 @@ body:before{
 </section>
 </main>
 <main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題</button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.4_20261001</footer>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.5_20261002</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 <div id="globalOx" class="global-ox" aria-hidden="true"></div>
@@ -1191,7 +1239,7 @@ function correctLabel(q){
     const grouped=new Set(),parts=[];
     (q.unorderedGroups||[]).forEach(group=>{
       group.forEach(i=>grouped.add(i));
-      parts.push(`${group.map(i=>q.fields[i].label).join("・")}（順不同） ${unorderedGroupAnswers(q,group).join(" ／ ")}`)
+      parts.push(`${group.map(i=>blankDisplayLabel(q.fields[i].label)).join("・")}（順不同） ${unorderedGroupAnswers(q,group).join(" ／ ")}`)
     });
     q.fields.forEach((f,i)=>{
       if(grouped.has(i))return;
@@ -1354,21 +1402,40 @@ function scheduleQuestionStickyState(){
 window.addEventListener("scroll",scheduleQuestionStickyState,{passive:true});
 window.addEventListener("resize",scheduleQuestionStickyState,{passive:true});
 
+
+function blankDisplayLabel(label){
+  return String(label??"").normalize("NFKC")
+    .replace(/[【】［］\[\]（）()〔〕]/g,"")
+    .trim()
+}
+
 function renderQuestionText(q,explicitIndex=null){
   const vals=Array.isArray(answers[q.id])?answers[q.id]:(q.fields||[]).map(()=>"");
   const idx=explicitIndex===null?activeFieldIndex(q,vals):explicitIndex;
+  const judged=(q.type==="input"&&checked[q.id])?inputFieldResults(q):null;
   let out=escapeHtmlText(q.q);
   if(q.type==="input"){
     q.fields.forEach((f,i)=>{
-      const cls=i===idx?"blank-token active":"blank-token";
+      let stateClass="";
+      if(judged)stateClass=judged[i]?.ok?"correct":"wrong";
+      else if(i===idx)stateClass="active";
+      else if(fieldIsComplete(f,vals[i]))stateClass="done";
+      const display=escapeHtmlText(blankDisplayLabel(f.label));
+      const badge=`<mark class="blank-number-badge ${stateClass}">${display}</mark>`;
       const tokens=[`【${f.label}】`,`（${f.label}）`,`(${f.label})`,`［${f.label}］`,`[${f.label}]`,`〔${f.label}〕`];
-      tokens.forEach(token=>{out=out.split(token).join(`<mark class="${cls}">${token}</mark>`)})
+      tokens.forEach(token=>{out=out.split(token).join(badge)})
     })
   }
   $("question").innerHTML=out;
   const sticky=$("questionSticky");
   if(sticky)sticky.classList.toggle("collapsed",!!questionCollapsedByQuestion[q.id]);
-  if($("activeBlankLabel"))$("activeBlankLabel").textContent=(q.type==="input"&&idx>=0)?`解答中：空欄 ${q.fields[idx].label}`:"問題文";
+  if($("activeBlankLabel")){
+    if(q.type==="input"&&idx>=0){
+      $("activeBlankLabel").innerHTML=`解答中：空欄 <span class="active-blank-number">${escapeHtmlText(blankDisplayLabel(q.fields[idx].label))}</span>`
+    }else{
+      $("activeBlankLabel").textContent="問題文"
+    }
+  }
   if($("questionToggleBtn"))$("questionToggleBtn").textContent=questionCollapsedByQuestion[q.id]?"問題文を展開":"問題文を縮小";
   scheduleQuestionStickyState()
 }
@@ -1434,7 +1501,8 @@ function renderQuestion(){
       const head=document.createElement("button");head.type="button";head.className="mc-field-head";
       const titleWrap=document.createElement("span");titleWrap.className="mc-field-title-wrap";
       const ttl=document.createElement("span");ttl.className="mc-field-title";
-      ttl.textContent=isMultiField(f)?`空欄 ${f.label}：正しいものを ${Number(f.required_count)||f.answers.length} 個選択`:`空欄 ${f.label}`;
+      const badgeState=result?(result.ok?"correct":"wrong"):(i===active?"active":(complete?"done":""));
+      ttl.innerHTML=`<span>空欄</span><span class="field-number-badge ${badgeState}">${escapeHtmlText(blankDisplayLabel(f.label))}</span>${isMultiField(f)?`<span class="field-extra">正しいものを ${Number(f.required_count)||f.answers.length} 個選択</span>`:""}`;
       const summary=document.createElement("span");summary.className="mc-field-summary";
       const chosen=fieldAnswerSummary(f,vals[i]);
       if(result){summary.textContent=result.ok?`○ 正解：${chosen||result.correct}`:`× あなたの回答：${chosen||"未回答"}`;summary.classList.add(result.ok?"ok":"ng")}
@@ -1474,7 +1542,7 @@ function renderQuestion(){
       field.append(body);box.append(field)
     });
     const note=document.createElement("div");note.className="mode-note";
-    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>q.fields[i].label).join("・")).join("、"),hasMulti=q.fields.some(isMultiField);
+    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>blankDisplayLabel(q.fields[i].label)).join("・")).join("、"),hasMulti=q.fields.some(isMultiField);
     note.textContent=hasMulti?"複数選択の空欄は、指定個数をすべて選べば順不同で正解です。":ug?`各空欄について1つ選択してください。空欄 ${ug} は順不同で正解です（同じ答えの重複選択は不可）。`:"各空欄について1つ選択してください。回答済みの欄は折りたたまれ、見出しを押すと再表示できます。";
     box.append(note);$("choiceForm").append(box)
   }else if(q.type==="enumeration"&&answerMode()==="choice"){
@@ -1499,7 +1567,11 @@ function renderQuestion(){
     const box=document.createElement("div");box.className="input-answer";
     const vals=Array.isArray(answers[q.id])?answers[q.id]:q.fields.map(()=>"");
     q.fields.forEach((f,i)=>{
-      const lab=document.createElement("label");lab.textContent=`空欄 ${f.label}`;
+      const lab=document.createElement("label");
+      const writeBadgeState=checked[q.id]?(inputFieldResults(q)[i].ok?"correct":"wrong"):(fieldIsComplete(f,vals[i])?"done":"");
+      const labHead=document.createElement("span");labHead.className="write-field-title";
+      labHead.innerHTML=`<span>空欄</span><span class="field-number-badge ${writeBadgeState}">${escapeHtmlText(blankDisplayLabel(f.label))}</span>`;
+      lab.append(labHead);
       if(isMultiField(f)){
         const required=Number(f.required_count)||f.answers.length,current=fieldSelectedValues(vals[i]);
         const wrap=document.createElement("div");wrap.style.display="grid";wrap.style.gap="7px";wrap.style.marginTop="6px";
@@ -1516,7 +1588,7 @@ function renderQuestion(){
       }box.append(lab)
     });
     const hint=document.createElement("div");hint.className="input-hint";
-    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>q.fields[i].label).join("・")).join("、"),hasMulti=q.fields.some(isMultiField);
+    const ug=(q.unorderedGroups||[]).map(g=>g.map(i=>blankDisplayLabel(q.fields[i].label)).join("・")).join("、"),hasMulti=q.fields.some(isMultiField);
     hint.textContent=hasMulti?"「順不同」の空欄は表示された個数すべてを入力してください。入力順は問いません。":ug?`空欄 ${ug} は順不同で正解です。同じ答えを重複して入力した場合は不正解です。表記差は通常どおり吸収します。`:"意味は厳密に判定し、全角/半角・空白・中黒・一般的なハイフン等の表記差は吸収します。";
     box.append(hint);$("choiceForm").append(box)
   }else if(q.type==="enumeration"){
