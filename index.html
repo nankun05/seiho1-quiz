@@ -291,6 +291,82 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 }
+
+
+/* ver1.11: full question search + problem-text reader */
+.search-entry{
+  margin:18px 0 4px;padding:18px;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(135deg,#f8fbff,#f4f8fc);display:flex;align-items:center;justify-content:space-between;gap:16px
+}
+.search-entry-copy{min-width:0}.search-entry .eyebrow{font-size:10px;letter-spacing:.16em;font-weight:950;color:#0e7490}
+.search-entry h3{margin:2px 0 4px;font-size:19px}.search-entry p{margin:0;color:var(--muted);font-size:12px}
+.search-entry .btn{flex:0 0 auto;min-height:44px}
+.search-shell{display:grid;gap:14px}
+.search-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.search-head h2{margin:0}.search-head p{margin:3px 0 0;font-size:12px}
+.search-box{
+  position:relative;display:flex;gap:8px;align-items:center;padding:10px;border:1px solid var(--line);
+  border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.05)
+}
+.search-box input{
+  width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text);font-size:16px;padding:8px 10px
+}
+.search-box input::placeholder{color:#94a3b8}.search-box .btn{flex:0 0 auto;min-height:40px}
+.search-mode-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.search-tab,.search-chip,.reader-layout-btn{
+  min-height:40px;border:1px solid var(--line);border-radius:11px;background:#fff;color:#334155;padding:8px 12px;font-weight:900;font-size:12px
+}
+.search-tab.active,.search-chip.active,.reader-layout-btn.active{background:#e6f7fb;border-color:#67d4e5;color:#0e7490}
+.search-filter-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:13px;display:grid;gap:12px}
+.search-filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search-filter-label{font-size:11px;font-weight:950;color:#64748b;min-width:54px}
+.search-chips{display:flex;gap:6px;overflow-x:auto;padding:2px 1px;scrollbar-width:thin}
+.search-chip{white-space:nowrap;min-width:44px}
+.search-selects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;flex:1;min-width:0}
+.search-selects select{width:100%;min-height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--text);padding:7px 9px}
+.search-fav-toggle{min-height:42px;display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid var(--line);border-radius:11px;font-size:12px;font-weight:850;color:#475569}
+.search-fav-toggle input{width:18px;height:18px}
+.search-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.search-count{font-size:13px;font-weight:950;color:#334155}.search-count b{font-size:20px;color:#0f172a}
+.search-actions{display:flex;gap:7px;flex-wrap:wrap}.search-actions .btn{min-height:42px}
+.search-results{display:grid;gap:9px}
+.search-result-card{
+  width:100%;text-align:left;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--text);padding:13px 14px;
+  box-shadow:0 5px 16px rgba(15,23,42,.035);transition:border-color .15s ease,transform .15s ease,box-shadow .15s ease
+}
+.search-result-card:active{transform:scale(.995)}
+@media(hover:hover) and (pointer:fine){.search-result-card:hover{border-color:#7dd3e2;box-shadow:0 9px 24px rgba(15,23,42,.07);transform:translateY(-1px)}}
+.search-result-top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:5px}
+.search-result-title{font-weight:950;font-size:13px}.search-result-status{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.search-mini-badge{font-size:10px;font-weight:900;border:1px solid #dbe4ec;border-radius:999px;padding:3px 7px;color:#64748b;background:#f8fafc}
+.search-mini-badge.mastered{border-color:#bbf7d0;background:#f0fdf4;color:#166534}.search-mini-badge.weak{border-color:#fecdd3;background:#fff1f2;color:#9f1239}
+.search-snippet{font-size:13px;line-height:1.65;color:#475569;white-space:normal;overflow-wrap:anywhere}
+.search-topic{margin-top:6px;color:#64748b;font-size:11px;display:flex;gap:6px;flex-wrap:wrap}
+.search-hit{background:#fef3c7;color:#854d0e;border-radius:4px;padding:0 2px;font-weight:900}
+.search-empty{padding:28px 18px;text-align:center;border:1px dashed var(--line);border-radius:15px;color:var(--muted);background:#fff}
+.reader-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:-2px}
+.reader-layout{display:flex;gap:6px}.reader-list{display:grid;gap:10px}
+.reader-card{border:1px solid var(--line);border-radius:15px;background:#fff;padding:14px}
+.reader-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.reader-meta{font-size:12px;font-weight:950;color:#334155}.reader-submeta{font-size:10px;color:#64748b;margin-top:2px}
+.reader-open{border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:7px 10px;font-size:11px;font-weight:950;min-height:38px;flex:0 0 auto}
+.reader-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.82;color:#243447}
+.reader-card.compact .reader-text{white-space:normal;line-height:1.65;color:#475569}
+.search-back-btn{display:none;min-height:42px}
+.search-back-btn.show{display:inline-flex}
+#searchPanel{padding-bottom:72px}
+@media(max-width:700px){
+  .search-entry{align-items:flex-start;flex-direction:column}.search-entry .btn{width:100%}
+  .search-selects{grid-template-columns:1fr}.search-filter-row{align-items:stretch}.search-filter-label{min-width:100%}
+  .search-fav-toggle{justify-content:flex-start}.search-summary{align-items:stretch}.search-actions{width:100%}.search-actions .btn{flex:1 1 150px}
+  .search-result-top,.reader-card-head{align-items:flex-start}.search-result-status{max-width:45%}
+}
+@media(max-width:520px){
+  .search-box{align-items:stretch;flex-wrap:wrap}.search-box input{flex-basis:100%}.search-box .btn{flex:1}
+  .search-tab,.reader-layout-btn{flex:1}.search-mode-tabs,.reader-layout{width:100%}
+  .reader-card{padding:12px}.reader-text{font-size:13px;line-height:1.76}
+}
+
 </style>
 
 
@@ -977,7 +1053,7 @@ body:before{
 <body>
 <section id="auth" class="auth"><form id="authForm" class="auth-card"><div class="auth-logo">生1</div><h1>生保1 合格クイズ</h1><p class="muted">閲覧するにはパスワードを入力してください。</p><input id="pw" type="password" inputmode="numeric" autofocus><button class="btn primary" style="width:100%;margin-top:14px">クイズを開く</button><p id="authError" class="auth-error"></p></form></section>
 <div id="app" class="shell">
-<header class="header"><div class="brand"><div class="logo">生1</div><div><h1>生保1 合格クイズ</h1><small class="muted">ACTUARY TRAINING / LIFE 1</small></div></div><div class="header-actions"><button id="homeBtn" class="btn">ホーム</button><button id="logoutBtn" class="btn">ログアウト</button><button id="resetBtn" class="btn danger">学習記録をリセット</button></div></header>
+<header class="header"><div class="brand"><div class="logo">生1</div><div><h1>生保1 合格クイズ</h1><small class="muted">ACTUARY TRAINING / LIFE 1</small></div></div><div class="header-actions"><button id="searchBtn" class="btn">問題を探す</button><button id="homeBtn" class="btn">ホーム</button><button id="logoutBtn" class="btn">ログアウト</button><button id="resetBtn" class="btn danger">学習記録をリセット</button></div></header>
 <main id="homePanel" class="panel show">
 <section class="hero">
   <div class="hero-kicker">ACTUARY TRAINING // LIFE 1</div>
@@ -1009,14 +1085,54 @@ body:before{
     <button id="homeWriteMode" class="answer-mode-card" type="button"><span class="answer-mode-level">LEVEL 2</span><span class="answer-mode-title">記述モード</span><span class="answer-mode-desc">選択肢なし。空欄を自力で思い出して入力する。</span></button>
   </div>
 </section>
+<section class="search-entry">
+  <div class="search-entry-copy"><div class="eyebrow">QUESTION FINDER</div><h3>問題を探す・問題文だけ読む</h3><p>章・年度・キーワード・正答語・教科書語から136問を横断検索。問題文だけの連続表示にも切り替えられます。</p></div>
+  <button id="homeSearchBtn" class="btn primary" type="button">検索を開く</button>
+</section>
 <section class="dashboard"><h3>章別 習熟度ダッシュボード</h3><div class="dashboard-scroll"><table><thead><tr><th>章</th><th>選択肢：基礎習得</th><th>記述：完全習得</th><th>現在モード正答率</th><th>復習</th></tr></thead><tbody id="dashboardBody"></tbody></table></div></section>
 <div class="section-title"><h3>章を選択</h3><span class="muted">FOCUS TRAINING</span></div>
 <section id="chapters" class="chapters"></section>
 <p class="muted" style="margin:12px 2px 0;font-size:12px">※ 保険1（生命保険）の公式テキストには第9章はなく、第8章の次は第10章です。</p>
 </main>
+<main id="searchPanel" class="panel">
+<section class="search-shell">
+  <div class="search-head">
+    <div><h2>問題を探す</h2><p class="muted">問題文・正答語・年度・問題番号・章・教科書の章節や検索語まで横断します。スペース区切りはAND検索。</p></div>
+    <div class="search-mode-tabs" role="tablist" aria-label="表示モード">
+      <button id="searchResultTab" class="search-tab active" type="button">検索結果</button>
+      <button id="problemReaderTab" class="search-tab" type="button">問題文一覧</button>
+    </div>
+  </div>
+  <div class="search-box">
+    <input id="questionSearchInput" type="search" autocomplete="off" placeholder="例：再保険 財務 / 平成28 / MVA / アセット シェア" aria-label="問題を検索">
+    <button id="questionSearchClear" class="btn" type="button">クリア</button>
+  </div>
+  <section class="search-filter-card" aria-label="検索フィルター">
+    <div class="search-filter-row"><span class="search-filter-label">章</span><div id="searchChapterChips" class="search-chips"></div></div>
+    <div class="search-filter-row">
+      <span class="search-filter-label">絞り込み</span>
+      <div class="search-selects">
+        <select id="searchSourceFilter" aria-label="問題種別"><option value="all">すべての問題</option><option value="past">公式過去問</option><option value="summary">まとめ問題</option></select>
+        <select id="searchMasteryFilter" aria-label="習得状況"><option value="all">すべての習得状況</option><option value="unmastered">未習得</option><option value="mastered">習得済み</option><option value="weak">復習対象</option></select>
+        <select id="searchSort" aria-label="並び順"><option value="chapter">章順</option><option value="year_desc">年度の新しい順</option><option value="year_asc">年度の古い順</option></select>
+      </div>
+      <label class="search-fav-toggle"><input id="searchFavoriteOnly" type="checkbox">★ お気に入りのみ</label>
+    </div>
+  </section>
+  <div id="readerToolbar" class="reader-toolbar" style="display:none">
+    <span class="muted" style="font-size:11px">答え・選択肢・解説は表示せず、問題文だけを連続表示します。</span>
+    <div class="reader-layout"><button id="readerCompactBtn" class="reader-layout-btn" type="button">コンパクト</button><button id="readerFullBtn" class="reader-layout-btn active" type="button">全文</button></div>
+  </div>
+  <div class="search-summary">
+    <div id="searchCount" class="search-count"><b>136</b>問</div>
+    <div class="search-actions"><button id="searchSetBtn" class="btn primary" type="button">この条件から5問出題</button></div>
+  </div>
+  <div id="searchResults" class="search-results"></div>
+</section>
+</main>
 <main id="quizPanel" class="panel">
 <div class="quiz-top">
-  <div><h2 id="quizTitle"></h2><p id="quizDesc" class="muted"></p></div>
+  <div><h2 id="quizTitle"></h2><p id="quizDesc" class="muted"></p><button id="searchBackBtn" class="btn search-back-btn" type="button">← 検索へ戻る</button></div>
   <div class="mode-row">
     <div class="streak-box"><div class="streak-main">STREAK <b id="sessionStreak">0</b></div><div class="streak-best">SESSION BEST <b id="sessionBest">0</b></div></div><div class="answer-mode-mini"><span>回答</span><select id="answerModeSelect"><option value="choice">選択肢モード</option><option value="write">記述モード</option></select></div>
     <label>出題：</label>
@@ -1045,8 +1161,8 @@ body:before{
   <div class="actions"><button id="prevBtn" class="btn">← 前へ</button><div class="right"><button id="revealBtn" class="btn">答えを見る</button><button id="checkBtn" class="btn primary">判定する</button><button id="nextBtn" class="btn primary" style="display:none">次へ →</button></div></div>
 </section>
 </main>
-<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題</button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.10_20261004</footer>
+<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る</button><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題</button></div></div></section></main>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.11_20261012</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 
@@ -1077,7 +1193,7 @@ const PASS="1582",AUTH_KEY="seiho1QuizAuthV1",LOGIN_DURATION=7*24*60*60*1000,STA
 const TEXTBOOK_REFERENCE_MAP={"pe2000_1_3":{"question_id":"pe2000_1_3","year":2000,"problem":"問1(3)","topic":"変額商品の目的と分離勘定の運用形態","answer_terms":["インフレ・ヘッジ","収益性","安全性","単独運用","合同運用"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.6","section_title":"分離勘定資産の運用","subsection_number":"5.6.1","subsection_title":"分離勘定資産の運用のあり方","printed_page_start":83,"printed_page_end":84,"pdf_page_start":136,"pdf_page_end":137,"search_terms":["インフレヘッジ","収益性","安全性","単独運用","合同運用"],"reason":"付録の旧第5章で、変額商品のインフレ対応、一般勘定との投資方針の違い、単独運用・合同運用の二分類を連続して説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2000_1_4":{"question_id":"pe2000_1_4","year":2000,"problem":"問1(4)","topic":"アセット・シェアの定義","answer_terms":["保有契約","群団","キャッシュ・フロー","正味資産","貢献度"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.1","section_title":"序論","subsection_number":"3.1.1","subsection_title":"アセット・シェアの定義","printed_page_start":1,"printed_page_end":1,"pdf_page_start":5,"pdf_page_end":5,"search_terms":["保有契約","群団","キャッシュフロー","正味資産","貢献度"],"reason":"過去問の定義文と同じ構成で、保有契約の群団区分、キャッシュフロー、正味資産、持分・貢献度を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2000_1_5":{"question_id":"pe2000_1_5","year":2000,"problem":"問1(5)","topic":"付加保険料の費用主義・効用主義","answer_terms":["費用主義（実費主義）","間接費用","保障効用","貯蓄効用","P比例ローディング"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_01.pdf","chapter_number":"1","chapter_title":"営業保険料","section_number":"1.4","section_title":"営業保険料の構成要素（計算基礎率）","subsection_number":"1.4.4","subsection_title":"予定事業費率","printed_page_start":14,"printed_page_end":19,"pdf_page_start":16,"pdf_page_end":21,"search_terms":["費用主義","効用主義","間接費用","保障効用","貯蓄効用","P比例ローディング"],"reason":"予定事業費率の設定原則として費用主義と効用主義、α－β－γ方式との対応を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2001_1_3":{"question_id":"pe2001_1_3","year":2001,"problem":"問1(3)","topic":"財務再保険の定義・会計処理・種類","answer_terms":["すべて","出再保険受入手数料（初年度コミッション）","責任準備金","共同保険","修正共同保険"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.2","section_title":"再保険の方式","subsection_number":"8.2.4・参考","subsection_title":"伝統的再保険・非伝統的再保険／財務再保険","printed_page_start":9,"printed_page_end":13,"pdf_page_start":13,"pdf_page_end":17,"search_terms":["財務再保険","出再保険受入手数料","責任準備金","共同保険","修正共同保険"],"reason":"非伝統的再保険に続く参考節で、施行規則・告示に基づく財務再保険の定義、手数料、種類を扱うため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2001_1_4":{"question_id":"pe2001_1_4","year":2001,"problem":"問1(4)","topic":"α－β－γ方式の特徴","answer_terms":["普遍性","簡明性","費用主義","収益管理","利源別"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_01.pdf","chapter_number":"1","chapter_title":"営業保険料","section_number":"1.4","section_title":"営業保険料の構成要素（計算基礎率）","subsection_number":"1.4.4","subsection_title":"予定事業費率","printed_page_start":14,"printed_page_end":19,"pdf_page_start":16,"pdf_page_end":21,"search_terms":["α－β－γ方式","普遍性","簡明性","費用主義","利源別配当"],"reason":"予定事業費率の代表方式であるα－β－γ方式について、構造、利点、費用主義・効用主義との関係を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2001_1_5":{"question_id":"pe2001_1_5","year":2001,"problem":"問1(5)","topic":"団体生命保険の危険選択（グレッグの原則）","answer_terms":["保険加入","死亡率","客観的","全員","管理"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.3","section_title":"団体生命保険の危険選択","subsection_number":"6.3.2","subsection_title":"団体による選択理論","printed_page_start":3,"printed_page_end":5,"pdf_page_start":7,"pdf_page_end":9,"search_terms":["グレッグ","保険加入","死亡率","客観的","全員加入","管理"],"reason":"団体による選択理論として、団体形成目的、加入範囲、客観的保険金額基準、管理の各原則を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2002_1_1":{"question_id":"pe2002_1_1","year":2002,"problem":"問1(1)","topic":"アセット・シェア計算の活用目的","answer_terms":["保険料率","保険金支払能力","将来収支分析","公正、衡平","持分資産"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.1","section_title":"序論","subsection_number":"3.1.2","subsection_title":"アセット・シェア計算の目的","printed_page_start":2,"printed_page_end":2,"pdf_page_start":6,"pdf_page_end":6,"search_terms":["アセット・シェア計算の目的","保険料率","保険金支払能力","配当","持分資産"],"reason":"料率設定、責任準備金確認、配当、会社組織変更など、問題に並ぶ代表的な活用目的を列挙しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.3","section_title":"アセット・シェアの活用例","subsection_number":null,"subsection_title":null,"printed_page_start":21,"printed_page_end":38,"pdf_page_start":25,"pdf_page_end":42,"search_terms":["料率設定への活用","責任準備金確認への活用","配当率設定・確認への活用"],"reason":"各活用目的の具体的な方法を確認できるため。","confidence":"high"}],"notes":""},"pe2002_1_2":{"question_id":"pe2002_1_2","year":2002,"problem":"問1(2)","topic":"生命保険業免許の対象となる保険","answer_terms":["生存又は死亡","一定額","傷害","治療","再保険"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_07.pdf","chapter_number":"7","chapter_title":"医療保険","section_number":"7.1","section_title":"民間医療保険の法的位置づけ","subsection_number":"7.1.1","subsection_title":"保険業法上の医療保険","printed_page_start":1,"printed_page_end":2,"pdf_page_start":5,"pdf_page_end":6,"search_terms":["保険業法第3条","生存又は死亡","傷害","治療","再保険"],"reason":"保険業法第3条の生命保険業免許と第三分野保険の法的区分を条文付きで説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2003_1_3":{"question_id":"pe2003_1_3","year":2003,"problem":"問1(3)","topic":"算出方法書の記載事項","answer_terms":["保険料","責任準備金","返戻金","被保険者","未収保険料"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"参考","section_title":"商品開発に関連する基礎書類","subsection_number":null,"subsection_title":null,"printed_page_start":53,"printed_page_end":56,"pdf_page_start":56,"pdf_page_end":59,"search_terms":["保険料及び責任準備金の算出方法書","返戻金","未収保険料","保険業法施行規則第10条"],"reason":"商品開発に関連する基礎書類として算出方法書の法定記載事項を整理しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2004_1_4":{"question_id":"pe2004_1_4","year":2004,"problem":"問1(4)","topic":"団体生命保険の経験料率","answer_terms":["男女","年齢","死亡実績","次期以降","配当精算"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.6","section_title":"団体生命保険の数理","subsection_number":"6.6.3","subsection_title":"経験料率","printed_page_start":17,"printed_page_end":19,"pdf_page_start":21,"pdf_page_end":23,"search_terms":["経験料率","死亡実績","次期以降","配当精算"],"reason":"経験料率法と配当清算法の違い、および団体実績を料率または配当に反映する仕組みを説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2005_1_2":{"question_id":"pe2005_1_2","year":2005,"problem":"問1(2)","topic":"個人変額保険の特別勘定利源分析","answer_terms":["純保険料","危険保険料","最低死亡保証純保険料","特別勘定運営費","特別勘定調整"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.4","section_title":"変額保険の数理","subsection_number":"5.4.7","subsection_title":"利源分析","printed_page_start":38,"printed_page_end":41,"pdf_page_start":91,"pdf_page_end":94,"search_terms":["利源分析","純保険料","危険保険料","最低死亡保証純保険料","特別勘定運営費","特別勘定調整"],"reason":"付録の旧第5章で、特別勘定固有の内部取引と利源別損益、特別勘定調整を用いた利源分析を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2006_1_1":{"question_id":"pe2006_1_1","year":2006,"problem":"問1(1)","topic":"保険料算出方法の監督上の留意点","answer_terms":["十分性","信頼度","長期的","販売経路","モニタリング資料"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_01.pdf","chapter_number":"1","chapter_title":"営業保険料","section_number":"1.4","section_title":"営業保険料の構成要素（計算基礎率）","subsection_number":"1.4.1","subsection_title":"予定死亡率・予定給付発生率等","printed_page_start":7,"printed_page_end":10,"pdf_page_start":9,"pdf_page_end":12,"search_terms":["十分性","基礎データ","信頼性","補整","予定発生率"],"reason":"問題の中心である基礎データの信頼性、補整、予定発生率設定を直接説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_01.pdf","chapter_number":"1","chapter_title":"営業保険料","section_number":"1.2","section_title":"営業保険料決定の際に考慮すべき点","subsection_number":null,"subsection_title":null,"printed_page_start":2,"printed_page_end":4,"pdf_page_start":4,"pdf_page_end":6,"search_terms":["十分性","公平性"],"reason":"保険料設定の十分性・公平性の位置づけを確認できるため。","confidence":"high"},{"source_file":"hoken1-seiho_01.pdf","chapter_number":"1","chapter_title":"営業保険料","section_number":"1.4","section_title":"営業保険料の構成要素（計算基礎率）","subsection_number":"1.4.3","subsection_title":"予定利率","printed_page_start":11,"printed_page_end":13,"pdf_page_start":13,"pdf_page_end":15,"search_terms":["予定利率","長期的"],"reason":"予定利率を長期的観点で設定する説明に対応するため。","confidence":"high"},{"source_file":"hoken1-seiho_01.pdf","chapter_number":"1","chapter_title":"営業保険料","section_number":"1.4","section_title":"営業保険料の構成要素（計算基礎率）","subsection_number":"1.4.4","subsection_title":"予定事業費率","printed_page_start":14,"printed_page_end":19,"pdf_page_start":16,"pdf_page_end":21,"search_terms":["予定事業費率","販売経路","モニタリング"],"reason":"付加保険料と販売経路・事業費管理の論点に対応するため。","confidence":"high"}],"notes":""},"pe2007_1_1":{"question_id":"pe2007_1_1","year":2007,"problem":"問1(1)","topic":"市場価格調整（MVA）の考え方","answer_terms":["簿価","金利感応型","金利","コスト"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_02.pdf","chapter_number":"2","chapter_title":"解約および解約返戻金","section_number":"2.5","section_title":"商品開発における留意事項","subsection_number":"2.5.4","subsection_title":"市場価格調整型（Market Value Adjustment）","printed_page_start":24,"printed_page_end":25,"pdf_page_start":29,"pdf_page_end":30,"search_terms":["市場価格調整","Market Value Adjustment","簿価","金利感応型","金利リスク","解約コスト"],"reason":"市場価格調整型商品の目的と、金利変動に伴う解約時コストを契約者価額へ反映する仕組みを説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2009_1_1":{"question_id":"pe2009_1_1","year":2009,"problem":"問1(1)","topic":"財務再保険と保険リスクの証券化","answer_terms":["財務再保険","収益認識","預かり金","責任準備金不足","カタストロフィーボンド（Catボンド）","特定目的会社（SPC）","利率"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.2","section_title":"再保険の方式","subsection_number":"8.2.4・参考","subsection_title":"伝統的再保険・非伝統的再保険／財務再保険","printed_page_start":9,"printed_page_end":13,"pdf_page_start":13,"pdf_page_end":17,"search_terms":["財務再保険","収益認識","預かり金","責任準備金不足"],"reason":"問題前半の財務再保険の定義、収益認識、将来の責任準備金不足リスクに直接対応するため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.4","section_title":"再保険と類似の機能","subsection_number":"8.4.2","subsection_title":"証券化","printed_page_start":31,"printed_page_end":31,"pdf_page_start":35,"pdf_page_end":35,"search_terms":["証券化","Catボンド","特定目的会社","SPC"],"reason":"問題後半のCatボンドとSPCを用いた保険リスク証券化に対応するため。","confidence":"high"}],"notes":""},"pe2010_1_1":{"question_id":"pe2010_1_1","year":2010,"problem":"問1(1)","topic":"資産留保型修正共同保険式再保険","answer_terms":["再保険貸","資産留保","低い","将来収益","新契約費支出"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.3","section_title":"再保険の種類","subsection_number":"8.3.3","subsection_title":"修正共同保険式再保険","printed_page_start":21,"printed_page_end":23,"pdf_page_start":25,"pdf_page_end":27,"search_terms":["修正共同保険式再保険","再保険貸","資産留保","将来収益","新契約費"],"reason":"修正共同保険式再保険と資産留保型の決済・活用目的を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2010_1_2":{"question_id":"pe2010_1_2","year":2010,"problem":"問1(2)","topic":"団体保険の商品審査上の留意点","answer_terms":["最低被保険者数","最高保険金額倍数","退職者","保険料","配当方式"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.9","section_title":"監督指針関係","subsection_number":null,"subsection_title":null,"printed_page_start":25,"printed_page_end":26,"pdf_page_start":29,"pdf_page_end":30,"search_terms":["最低被保険者数","最高保険金額倍数","退職者","保険料","配当方式"],"reason":"団体保険の商品審査における団体要件、退職者管理、保険料・配当方式を扱う監督指針関係の節であるため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2012_1_3":{"question_id":"pe2012_1_3","year":2012,"problem":"問1(3)","topic":"保険法上の保険契約の定義","answer_terms":["生存","死亡","保険給付","偶然の事故","てん補","損害保険契約"],"status":"partial","primary_reference":{"source_file":"hoken1-seiho_07.pdf","chapter_number":"7","chapter_title":"医療保険","section_number":"7.1","section_title":"民間医療保険の法的位置づけ","subsection_number":"7.1.1","subsection_title":"保険業法上の医療保険","printed_page_start":1,"printed_page_end":2,"pdf_page_start":5,"pdf_page_end":6,"search_terms":["保険法第2条","生命保険契約","損害保険契約","傷害疾病定額保険契約","傷害疾病損害保険契約"],"reason":"医療保険を含む保険契約の法的位置づけと第三分野の区分を確認できるが、保険法第2条の逐語確認には別途法令本文が必要であるため。","confidence":"medium"},"secondary_references":[],"notes":"第7章は第三分野の法的位置づけと保険業法の条文を掲載しているが、過去問が引用する保険法第2条の四契約類型を全文掲載していないため部分対応。"},"pe2013_1_2":{"question_id":"pe2013_1_2","year":2013,"problem":"問1(2)","topic":"アセット・シェアを用いた料率設定","answer_terms":["イクエーション（等式）方式","アキュムレーション（累積額）方式","利益目標","保険料率","収支相等方程式"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.3","section_title":"アセット・シェアの活用例","subsection_number":"3.3.1","subsection_title":"料率設定への活用","printed_page_start":21,"printed_page_end":31,"pdf_page_start":25,"pdf_page_end":35,"search_terms":["イクエーション方式","アキュムレーション方式","利益目標","保険料率","収支相等方程式"],"reason":"アセット・シェアを料率設定に使う二方式の計算発想と相違を詳細に説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_01.pdf","chapter_number":"1","chapter_title":"営業保険料","section_number":"1.3","section_title":"営業保険料の計算方法","subsection_number":null,"subsection_title":null,"printed_page_start":5,"printed_page_end":6,"pdf_page_start":7,"pdf_page_end":8,"search_terms":["Equation type","Accumulation type","収支相等"],"reason":"営業保険料計算の観点から二方式を簡潔に対比しているため。","confidence":"high"}],"notes":""},"pe2014_1_1":{"question_id":"pe2014_1_1","year":2014,"problem":"問1(1)","topic":"算出方法書の記載事項","answer_terms":["返戻金","契約者配当","未収保険料","保険期間","保険数理"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"参考","section_title":"商品開発に関連する基礎書類","subsection_number":null,"subsection_title":null,"printed_page_start":53,"printed_page_end":56,"pdf_page_start":56,"pdf_page_end":59,"search_terms":["算出方法書","返戻金","契約者配当","未収保険料","保険期間"],"reason":"算出方法書に記載する返戻金、配当、未収保険料、契約変更時の計算方法等を確認できるため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2014_1_2":{"question_id":"pe2014_1_2","year":2014,"problem":"問1(2)","topic":"団体保険の種類と目的","answer_terms":["団体定期保険","総合福祉団体定期保険","ヒューマン・ヴァリュー特約","未払債務残高","医療保障保険（団体型）"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.5","section_title":"団体保険の種類","subsection_number":null,"subsection_title":null,"printed_page_start":8,"printed_page_end":14,"pdf_page_start":12,"pdf_page_end":18,"search_terms":["団体定期保険","総合福祉団体定期保険","ヒューマン・ヴァリュー特約","団体信用生命保険","医療保障保険（団体型）"],"reason":"問題に挙げられた各団体保険の商品目的と仕組みを、種類別に説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2014_1_3":{"question_id":"pe2014_1_3","year":2014,"problem":"問1(3)","topic":"非伝統的再保険とART","answer_terms":["財務再保険","サープラス・リリーフ","ART","自家保険","キャプティブ","証券化"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.2","section_title":"再保険の方式","subsection_number":"8.2.4・参考","subsection_title":"伝統的再保険・非伝統的再保険／財務再保険","printed_page_start":9,"printed_page_end":13,"pdf_page_start":13,"pdf_page_end":17,"search_terms":["非伝統的再保険","財務再保険","サープラス・リリーフ"],"reason":"伝統的・非伝統的再保険と財務再保険の関係を説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.4","section_title":"再保険と類似の機能","subsection_number":null,"subsection_title":null,"printed_page_start":29,"printed_page_end":32,"pdf_page_start":33,"pdf_page_end":36,"search_terms":["ART","キャプティブ","証券化"],"reason":"ARTの代表手段であるキャプティブと証券化を扱うため。","confidence":"high"}],"notes":""},"pe2015_1_1":{"question_id":"pe2015_1_1","year":2015,"problem":"問1(1)","topic":"責任準備金・MVA・契約者価額の監督上の留意点","answer_terms":["負値","ゼロ","財務の健全性","保険料積立金","解約返戻金","事業費","投資上"],"status":"partial","primary_reference":{"source_file":"hoken1-seiho_02.pdf","chapter_number":"2","chapter_title":"解約および解約返戻金","section_number":"2.5","section_title":"商品開発における留意事項","subsection_number":"2.5.4","subsection_title":"市場価格調整型（Market Value Adjustment）","printed_page_start":24,"printed_page_end":25,"pdf_page_start":29,"pdf_page_end":30,"search_terms":["MVA","保険料積立金","解約返戻金","市場価格調整"],"reason":"問題中のMVA商品の責任準備金と解約返戻金の関係を直接説明する箇所であるため。","confidence":"medium"},"secondary_references":[{"source_file":"hoken1-seiho_02.pdf","chapter_number":"2","chapter_title":"解約および解約返戻金","section_number":"2.3","section_title":"解約控除の理由","subsection_number":null,"subsection_title":null,"printed_page_start":11,"printed_page_end":13,"pdf_page_start":16,"pdf_page_end":18,"search_terms":["新契約費","投資上の不利益","解約控除"],"reason":"契約者価額で控除対象となる事業費・投資上の損失の背景を説明しているため。","confidence":"medium"}],"notes":"MVAと解約返戻金の論点は教科書で確認できるが、負値責任準備金をゼロとする場合の健全性検討は公式教科書内で同一箇所に確認できないため部分対応。"},"pe2015_1_2":{"question_id":"pe2015_1_2","year":2015,"problem":"問1(2)","topic":"配当確認におけるアセット・シェアと代表契約","answer_terms":["最終精算","消滅時配当","区分経理の商品区分","販売経路","危険選択手法"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.3","section_title":"アセット・シェアの活用例","subsection_number":"3.3.3","subsection_title":"配当率設定・確認への活用","printed_page_start":34,"printed_page_end":38,"pdf_page_start":38,"pdf_page_end":42,"search_terms":["消滅時配当","代表契約","選定単位","販売経路","危険選択手法"],"reason":"配当率設定・確認への活用として、代表契約選定とアセット・シェア確認を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2016_1_1":{"question_id":"pe2016_1_1","year":2016,"problem":"問1(1)","topic":"保険業法上の生命保険業免許と第三分野","answer_terms":["生存又は死亡","疾病","傷害","出産","不妊治療"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_07.pdf","chapter_number":"7","chapter_title":"医療保険","section_number":"7.1","section_title":"民間医療保険の法的位置づけ","subsection_number":"7.1.1","subsection_title":"保険業法上の医療保険","printed_page_start":1,"printed_page_end":2,"pdf_page_start":5,"pdf_page_end":6,"search_terms":["保険業法第3条","疾病","傷害","出産","不妊治療"],"reason":"生命保険業免許の対象と、施行規則で定める疾病等に類する事由を確認できるため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2016_1_2":{"question_id":"pe2016_1_2","year":2016,"problem":"問1(2)","topic":"財務再保険に関する大蔵省告示","answer_terms":["すべてのリスク","出再保険受入手数料","現金","一方的な解約","共同保険式再保険"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.2","section_title":"再保険の方式","subsection_number":"8.2.4・参考","subsection_title":"伝統的再保険・非伝統的再保険／財務再保険","printed_page_start":9,"printed_page_end":13,"pdf_page_start":13,"pdf_page_end":17,"search_terms":["財務再保険","大蔵省告示第233号","出再保険受入手数料","共同保険式再保険"],"reason":"財務再保険のリスク移転要件、手数料収受、解約制限、種類を法令とともに説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2016_1_3":{"question_id":"pe2016_1_3","year":2016,"problem":"問1(3)","topic":"変額年金の最低保証リスクとオプション構造","answer_terms":["プット・オプション","コール・オプション","ヨーロピアン","プット・コール・パリティ","金利"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.2","section_title":"最低保証リスクの基本的構造","subsection_number":null,"subsection_title":null,"printed_page_start":5,"printed_page_end":7,"pdf_page_start":9,"pdf_page_end":11,"search_terms":["プット・オプション","コール・オプション","プット・コール・パリティ","最低保証","金利リスク"],"reason":"最低保証を金融オプションとして分解し、金融リスク・保険リスクを説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2017_1_1":{"question_id":"pe2017_1_1","year":2017,"problem":"問1(1)","topic":"団体保険の商品審査と団体要件","answer_terms":["保険引受","モラルリスク","最高保険金額倍数","上昇","配当方式"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.9","section_title":"監督指針関係","subsection_number":null,"subsection_title":null,"printed_page_start":25,"printed_page_end":26,"pdf_page_start":29,"pdf_page_end":30,"search_terms":["保険引受","モラルリスク","最高保険金額倍数","退職者","配当方式"],"reason":"団体保険の商品審査における団体要件、モラルリスク排除、退職者の取扱いを扱うため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2017_1_3":{"question_id":"pe2017_1_3","year":2017,"problem":"問1(3)","topic":"配当設定・確認におけるアセット・シェア","answer_terms":["衡平","区分経理","前年度末アセット・シェア","保険料","事業費"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.3","section_title":"アセット・シェアの活用例","subsection_number":"3.3.3","subsection_title":"配当率設定・確認への活用","printed_page_start":34,"printed_page_end":38,"pdf_page_start":38,"pdf_page_end":42,"search_terms":["公正","衡平","区分経理","前年度末アセット・シェア","保険料","事業費"],"reason":"配当の公正・衡平性、商品区分、当年度末アセット・シェア算式を一体として説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2018_1_4":{"question_id":"pe2018_1_4","year":2018,"problem":"問1(4)","topic":"商品開発の内部管理と商品審査の共通事項","answer_terms":["収支予測","合理的","特別利益の提供","保険契約者","需要","保険性","モラルハザード"],"status":"partial","primary_reference":{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.2","section_title":"商品開発プロセス","subsection_number":null,"subsection_title":null,"printed_page_start":8,"printed_page_end":22,"pdf_page_start":11,"pdf_page_end":25,"search_terms":["収支予測","商品開発プロセス","関連部門","事後モニタリング"],"reason":"商品開発時の収益性確認、関連部門連携、内部管理の主論点を扱うため。","confidence":"medium"},"secondary_references":[{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.3","section_title":"生命保険商品の開発・事業運営の構成要素（商品設計）","subsection_number":"4.3.3","subsection_title":"モラルリスクおよび大災害への対応","printed_page_start":30,"printed_page_end":31,"pdf_page_start":33,"pdf_page_end":34,"search_terms":["モラルリスク","大災害"],"reason":"商品設計におけるモラルリスクの検討に対応するため。","confidence":"medium"},{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.4","section_title":"生命保険商品の開発・事業運営の構成要素（商品設計以外）","subsection_number":"4.4.10","subsection_title":"法令等","printed_page_start":51,"printed_page_end":52,"pdf_page_start":54,"pdf_page_end":55,"search_terms":["保険契約者等の保護","法令","普通保険約款"],"reason":"商品審査・法令面の補助参照箇所であるため。","confidence":"medium"}],"notes":"問題は監督指針の複数節の逐語穴埋めであり、教科書には同じ論点の解説はあるが全文同一の条文掲載ではないため部分対応。"},"pe2018_1_5":{"question_id":"pe2018_1_5","year":2018,"problem":"問1(5)","topic":"最低保証付変額年金のプライシング","answer_terms":["最低保証費用","市場","インザマネー","分散","市場整合"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.3","section_title":"変額年金保険数理の基本的な考え方","subsection_number":"5.3.3","subsection_title":"プライシングの基本的考え方","printed_page_start":21,"printed_page_end":22,"pdf_page_start":25,"pdf_page_end":26,"search_terms":["最低保証費用","インザマネー","分散効果","市場整合","プライシング"],"reason":"最低保証費用率、費用収入とのミスマッチ、市場整合的プライシングを直接説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2019_1_2":{"question_id":"pe2019_1_2","year":2019,"problem":"問1(2)","topic":"商品開発に係る基礎書類と内部管理態勢","answer_terms":["事業方法書","保険料及び責任準備金の算出方法書","認可","自己責任原則","募集面"],"status":"partial","primary_reference":{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"参考","section_title":"商品開発に関連する基礎書類","subsection_number":null,"subsection_title":null,"printed_page_start":53,"printed_page_end":56,"pdf_page_start":56,"pdf_page_end":59,"search_terms":["普通保険約款","事業方法書","保険料及び責任準備金の算出方法書","認可"],"reason":"商品内容・料率を記載する三つの基礎書類と認可手続を整理しているが、問題後半の監督指針文言は補助確認が必要であるため。","confidence":"medium"},"secondary_references":[{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.2","section_title":"商品開発プロセス","subsection_number":null,"subsection_title":null,"printed_page_start":8,"printed_page_end":22,"pdf_page_start":11,"pdf_page_end":25,"search_terms":["自己責任原則","募集面","内部管理態勢"],"reason":"商品開発を多面的に検討する内部管理の考え方を補足するため.","confidence":"medium"}],"notes":"三つの基礎書類は教科書の参考節で確認できるが、監督指針Ⅱ－2－5の『自己責任原則』『募集面』等の逐語表現は教科書本文だけでは完結しないため部分対応。"},"pe2020_1_3":{"question_id":"pe2020_1_3","year":2020,"problem":"問1(3)","topic":"団体生命保険の特質","answer_terms":["グレッグ","団体選択","画一性","経験保険料率","配当"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.1","section_title":"はじめに","subsection_number":null,"subsection_title":null,"printed_page_start":1,"printed_page_end":1,"pdf_page_start":5,"pdf_page_end":5,"search_terms":["グレッグ","団体選択","画一性","経験保険料率","配当"],"reason":"グレッグが挙げた団体生命保険の特質を問題文と同じ流れで説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2020_1_5":{"question_id":"pe2020_1_5","year":2020,"problem":"問1(5)","topic":"エクセスオブロス・カバー（ELC）","answer_terms":["非比例","ワーキング・カバー","集積","自己保有","填補限度"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.3","section_title":"再保険の種類","subsection_number":"8.3.4","subsection_title":"エクセスオブロス・カバー","printed_page_start":24,"printed_page_end":27,"pdf_page_start":28,"pdf_page_end":31,"search_terms":["非比例式再保険","エクセスオブロス","Cat Cover","ワーキング・カバー","自己保有額","填補限度額"],"reason":"ELCの非比例性、Cat Coverとワーキング・カバー、自己保有額・填補限度額を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2021_1_2":{"question_id":"pe2021_1_2","year":2021,"problem":"問1(2)","topic":"団体生命保険の配当清算法","answer_terms":["信頼度","損失限度","小さい","異常危険","危険賦課金"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.6","section_title":"団体生命保険の数理","subsection_number":"6.6.3","subsection_title":"経験料率","printed_page_start":17,"printed_page_end":19,"pdf_page_start":21,"pdf_page_end":23,"search_terms":["配当清算法","信頼度方式","損失限度方式","異常危険","危険賦課金"],"reason":"経験料率の一方式として配当清算法、プール方式、剰余金計算を説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_06.pdf","chapter_number":"6","chapter_title":"団体生命保険","section_number":"6.7","section_title":"配当","subsection_number":null,"subsection_title":null,"printed_page_start":22,"printed_page_end":23,"pdf_page_start":26,"pdf_page_end":27,"search_terms":["経験配当","剰余金"],"reason":"団体保険の配当率算定の考え方を補足するため。","confidence":"high"}],"notes":""},"pe2021_1_3":{"question_id":"pe2021_1_3","year":2021,"problem":"問1(3)","topic":"契約者価額とMVA係数","answer_terms":["投資上","MVA","金利変動","取引費用","リスク管理"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_02.pdf","chapter_number":"2","chapter_title":"解約および解約返戻金","section_number":"2.5","section_title":"商品開発における留意事項","subsection_number":"2.5.4","subsection_title":"市場価格調整型（Market Value Adjustment）","printed_page_start":24,"printed_page_end":25,"pdf_page_start":29,"pdf_page_end":30,"search_terms":["MVA","金利変動","取引費用","契約者価額","リスク管理"],"reason":"MVAの係数が金利変動・資産売却費用を契約者価額に反映する仕組みを説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_02.pdf","chapter_number":"2","chapter_title":"解約および解約返戻金","section_number":"参考","section_title":"保険業法等における解約返戻金に関する規定","subsection_number":null,"subsection_title":null,"printed_page_start":48,"printed_page_end":50,"pdf_page_start":53,"pdf_page_end":55,"search_terms":["契約者価額","監督指針","解約返戻金"],"reason":"契約者価額に関する監督上の根拠を確認する補助箇所であるため。","confidence":"high"}],"notes":""},"pe2022_1_2":{"question_id":"pe2022_1_2","year":2022,"problem":"問1(2)","topic":"アセット・シェアの定義","answer_terms":["キャッシュフロー","解約失効率","正味資産","貢献度"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.1","section_title":"序論","subsection_number":"3.1.1","subsection_title":"アセット・シェアの定義","printed_page_start":1,"printed_page_end":1,"pdf_page_start":5,"pdf_page_end":5,"search_terms":["保有契約","群団","キャッシュフロー","解約失効率","正味資産","貢献度"],"reason":"問題文と同一の定義により、計算対象群団、キャッシュフロー、計算基礎、持分・貢献度を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2022_1_4":{"question_id":"pe2022_1_4","year":2022,"problem":"問1(4)","topic":"変額年金のプライシングとテイルリスク・ヘッジ","answer_terms":["特別勘定","ヘッジ対象","テイル","アウトオブ"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.5","section_title":"リスク管理とヘッジ","subsection_number":"5.5.3","subsection_title":"テイルリスク（ストレスシナリオのリスク）のヘッジ","printed_page_start":32,"printed_page_end":32,"pdf_page_start":36,"pdf_page_end":36,"search_terms":["テイルリスク","アウトオブザマネー","静態的ヘッジ","ヘッジ対象"],"reason":"テイルイベントに対するアウト・オブ・ザ・マネーのプットによるヘッジを説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.3","section_title":"変額年金保険数理の基本的な考え方","subsection_number":"5.3.3","subsection_title":"プライシングの基本的考え方","printed_page_start":21,"printed_page_end":22,"pdf_page_start":25,"pdf_page_end":26,"search_terms":["特別勘定","最低保証費用率","プライシング"],"reason":"問題前半の特別勘定投入額と費用率設定を確認できるため。","confidence":"high"}],"notes":""},"pe2023_1_2":{"question_id":"pe2023_1_2","year":2023,"problem":"問1(2)","topic":"消滅時配当とアセット・シェア代表契約","answer_terms":["消滅時配当","ネット・アセット・シェア","収支状況","保険事故"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_03.pdf","chapter_number":"3","chapter_title":"アセットシェア","section_number":"3.3","section_title":"アセット・シェアの活用例","subsection_number":"3.3.3","subsection_title":"配当率設定・確認への活用","printed_page_start":34,"printed_page_end":38,"pdf_page_start":38,"pdf_page_end":42,"search_terms":["消滅時配当","ネット・アセット・シェア","代表契約","収支状況","保険事故"],"reason":"配当確認のための代表契約選定、ネット・アセット・シェア、選定単位を説明しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2023_1_3":{"question_id":"pe2023_1_3","year":2023,"problem":"問1(3)","topic":"事業方法書の記載事項","answer_terms":["被保険者","保険期間","返戻金","貸付け"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"参考","section_title":"商品開発に関連する基礎書類","subsection_number":null,"subsection_title":null,"printed_page_start":53,"printed_page_end":56,"pdf_page_start":56,"pdf_page_end":59,"search_terms":["事業方法書","被保険者","保険期間","返戻金","貸付け"],"reason":"事業方法書に記載すべき契約範囲、保険期間、返戻金支払、貸付け等を確認できるため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2024_1_1":{"question_id":"pe2024_1_1","year":2024,"problem":"問1(1)","topic":"変額年金の経済価値・会計価値ヘッジ","answer_terms":["ボラティリティ","ロー","動態","静態","負の値"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.5","section_title":"リスク管理とヘッジ","subsection_number":null,"subsection_title":null,"printed_page_start":30,"printed_page_end":31,"pdf_page_start":34,"pdf_page_end":35,"search_terms":["経済価値のヘッジ","会計価値のヘッジ","ベガ","ロー","動態ヘッジ","静態ヘッジ"],"reason":"経済価値と会計価値のヘッジ目的、リスクパラメータ、動態・静態ヘッジを対比しているため。","confidence":"high"},"secondary_references":[],"notes":""},"pe2024_1_2":{"question_id":"pe2024_1_2","year":2024,"problem":"問1(2)","topic":"商品審査における危険選択・モラルリスク","answer_terms":["身体的危険","環境的危険","危険選択","趣味","巨大リスクの排除","保険契約者等の保護","公序良俗","モラルリスク排除"],"status":"partial","primary_reference":{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.4","section_title":"生命保険商品の開発・事業運営の構成要素（商品設計以外）","subsection_number":"4.4.4","subsection_title":"危険選択（アンダーライティング）","printed_page_start":39,"printed_page_end":44,"pdf_page_start":42,"pdf_page_end":47,"search_terms":["危険選択","身体的危険","環境的危険","告知","モラルリスク"],"reason":"危険選択の目的・方法と身体的・環境的危険の評価を説明しているため。","confidence":"medium"},"secondary_references":[{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.3","section_title":"生命保険商品の開発・事業運営の構成要素（商品設計）","subsection_number":"4.3.3","subsection_title":"モラルリスクおよび大災害への対応","printed_page_start":30,"printed_page_end":31,"pdf_page_start":33,"pdf_page_end":34,"search_terms":["巨大リスク","公序良俗","モラルリスク"],"reason":"免責・保険金額設計に関係するモラルリスクと大災害対応を補足するため。","confidence":"medium"}],"notes":"危険選択とモラルリスクの主論点は教科書に直接対応するが、監督指針Ⅳ－1－4～Ⅳ－1－8の逐語表現は教科書本文に一括掲載されていないため部分対応。"},"pe2025_1_3":{"question_id":"pe2025_1_3","year":2025,"problem":"問1(3)","topic":"商品開発に係る内部管理態勢","answer_terms":["普通保険約款","保険業法","取締役","経営計画","健全性維持","相互牽制","道徳","保険計理人"],"status":"partial","primary_reference":{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.2","section_title":"商品開発プロセス","subsection_number":null,"subsection_title":null,"printed_page_start":8,"printed_page_end":22,"pdf_page_start":11,"pdf_page_end":25,"search_terms":["商品開発","経営計画","健全性維持","相互牽制","保険計理人"],"reason":"商品開発方針、関係部門の役割、リスク・収益性確認、事後モニタリングを体系的に説明しているため。","confidence":"medium"},"secondary_references":[{"source_file":"hoken1-seiho_04.pdf","chapter_number":"4","chapter_title":"生命保険の商品開発","section_number":"4.4","section_title":"生命保険商品の開発・事業運営の構成要素（商品設計以外）","subsection_number":"4.4.10","subsection_title":"法令等","printed_page_start":51,"printed_page_end":52,"pdf_page_start":54,"pdf_page_end":55,"search_terms":["普通保険約款","保険業法","取締役会","法令等"],"reason":"商品開発における法令・基礎書類・統治の確認に使えるため。","confidence":"medium"}],"notes":"商品開発のガバナンスと各部門の役割は教科書に対応するが、監督指針Ⅱ－2－5の逐語穴埋め全項目は教科書本文だけでは確認できないため部分対応。"},"pe2025_1_4":{"question_id":"pe2025_1_4","year":2025,"problem":"問1(4)","topic":"変額年金保険の商品構造と最低保証費用","answer_terms":["投資信託","銀行窓販","プット","解約","保険関係費用","最低保証料","インザマネー","内部留保"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.1","section_title":"変額年金保険の概要","subsection_number":null,"subsection_title":null,"printed_page_start":1,"printed_page_end":4,"pdf_page_start":5,"pdf_page_end":8,"search_terms":["投資信託","銀行窓販","プット・オプション","解約","保険関係費用"],"reason":"変額年金の商品成立、銀行窓販、特別勘定の投資信託、最低保証オプション、費用控除を直接説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_05.pdf","chapter_number":"5","chapter_title":"変額年金保険","section_number":"5.3","section_title":"変額年金保険数理の基本的な考え方","subsection_number":"5.3.3","subsection_title":"プライシングの基本的考え方","printed_page_start":21,"printed_page_end":22,"pdf_page_start":25,"pdf_page_end":26,"search_terms":["最低保証料","インザマネー","内部留保","プライシング"],"reason":"最低保証料収入とオプション価値のミスマッチを確認できるため。","confidence":"high"}],"notes":""},"pe2025_1_5_a":{"question_id":"pe2025_1_5_a","year":2025,"problem":"問1(5)(ア)","topic":"ELCとストップロス・カバー","answer_terms":["集積","発生率関係","自己保有額","割高"],"status":"matched","primary_reference":{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.3","section_title":"再保険の種類","subsection_number":"8.3.4","subsection_title":"エクセスオブロス・カバー","printed_page_start":24,"printed_page_end":27,"pdf_page_start":28,"pdf_page_end":31,"search_terms":["ELC","集積リスク","発生率関係リスク","自己保有額","カタストロフ・カバー"],"reason":"生命再保険におけるELCの移転対象とCat Coverの自己保有額を説明しているため。","confidence":"high"},"secondary_references":[{"source_file":"hoken1-seiho_08.pdf","chapter_number":"8","chapter_title":"再保険","section_number":"8.3","section_title":"再保険の種類","subsection_number":"8.3.5","subsection_title":"ストップロス・カバー","printed_page_start":28,"printed_page_end":28,"pdf_page_start":32,"pdf_page_end":32,"search_terms":["ストップロス・カバー","再保険料","偶然変動"],"reason":"SLCの補償構造とELCに対する再保険料水準を確認できるため。","confidence":"high"}],"notes":""}};
 const TEXTBOOK_PDF_BASE="https://www.actuaries.jp/examin/textbook/pdf/";
 const TEXTBOOK_INDEX_URL="https://www.actuaries.jp/examin/textbook/";
-const CONTENT_REV="1.10";
+const CONTENT_REV="1.11";
 const REVISED_QUESTION_IDS=[];
 const REMOVED_LEGACY_PAST_IDS=["pe2000_1_2","pe2000_1_6","pe2000_1_7","pe2003_1_2","pe2004_1_3","pe2004_1_5","pe2005_1_3","pe2008_1_1","pe2009_1_4","pe2011_1_1","pe2013_1_1","pe2013_1_3","pe2013_1_4","pe2014_1_4","pe2017_1_4","pe2019_1_1","pe2019_1_3","pe2020_1_1","pe2020_1_4","pe2022_1_1","pe2022_1_6","pe2023_1_6","pe2024_1_4","pe2025_1_1","pe2025_1_2"];
 const CURRENT_QUESTION_IDS=new Set(Object.values(CHAPTERS).flatMap(ch=>ch.bank.map(q=>q.id)));
@@ -1085,6 +1201,8 @@ const $=id=>document.getElementById(id),letters=["A","B","C","D","E","F","G","H"
 let state=loadState(),chapterId="1",bank=CHAPTERS["1"].bank,set=[],pos=0,answers={},checked={},revealed={},choiceCache={},sessionStreak=0,sessionBest=0,focusTimer=null,toastTimer=null;
 let activeFieldByQuestion={},fieldOpenByQuestion={},questionCollapsedByQuestion={},questionMetaOpenByQuestion={},autoAdvanceTimer=null,stickyStateRaf=0;
 let retryOnlyByQuestion={},originalResultByQuestion={},lastEnteredQuestionId=null,questionReferenceOpenByQuestion={};
+let searchState={query:"",chapter:"all",source:"all",mastery:"all",favoriteOnly:false,sort:"chapter",view:"results",readerLayout:"full"};
+let searchQuizContext=null,searchRestoreY=0;
 
 function defaultState(){return{
   attempts:0,correct:0,favorites:[],bestStreak:0,daily:{date:"",attempts:0,correct:0},answerMode:"choice",
@@ -1124,8 +1242,8 @@ function loadState(){
     if(!Array.isArray(x.weakByMode.choice))x.weakByMode.choice=[];
     if(!Array.isArray(x.weakByMode.write))x.weakByMode.write=[];
 
-    // ver1.10: move pe2014_1_3 from chapter 5 to chapter 8.
-    // Preserve question data and all existing learning progress.
+    // ver1.11: add full question search and problem-text reader.
+    // Question data, answer keys, IDs and existing learning progress are unchanged.
     if(x.contentRev!==CONTENT_REV){
       ["choice","write"].forEach(mode=>{
         REVISED_QUESTION_IDS.forEach(id=>{
@@ -1160,8 +1278,10 @@ function setAnswerMode(mode,rerender=true){
   saveState();
   renderAnswerModeControls();
   if(rerender&&$("quizPanel").classList.contains("show")){
-    startChapter(chapterId,$("mode").value||"mastery");
+    if(searchQuizContext){answers={};checked={};revealed={};choiceCache={};retryOnlyByQuestion={};originalResultByQuestion={};lastEnteredQuestionId=null;renderQuestion();resetQuestionScrollPosition()}
+    else startChapter(chapterId,$("mode").value||"mastery");
   }
+  if($("searchPanel")?.classList.contains("show"))renderSearchResults();
 }
 function renderAnswerModeControls(){
   const m=answerMode();
@@ -1449,12 +1569,163 @@ function correctLabel(q){
   if(q.type==="enumeration")return q.items.map(x=>x.canonical).join(" ／ ");
   return q.keys.map(g=>g[0]).join("、")
 }
-function showPanel(id){
-  ["homePanel","quizPanel","resultPanel"].forEach(x=>$(x).classList.toggle("show",x===id));
+function showPanel(id,opts={}){
+  ["homePanel","searchPanel","quizPanel","resultPanel"].forEach(x=>$(x).classList.toggle("show",x===id));
   if(id==="homePanel"){renderDashboard();renderChapters()}
-  window.scrollTo({top:0,behavior:"smooth"})
+  if(id==="searchPanel")renderSearchResults();
+  if(!opts.preserveScroll)window.scrollTo({top:0,behavior:opts.instant?"auto":"smooth"})
 }
 function allQuestions(){return Object.values(CHAPTERS).flatMap(ch=>ch.bank)}
+function searchableQuestionRecords(){
+  const out=[];
+  Object.entries(CHAPTERS).forEach(([cid,ch],chapterOrder)=>{
+    ch.bank.forEach((q,questionOrder)=>out.push({q,chapterId:cid,chapter:ch,chapterOrder,questionOrder,ref:textbookReferenceFor(q)}));
+  });
+  return out
+}
+function searchNorm(v){
+  return String(v??"").normalize("NFKC").toLowerCase()
+    .replace(/[\s\u3000]+/g,"")
+    .replace(/[，,。．・･·「」『』【】［］\[\]（）()]/g,"")
+    .replace(/[‐‑‒–—―−-]/g,"")
+    .replace(/[／/]/g,"")
+}
+function searchTerms(){return String(searchState.query||"").trim().split(/[\s\u3000]+/).filter(Boolean)}
+function recordSearchCorpus(rec){
+  const q=rec.q,r=rec.ref,parts=[q.q,q.tag,q.detail,q.tip,q.e,q.year,q.problem,examYearLabel(q.year),rec.chapter.title,rec.chapter.short,`第${rec.chapterId}章`,q.sourceDoc,q.textbook];
+  if(q.fields)q.fields.forEach(f=>{parts.push(f.label,...(f.answers||[]))});
+  if(q.items)q.items.forEach(it=>parts.push(it.canonical,...(it.answers||[])));
+  if(r){
+    parts.push(r.topic,...(r.answer_terms||[]));
+    const refs=[r.primary_reference,...(r.secondary_references||[])].filter(Boolean);
+    refs.forEach(x=>parts.push(x.chapter_number,x.chapter_title,x.section_number,x.section_title,x.subsection_number,x.subsection_title,...(x.search_terms||[]),x.reason));
+  }
+  return searchNorm(parts.filter(Boolean).join(" "))
+}
+function searchSourceMatches(rec){
+  if(searchState.source==="past")return rec.q.sourceType==="past_exam";
+  if(searchState.source==="summary")return rec.q.sourceType==="summary_notes";
+  return true
+}
+function searchMasteryMatches(rec){
+  if(searchState.mastery==="mastered")return isMastered(rec.q.id);
+  if(searchState.mastery==="unmastered")return !isMastered(rec.q.id);
+  if(searchState.mastery==="weak")return weakForMode().includes(rec.q.id);
+  return true
+}
+function filteredSearchRecords(){
+  const terms=searchTerms().map(searchNorm).filter(Boolean);
+  let rows=searchableQuestionRecords().filter(rec=>{
+    if(searchState.chapter!=="all"&&rec.chapterId!==searchState.chapter)return false;
+    if(!searchSourceMatches(rec)||!searchMasteryMatches(rec))return false;
+    if(searchState.favoriteOnly&&!state.favorites.includes(rec.q.id))return false;
+    if(!terms.length)return true;
+    const corpus=recordSearchCorpus(rec);
+    return terms.every(t=>corpus.includes(t))
+  });
+  if(searchState.sort==="year_desc")rows.sort((a,b)=>(Number(b.q.year)||0)-(Number(a.q.year)||0)||a.chapterOrder-b.chapterOrder||a.questionOrder-b.questionOrder);
+  else if(searchState.sort==="year_asc")rows.sort((a,b)=>(Number(a.q.year)||9999)-(Number(b.q.year)||9999)||a.chapterOrder-b.chapterOrder||a.questionOrder-b.questionOrder);
+  else rows.sort((a,b)=>a.chapterOrder-b.chapterOrder||a.questionOrder-b.questionOrder);
+  return rows
+}
+function searchDisplayTitle(rec){
+  const q=rec.q;
+  return q.sourceType==="past_exam"?`${examYearLabel(q.year)} ${q.problem||""}`.trim():`まとめ問題 ${String(rec.questionOrder+1).padStart(2,"0")}`
+}
+function collapseQuestionText(v){return String(v||"").replace(/[\s\u3000]+/g," ").trim()}
+function snippetForSearch(rec,terms,maxLen=34){
+  const txt=collapseQuestionText(rec.q.q);if(txt.length<=maxLen)return txt;
+  const lowered=txt.normalize("NFKC").toLowerCase();let hit=-1;
+  for(const t of terms){const raw=String(t||"").normalize("NFKC").toLowerCase();const i=raw?lowered.indexOf(raw):-1;if(i>=0&&(hit<0||i<hit))hit=i}
+  if(hit<0)return txt.slice(0,maxLen)+"…";
+  const start=Math.max(0,hit-Math.floor(maxLen*.35)),end=Math.min(txt.length,start+maxLen);
+  return (start>0?"…":"")+txt.slice(start,end)+(end<txt.length?"…":"")
+}
+function highlightSearchText(text,terms){
+  const raw=String(text??"");if(!terms.length)return escapeHtmlText(raw);
+  const escapedTerms=[...new Set(terms.map(t=>String(t||"").trim()).filter(Boolean))].sort((a,b)=>b.length-a.length);
+  if(!escapedTerms.length)return escapeHtmlText(raw);
+  const re=new RegExp(escapedTerms.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|"),"gi");
+  let out="",last=0,m;
+  while((m=re.exec(raw))){out+=escapeHtmlText(raw.slice(last,m.index))+`<mark class="search-hit">${escapeHtmlText(m[0])}</mark>`;last=m.index+m[0].length;if(m[0].length===0)re.lastIndex++}
+  return out+escapeHtmlText(raw.slice(last))
+}
+function searchStatusBadges(rec){
+  const id=rec.q.id,out=[];
+  if(isMastered(id))out.push(`<span class="search-mini-badge mastered">${escapeHtmlText(masteryTerm())}</span>`);
+  else if(weakForMode().includes(id))out.push('<span class="search-mini-badge weak">復習</span>');
+  if(state.favorites.includes(id))out.push('<span class="search-mini-badge">★</span>');
+  return out.join("")
+}
+function renderSearchChapterChips(){
+  const box=$("searchChapterChips");if(!box)return;box.innerHTML="";
+  const entries=[["all","すべて"],...Object.entries(CHAPTERS).map(([id])=>[id,`第${id}章`])];
+  entries.forEach(([id,label])=>{const b=document.createElement("button");b.type="button";b.className="search-chip"+(searchState.chapter===id?" active":"");b.textContent=label;b.onclick=()=>{searchState.chapter=id;renderSearchResults()};box.append(b)})
+}
+function syncSearchControls(){
+  if($("questionSearchInput")&&$("questionSearchInput").value!==searchState.query)$("questionSearchInput").value=searchState.query;
+  if($("searchSourceFilter"))$("searchSourceFilter").value=searchState.source;
+  if($("searchMasteryFilter"))$("searchMasteryFilter").value=searchState.mastery;
+  if($("searchSort"))$("searchSort").value=searchState.sort;
+  if($("searchFavoriteOnly"))$("searchFavoriteOnly").checked=!!searchState.favoriteOnly;
+  if($("searchResultTab"))$("searchResultTab").classList.toggle("active",searchState.view==="results");
+  if($("problemReaderTab"))$("problemReaderTab").classList.toggle("active",searchState.view==="reader");
+  if($("readerToolbar"))$("readerToolbar").style.display=searchState.view==="reader"?"flex":"none";
+  if($("readerCompactBtn"))$("readerCompactBtn").classList.toggle("active",searchState.readerLayout==="compact");
+  if($("readerFullBtn"))$("readerFullBtn").classList.toggle("active",searchState.readerLayout==="full");
+  renderSearchChapterChips()
+}
+function renderSearchResults(){
+  const host=$("searchResults");if(!host)return;syncSearchControls();
+  const rows=filteredSearchRecords(),terms=searchTerms();
+  if($("searchCount"))$("searchCount").innerHTML=`<b>${rows.length}</b>問`;
+  if($("searchSetBtn")){const n=Math.min(5,rows.length);$("searchSetBtn").disabled=!rows.length;$("searchSetBtn").textContent=rows.length?`この条件から${n}問出題`:"該当問題なし"}
+  host.innerHTML="";
+  if(!rows.length){host.innerHTML='<div class="search-empty">条件に合う問題がありません。キーワードか絞り込みを少し緩めてください。</div>';return}
+  if(searchState.view==="reader"){
+    const list=document.createElement("div");list.className="reader-list";
+    rows.forEach(rec=>{
+      const card=document.createElement("article");card.className=`reader-card ${searchState.readerLayout==="compact"?"compact":""}`;
+      const shown=searchState.readerLayout==="compact"?snippetForSearch(rec,terms,42):rec.q.q;
+      const topic=rec.ref?.topic||String(rec.q.tag||"").split("｜").slice(1).join("｜");
+      card.innerHTML=`<div class="reader-card-head"><div><div class="reader-meta">${escapeHtmlText(searchDisplayTitle(rec))}　<span class="muted">第${escapeHtmlText(rec.chapterId)}章 ${escapeHtmlText(rec.chapter.short)}</span></div>${topic?`<div class="reader-submeta">${escapeHtmlText(topic)}</div>`:""}</div><button class="reader-open" type="button">この問題を解く</button></div><div class="reader-text">${highlightSearchText(shown,terms)}</div>`;
+      card.querySelector(".reader-open").onclick=()=>openSearchQuestion(rec);
+      list.append(card)
+    });host.append(list);return
+  }
+  rows.forEach(rec=>{
+    const b=document.createElement("button");b.type="button";b.className="search-result-card";
+    const snippet=snippetForSearch(rec,terms,34),topic=rec.ref?.topic||String(rec.q.tag||"").split("｜").slice(1).join("｜");
+    b.innerHTML=`<div class="search-result-top"><div class="search-result-title">${escapeHtmlText(searchDisplayTitle(rec))}　<span class="muted">第${escapeHtmlText(rec.chapterId)}章 ${escapeHtmlText(rec.chapter.short)}</span></div><div class="search-result-status">${searchStatusBadges(rec)}</div></div><div class="search-snippet">${highlightSearchText(snippet,terms)}</div>${topic?`<div class="search-topic"><span>${escapeHtmlText(topic)}</span></div>`:""}`;
+    b.onclick=()=>openSearchQuestion(rec);host.append(b)
+  })
+}
+function setSearchQuizControls(active){
+  if($("mode"))$("mode").disabled=!!active;
+  if($("newSetBtn"))$("newSetBtn").disabled=!!active;
+  if($("searchBackBtn"))$("searchBackBtn").classList.toggle("show",!!active);
+  if($("resultSearchBackBtn"))$("resultSearchBackBtn").style.display=active?"":"none";
+  if($("weakRetryBtn"))$("weakRetryBtn").style.display=active?"none":"";
+  if($("retryBtn"))$("retryBtn").style.display=active?"none":""
+}
+function clearSearchQuizContext(){searchQuizContext=null;setSearchQuizControls(false)}
+function launchSearchQuiz(records,{singleId=null}={}){
+  if(!records?.length)return;
+  searchRestoreY=window.scrollY;
+  const chosen=singleId?[records.find(r=>r.q.id===singleId)||records[0]]:shuffled(records).slice(0,Math.min(5,records.length));
+  searchQuizContext={records:[...records],restoreY:searchRestoreY,single:!!singleId};
+  chapterId=chosen[0].chapterId;bank=records.map(r=>r.q);set=chosen.map(r=>r.q);pos=0;answers={};checked={};revealed={};choiceCache={};retryOnlyByQuestion={};originalResultByQuestion={};lastEnteredQuestionId=null;sessionStreak=0;sessionBest=0;renderStreak();
+  $("quizTitle").textContent=singleId?"検索から1問":`検索セット ${set.length}問`;
+  const q=String(searchState.query||"").trim();
+  $("quizDesc").textContent=`検索条件：${q||"キーワードなし"} ／ 該当${records.length}問 ／ ${modeLabel()}`;
+  setSearchQuizControls(true);showPanel("quizPanel");renderQuestion();resetQuestionScrollPosition()
+}
+function openSearchQuestion(rec){launchSearchQuiz([rec],{singleId:rec.q.id})}
+function returnToSearch(){
+  const y=searchQuizContext?.restoreY??searchRestoreY;clearSearchQuizContext();showPanel("searchPanel",{preserveScroll:true,instant:true});requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}))
+}
+function openSearchPanel(){clearSearchQuizContext();showPanel("searchPanel");requestAnimationFrame(()=>$("questionSearchInput")?.focus())
+}
 function updateStats(){
   $("statAttempts").textContent=state.attempts;
   $("statCorrect").textContent=state.correct;
@@ -1532,6 +1803,7 @@ function buildSet(mode="mastery"){
   return true
 }
 function startChapter(id,mode="mastery"){
+  clearSearchQuizContext();
   chapterId=id;bank=CHAPTERS[id].bank;sessionStreak=0;sessionBest=0;renderStreak();$("quizTitle").textContent=CHAPTERS[id].title;
   $("mode").value=mode;
   const p=bank.filter(q=>(q.attributes||[]).includes("過去問")).length,
@@ -2167,9 +2439,16 @@ function judge(){
 }
 function finish(){
   const co=set.filter(scoredCorrect).length,total=set.length;$("finalScore").textContent=`${co} / ${total}`;
-  const r=total?co/total:0;$("grade").textContent=r>=.9?`${CHAPTERS[chapterId].title}：かなり強い`:r>=.7?"合格圏に近い":r>=.5?"もう一段":"重点復習推奨";
-  const x=chapterMetrics(chapterId),n=answerMode()==="write"?x.writeMastered:x.choiceMastered;
-  $("resultMessage").textContent=`${masteryTerm()} ${n}/${x.total}問。${modeLabel()}では3回連続正解で${masteryTerm()}になります。`;
+  const r=total?co/total:0;
+  if(searchQuizContext){
+    $("grade").textContent=r>=.9?"検索セット：かなり強い":r>=.7?"合格圏に近い":r>=.5?"もう一段":"重点復習推奨";
+    $("resultMessage").textContent=`検索条件から出題した${total}問。${modeLabel()}の最初の判定を成績に記録しました。`;
+    setSearchQuizControls(true)
+  }else{
+    $("grade").textContent=r>=.9?`${CHAPTERS[chapterId].title}：かなり強い`:r>=.7?"合格圏に近い":r>=.5?"もう一段":"重点復習推奨";
+    const x=chapterMetrics(chapterId),n=answerMode()==="write"?x.writeMastered:x.choiceMastered;
+    $("resultMessage").textContent=`${masteryTerm()} ${n}/${x.total}問。${modeLabel()}では3回連続正解で${masteryTerm()}になります。`;
+  }
   $("reviewList").innerHTML="";
   set.forEach(q=>{
     if(!scoredCorrect(q)){
@@ -2181,8 +2460,23 @@ function finish(){
 }
 $("authForm").onsubmit=e=>{e.preventDefault();if($("pw").value===PASS){localStorage.setItem(AUTH_KEY,String(Date.now()+LOGIN_DURATION));$("auth").style.display="none";$("app").style.display="block"}else{$("authError").textContent="パスワードが違います。";$("pw").value=""}};
 if(Number(localStorage.getItem(AUTH_KEY))>Date.now()){$("auth").style.display="none";$("app").style.display="block"}
-$("homeBtn").onclick=()=>showPanel("homePanel");
-$("resultHomeBtn").onclick=()=>showPanel("homePanel");
+$("searchBtn").onclick=openSearchPanel;
+$("homeSearchBtn").onclick=openSearchPanel;
+$("homeBtn").onclick=()=>{clearSearchQuizContext();showPanel("homePanel")};
+$("resultHomeBtn").onclick=()=>{clearSearchQuizContext();showPanel("homePanel")};
+$("searchBackBtn").onclick=returnToSearch;
+$("resultSearchBackBtn").onclick=returnToSearch;
+$("questionSearchInput").oninput=e=>{searchState.query=e.target.value;renderSearchResults()};
+$("questionSearchClear").onclick=()=>{searchState.query="";$("questionSearchInput").value="";renderSearchResults();$("questionSearchInput").focus()};
+$("searchSourceFilter").onchange=e=>{searchState.source=e.target.value;renderSearchResults()};
+$("searchMasteryFilter").onchange=e=>{searchState.mastery=e.target.value;renderSearchResults()};
+$("searchSort").onchange=e=>{searchState.sort=e.target.value;renderSearchResults()};
+$("searchFavoriteOnly").onchange=e=>{searchState.favoriteOnly=e.target.checked;renderSearchResults()};
+$("searchResultTab").onclick=()=>{searchState.view="results";renderSearchResults()};
+$("problemReaderTab").onclick=()=>{searchState.view="reader";renderSearchResults()};
+$("readerCompactBtn").onclick=()=>{searchState.readerLayout="compact";renderSearchResults()};
+$("readerFullBtn").onclick=()=>{searchState.readerLayout="full";renderSearchResults()};
+$("searchSetBtn").onclick=()=>launchSearchQuiz(filteredSearchRecords());
 $("logoutBtn").onclick=()=>{localStorage.removeItem(AUTH_KEY);location.reload()};
 $("resetBtn").onclick=()=>{if(confirm("全章の学習記録をリセットしますか？")){state=defaultState();localStorage.removeItem(STATE_KEY);updateStats();renderDashboard();renderChapters();renderAnswerModeControls()}};
 $("newSetBtn").onclick=()=>startChapter(chapterId,$("mode").value);
@@ -2194,10 +2488,10 @@ $("checkBtn").onclick=judge;
 $("revealBtn").onclick=()=>{const q=set[pos];revealed[q.id]=true;if(q.type==="input"){const st=ensureFieldOpenState(q);q.fields.forEach((_,i)=>st[i]=true)}renderQuestion()};
 $("prevBtn").onclick=()=>{if(pos>0){pos--;renderQuestion();resetQuestionScrollPosition()}};
 $("nextBtn").onclick=()=>{if(pos===set.length-1)finish();else{pos++;renderQuestion();resetQuestionScrollPosition()}};
-$("favoriteBtn").onclick=()=>{const id=set[pos].id;state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];saveState();renderQuestion()};
+$("favoriteBtn").onclick=()=>{const id=set[pos].id;state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];saveState();renderQuestion();if($("searchPanel")?.classList.contains("show"))renderSearchResults()};
 $("retryBtn").onclick=()=>startChapter(chapterId,"mastery");
 $("weakRetryBtn").onclick=()=>startChapter(chapterId,"weak");
-renderChapters();renderDashboard();updateStats();renderStudyCommand();renderStreak();renderAnswerModeControls();
+renderChapters();renderDashboard();updateStats();renderStudyCommand();renderStreak();renderAnswerModeControls();renderSearchResults();
 
 function updateOnlineStatus(){
   const el=$("offlineStatus");if(!el)return;
