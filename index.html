@@ -367,6 +367,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
   .reader-card{padding:12px}.reader-text{font-size:13px;line-height:1.76}
 }
 
+
+/* ver1.16 keyboard-first controls */
+.keyboard-help{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:8px 0 10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd;color:var(--muted);font-size:11px;line-height:1.5}
+.keyboard-help strong{color:var(--ink);font-weight:900}
+.keyboard-help kbd{display:inline-flex;align-items:center;justify-content:center;min-height:22px;padding:1px 6px;border:1px solid #cbd8e3;border-bottom-width:2px;border-radius:6px;background:#fff;color:var(--ink);font:800 10px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;white-space:nowrap}
+.keyboard-help.compact{margin:7px 0 0;padding:6px 9px}
+.shortcut-suffix{font-size:.82em;font-weight:800;opacity:.72;white-space:nowrap}
+@media(max-width:620px){.keyboard-help{gap:5px 9px}.shortcut-suffix{font-size:.76em}}
 </style>
 
 
@@ -1067,6 +1075,7 @@ body:before{
     <div class="stat"><b id="statMastered">0</b><span id="statMasteredLabel">基礎習得</span></div>
   </div>
 </section>
+<div class="keyboard-help" aria-label="キーボード操作"><strong>キーボード操作</strong><span><kbd>↑ ↓ ← →</kbd> 項目移動</span><span><kbd>Enter</kbd> 開く・選択</span><span><kbd>Ctrl+Enter</kbd> 判定・次へ</span><span class="muted">Macは Ctrl+Enter の代わりに ⌘+Enter も使えます。</span></div>
 <section class="study-command">
   <div class="command-head"><div><div class="eyebrow">STUDY COMMAND</div><h3>Today's Training</h3></div><div id="todayDate" class="command-date"></div></div>
   <div class="command-grid">
@@ -1107,6 +1116,7 @@ body:before{
     <input id="questionSearchInput" type="search" autocomplete="off" placeholder="例：再保険 財務 / 平成28 / MVA / アセット シェア" aria-label="問題を検索">
     <button id="questionSearchClear" class="btn" type="button">クリア</button>
   </div>
+  <div class="keyboard-help compact"><span><kbd>↓</kbd> 検索結果へ</span><span><kbd>↑ ↓</kbd> 結果移動</span><span><kbd>Enter</kbd> 問題を開く</span><span><kbd>Ctrl+Enter</kbd> この条件から出題</span></div>
   <section class="search-filter-card" aria-label="検索フィルター">
     <div class="search-filter-row"><span class="search-filter-label">章</span><div id="searchChapterChips" class="search-chips"></div></div>
     <div class="search-filter-row">
@@ -1142,6 +1152,7 @@ body:before{
 </div>
 <div class="progress-wrap"><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div><div class="progress-meta"><span id="progressText">1 / 5</span><span id="liveScore">正解 0 / 0</span></div></div>
 <nav id="questionNav" class="question-nav"></nav>
+<div id="quizKeyboardHelp" class="keyboard-help"><strong>キーボード</strong><span><kbd>↑ ↓</kbd> 記述の空欄 / 選択肢移動</span><span><kbd>← →</kbd> 選択肢・画面内移動</span><span><kbd>Enter</kbd> 選択</span><span><kbd>Ctrl+Enter</kbd> 判定 → 次へ</span><span class="muted">入力欄では ←→ は文字カーソルのままです。Macは ⌘+Enter も可。</span></div>
 <section id="questionCard" class="question-card">
   <div class="question-tools">
     <button id="questionMetaToggle" class="question-meta-toggle" type="button" aria-expanded="false"><span class="question-meta-chevron">›</span><span id="questionMetaToggleLabel">問題情報</span></button>
@@ -1158,11 +1169,11 @@ body:before{
   <form id="choiceForm" class="choices"></form>
   <div id="feedback" class="feedback"></div>
   <div id="questionReferences" class="question-references"></div>
-  <div class="actions"><button id="prevBtn" class="btn">← 前へ</button><div class="right"><button id="revealBtn" class="btn">答えを見る</button><button id="checkBtn" class="btn primary">判定する</button><button id="nextBtn" class="btn primary" style="display:none">次へ →</button></div></div>
+  <div class="actions"><button id="prevBtn" class="btn">← 前へ</button><div class="right"><button id="revealBtn" class="btn">答えを見る</button><button id="checkBtn" class="btn primary">判定する</button><button id="nextBtn" class="btn primary" style="display:none">次へ → <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div>
 </section>
 </main>
-<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る</button><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題</button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.15_20261012</footer>
+<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る <span class="shortcut-suffix">（Ctrl+Enter）</span></button><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題 <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div></section></main>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.16_20261013</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 
@@ -1293,7 +1304,7 @@ function renderAnswerModeControls(){
   if($("answerModeSelect"))$("answerModeSelect").value=m;
   if($("answerModeHelp"))$("answerModeHelp").textContent=m==="choice"
     ?"選択肢モードは「基礎習得」。3回連続正解で基礎習得になります。"
-    :"記述モードは「完全習得」。↑↓で空欄移動、Ctrl+Enter（MacはCommand+Enterでも可）で問題全体を判定します。";
+    :"記述モードは「完全習得」。↑↓で空欄移動、Ctrl+Enter（MacはCommand+Enterでも可）で判定し、判定後は同じキーで次へ進みます。";
 }
 function canonicalValues(q){
   if(q.type==="input")return q.fields.map(f=>f.answers[0]);
@@ -1714,7 +1725,7 @@ function renderSearchResults(){
   const host=$("searchResults");if(!host)return;syncSearchControls();
   const rows=filteredSearchRecords(),terms=searchTerms();
   if($("searchCount"))$("searchCount").innerHTML=`<b>${rows.length}</b>問`;
-  if($("searchSetBtn")){const n=Math.min(5,rows.length);$("searchSetBtn").disabled=!rows.length;$("searchSetBtn").textContent=rows.length?`この条件から${n}問出題`:"該当問題なし"}
+  if($("searchSetBtn")){const n=Math.min(5,rows.length);$("searchSetBtn").disabled=!rows.length;$("searchSetBtn").textContent=rows.length?`この条件から${n}問出題（Ctrl+Enter）`:"該当問題なし"}
   host.innerHTML="";
   if(!rows.length){host.innerHTML='<div class="search-empty">条件に合う問題がありません。キーワードか絞り込みを少し緩めてください。</div>';return}
   if(searchState.view==="reader"){
@@ -1939,7 +1950,8 @@ function unansweredCount(q,a=answers[q.id]){
 function updateCheckButtonLabel(q){
   const b=$("checkBtn");if(!b||checked[q.id]||revealed[q.id])return;
   const n=unansweredCount(q),retry=retryStateFor(q);
-  b.textContent=retry?(n?`再判定する（未回答${n}）`:"再判定する"):(n?`判定する（未回答${n}）`:"判定する")
+  const label=retry?(n?`再判定する（未回答${n}）`:"再判定する"):(n?`判定する（未回答${n}）`:"判定する");
+  b.textContent=`${label}（Ctrl+Enter）`
 }
 function resetQuestionScrollPosition(){
   const sticky=$("questionSticky"),question=$("question");
@@ -1967,8 +1979,8 @@ function setupWriteInput(inp,q,i=null){
     const k=inputs.indexOf(inp);
 
     if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){
-      e.preventDefault();
-      if($("checkBtn")&&$("checkBtn").style.display!=="none")judge();
+      e.preventDefault();e.stopPropagation();
+      runPrimaryKeyboardAction();
       return
     }
 
@@ -2272,6 +2284,15 @@ function scrollToActiveField(q){
     if(el)el.scrollIntoView({behavior:"smooth",block:"center"})
   })
 }
+function focusChoiceFieldOption(q,fieldIndex,optionIndex=0){
+  if(answerMode()!=="choice")return;
+  requestAnimationFrame(()=>{
+    const field=document.querySelector(`.mc-field[data-field-index="${fieldIndex}"]`);
+    if(!field)return;
+    const opts=[...field.querySelectorAll(".mc-option:not(:disabled)")].filter(elementVisible);
+    if(opts.length)opts[Math.min(Math.max(0,optionIndex),opts.length-1)].focus()
+  })
+}
 function scheduleChoiceFieldAdvance(q,i){
   clearTimeout(autoAdvanceTimer);
   autoAdvanceTimer=setTimeout(()=>{
@@ -2281,7 +2302,7 @@ function scheduleChoiceFieldAdvance(q,i){
     const stateMap=ensureFieldOpenState(q);stateMap[i]=false;
     const next=nextIncompleteField(q,vals,i);
     if(next>=0){stateMap[next]=true;activeFieldByQuestion[q.id]=next}else{activeFieldByQuestion[q.id]=i}
-    renderQuestion();if(next>=0)scrollToActiveField(q)
+    renderQuestion();if(next>=0){scrollToActiveField(q);focusChoiceFieldOption(q,next,0)}
   },420)
 }
 function setPostJudgeFieldState(q){
@@ -2354,7 +2375,7 @@ function renderQuestion(){
             let cur=fieldSelectedValues(v[i]);const hit=cur.findIndex(x=>normalize(x)===normalize(opt));
             if(hit>=0)cur.splice(hit,1);else{const limit=Number(f.required_count)||f.answers.length;if(cur.length>=limit)return;cur.push(opt)}v[i]=cur
           }else v[i]=opt;
-          answers[q.id]=v;activeFieldByQuestion[q.id]=i;ensureFieldOpenState(q)[i]=true;renderQuestion();
+          answers[q.id]=v;activeFieldByQuestion[q.id]=i;ensureFieldOpenState(q)[i]=true;renderQuestion();focusChoiceFieldOption(q,i,j);
           if(fieldIsComplete(f,v[i]))scheduleChoiceFieldAdvance(q,i)
         };
         options.append(b)
@@ -2512,6 +2533,114 @@ function finish(){
     }
   });showPanel("resultPanel")
 }
+
+function elementVisible(el){
+  if(!el)return false;
+  const st=getComputedStyle(el),r=el.getBoundingClientRect();
+  return st.display!=="none"&&st.visibility!=="hidden"&&r.width>0&&r.height>0
+}
+function shownPanel(){
+  return ["homePanel","searchPanel","quizPanel","resultPanel"].map(id=>$(id)).find(el=>el&&el.classList.contains("show"))||null
+}
+function isTextEditingTarget(el){
+  if(!el)return false;
+  if(el.isContentEditable)return true;
+  if(el.tagName==="TEXTAREA")return true;
+  if(el.tagName!=="INPUT")return false;
+  const type=(el.type||"text").toLowerCase();
+  return !["button","checkbox","radio","range","submit","reset"].includes(type)
+}
+function panelFocusables(panel=shownPanel()){
+  if(!panel)return[];
+  return [...panel.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled):not([type="hidden"]),select:not(:disabled),[tabindex]:not([tabindex="-1"])')]
+    .filter(el=>elementVisible(el)&&!el.closest('[aria-hidden="true"]'))
+}
+function focusByPanelOrder(step){
+  const items=panelFocusables(),active=document.activeElement;
+  if(!items.length)return false;
+  let i=items.indexOf(active);
+  if(i<0)i=step>0?-1:0;
+  const next=(i+step+items.length)%items.length;
+  items[next].focus();
+  return true
+}
+function searchResultFocusables(){
+  if(!$('searchPanel')?.classList.contains('show'))return[];
+  return [...$('searchResults').querySelectorAll('.search-result-card,.reader-open')].filter(elementVisible)
+}
+function focusSearchResult(step,fromSearchInput=false){
+  const items=searchResultFocusables();if(!items.length)return false;
+  const active=document.activeElement;let i=items.indexOf(active);
+  if(fromSearchInput){items[step<0?items.length-1:0].focus();return true}
+  if(i<0)i=step>0?-1:0;
+  const ni=i+step;
+  if(ni<0){$('questionSearchInput')?.focus();return true}
+  items[Math.min(items.length-1,ni)].focus();return true
+}
+function choiceGridMove(btn,key){
+  const group=btn.closest('.mc-options,.enum-choice-grid');if(!group)return false;
+  const buttons=[...group.querySelectorAll('.mc-option:not(:disabled)')].filter(elementVisible);if(!buttons.length)return false;
+  const i=buttons.indexOf(btn);if(i<0)return false;
+  const colText=getComputedStyle(group).gridTemplateColumns;
+  const cols=Math.max(1,colText.split(/\s+/).filter(Boolean).length);
+  let ni=i;
+  if(key==='ArrowLeft')ni=i-1;
+  else if(key==='ArrowRight')ni=i+1;
+  else if(key==='ArrowUp')ni=i-cols;
+  else if(key==='ArrowDown')ni=i+cols;
+  else return false;
+  if(ni>=0&&ni<buttons.length){buttons[ni].focus();return true}
+  const groups=[...$('choiceForm').querySelectorAll('.mc-options,.enum-choice-grid')].filter(elementVisible),gi=groups.indexOf(group);
+  const targetGroup=(key==='ArrowUp'||key==='ArrowLeft')?groups[gi-1]:groups[gi+1];
+  if(targetGroup){
+    const opts=[...targetGroup.querySelectorAll('.mc-option:not(:disabled)')].filter(elementVisible);
+    if(opts.length){opts[Math.min(i,opts.length-1)].focus();return true}
+  }
+  return false
+}
+function runPrimaryKeyboardAction(){
+  if($('quizPanel')?.classList.contains('show')){
+    const check=$('checkBtn'),next=$('nextBtn');
+    if(check&&elementVisible(check)&&!check.disabled){check.click();return true}
+    if(next&&elementVisible(next)&&!next.disabled){next.click();return true}
+    return false
+  }
+  if($('searchPanel')?.classList.contains('show')){
+    const b=$('searchSetBtn');if(b&&elementVisible(b)&&!b.disabled){b.click();return true}return false
+  }
+  if($('resultPanel')?.classList.contains('show')){
+    const retry=$('retryBtn'),back=$('resultSearchBackBtn');
+    if(retry&&elementVisible(retry)&&!retry.disabled){retry.click();return true}
+    if(back&&elementVisible(back)&&!back.disabled){back.click();return true}
+    return false
+  }
+  return false
+}
+document.addEventListener('keydown',e=>{
+  if(e.isComposing||e.keyCode===229)return;
+  const t=e.target;
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){
+    if(runPrimaryKeyboardAction()){e.preventDefault();e.stopPropagation()}
+    return
+  }
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(t?.classList?.contains('write-answer-input'))return;
+  if(t?.classList?.contains('mc-option')&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
+    if(choiceGridMove(t,e.key)){e.preventDefault();return}
+  }
+  if(t===$('questionSearchInput')&&e.key==='ArrowDown'){
+    if(focusSearchResult(1,true)){e.preventDefault();return}
+  }
+  if((t?.classList?.contains('search-result-card')||t?.classList?.contains('reader-open'))&&(e.key==='ArrowUp'||e.key==='ArrowDown')){
+    if(focusSearchResult(e.key==='ArrowDown'?1:-1)){e.preventDefault();return}
+  }
+  if(isTextEditingTarget(t)||t?.tagName==='SELECT')return;
+  if(['ArrowUp','ArrowLeft','ArrowDown','ArrowRight'].includes(e.key)){
+    const step=(e.key==='ArrowDown'||e.key==='ArrowRight')?1:-1;
+    if(focusByPanelOrder(step))e.preventDefault()
+  }
+});
+
 $("authForm").onsubmit=e=>{e.preventDefault();if($("pw").value===PASS){localStorage.setItem(AUTH_KEY,String(Date.now()+LOGIN_DURATION));$("auth").style.display="none";$("app").style.display="block"}else{$("authError").textContent="パスワードが違います。";$("pw").value=""}};
 if(Number(localStorage.getItem(AUTH_KEY))>Date.now()){$("auth").style.display="none";$("app").style.display="block"}
 $("searchBtn").onclick=openSearchPanel;
