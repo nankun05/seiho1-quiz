@@ -1176,8 +1176,8 @@ body:before{
   <div class="actions"><button id="prevBtn" class="btn">← 前へ</button><div class="right"><button id="revealBtn" class="btn">答えを見る</button><button id="checkBtn" class="btn primary">判定する <span class="shortcut-suffix">（Ctrl+Enter）</span></button><button id="nextBtn" class="btn primary" style="display:none">次へ → <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div>
 </section>
 </main>
-<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る</button><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題</button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.19_20261013</footer>
+<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ <span class="shortcut-suffix">（Esc）</span></button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る</button><button id="weakRetryBtn" class="btn">間違いだけ復習 <span class="shortcut-suffix">（Ctrl+Shift+Enter）</span></button><button id="retryBtn" class="btn primary">次の未習得問題 <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div></section></main>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.20_20261013</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 
@@ -2687,6 +2687,20 @@ function focusFirstQuizAnswer(){
 document.addEventListener('keydown',e=>{
   if(e.isComposing||e.keyCode===229)return;
   const t=e.target,key=e.key;
+
+  if($('resultPanel')?.classList.contains('show')){
+    if(key==='Escape'){
+      const home=$('resultHomeBtn');
+      if(home&&elementVisible(home)&&!home.disabled){e.preventDefault();e.stopPropagation();home.click()}
+      return
+    }
+    if(key==='Enter'&&(e.ctrlKey||e.metaKey)){
+      const target=e.shiftKey?$('weakRetryBtn'):$('retryBtn');
+      if(target&&elementVisible(target)&&!target.disabled){e.preventDefault();e.stopPropagation();target.click()}
+      return
+    }
+  }
+
   if(key==='Enter'&&(e.ctrlKey||e.metaKey)){
     if(runPrimaryKeyboardAction()){e.preventDefault();e.stopPropagation()}
     return
