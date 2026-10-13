@@ -368,13 +368,17 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 }
 
 
-/* ver1.16 keyboard-first controls */
+/* ver1.17 full keyboard navigation */
 .keyboard-help{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:8px 0 10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd;color:var(--muted);font-size:11px;line-height:1.5}
 .keyboard-help strong{color:var(--ink);font-weight:900}
 .keyboard-help kbd{display:inline-flex;align-items:center;justify-content:center;min-height:22px;padding:1px 6px;border:1px solid #cbd8e3;border-bottom-width:2px;border-radius:6px;background:#fff;color:var(--ink);font:800 10px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;white-space:nowrap}
 .keyboard-help.compact{margin:7px 0 0;padding:6px 9px}
 .shortcut-suffix{font-size:.82em;font-weight:800;opacity:.72;white-space:nowrap}
-@media(max-width:620px){.keyboard-help{gap:5px 9px}.shortcut-suffix{font-size:.76em}}
+@media(max-width:620px){.keyboard-help{gap:5px 9px}.shortcut-suffix{font-size:.76em}.field-jump-shortcut{font-size:8px;padding:2px 5px}}
+.global-back-btn{display:none}.global-back-btn.show{display:inline-flex}
+.field-jump-shortcut{display:inline-flex;align-items:center;margin-left:7px;padding:2px 6px;border:1px solid #cbd8e3;border-radius:6px;background:#f8fbfd;color:#64748b;font-size:9px;font-weight:900;white-space:nowrap}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid rgba(8,145,178,.28);outline-offset:3px}
+
 </style>
 
 
@@ -1061,7 +1065,7 @@ body:before{
 <body>
 <section id="auth" class="auth"><form id="authForm" class="auth-card"><div class="auth-logo">生1</div><h1>生保1 合格クイズ</h1><p class="muted">閲覧するにはパスワードを入力してください。</p><input id="pw" type="password" inputmode="numeric" autofocus><button class="btn primary" style="width:100%;margin-top:14px">クイズを開く</button><p id="authError" class="auth-error"></p></form></section>
 <div id="app" class="shell">
-<header class="header"><div class="brand"><div class="logo">生1</div><div><h1>生保1 合格クイズ</h1><small class="muted">ACTUARY TRAINING / LIFE 1</small></div></div><div class="header-actions"><button id="searchBtn" class="btn">問題を探す</button><button id="homeBtn" class="btn">ホーム</button><button id="logoutBtn" class="btn">ログアウト</button><button id="resetBtn" class="btn danger">学習記録をリセット</button></div></header>
+<header class="header"><div class="brand"><div class="logo">生1</div><div><h1>生保1 合格クイズ</h1><small class="muted">ACTUARY TRAINING / LIFE 1</small></div></div><div class="header-actions"><button id="backBtn" class="btn global-back-btn" type="button">← 戻る <span class="shortcut-suffix">（Esc）</span></button><button id="searchBtn" class="btn">問題を探す</button><button id="homeBtn" class="btn">ホーム <span class="shortcut-suffix">（Ctrl+Shift+Enter）</span></button><button id="logoutBtn" class="btn">ログアウト</button><button id="resetBtn" class="btn danger">学習記録をリセット</button></div></header>
 <main id="homePanel" class="panel show">
 <section class="hero">
   <div class="hero-kicker">ACTUARY TRAINING // LIFE 1</div>
@@ -1075,7 +1079,7 @@ body:before{
     <div class="stat"><b id="statMastered">0</b><span id="statMasteredLabel">基礎習得</span></div>
   </div>
 </section>
-<div class="keyboard-help" aria-label="キーボード操作"><strong>キーボード操作</strong><span><kbd>↑ ↓ ← →</kbd> 項目移動</span><span><kbd>Enter</kbd> 開く・選択</span><span><kbd>Ctrl+Enter</kbd> 判定・次へ</span><span class="muted">Macは Ctrl+Enter の代わりに ⌘+Enter も使えます。</span></div>
+<div class="keyboard-help" aria-label="キーボード操作"><strong>キーボード操作</strong><span><kbd>↑ ↓ ← →</kbd> 画面内を移動</span><span><kbd>Enter</kbd> 実行</span><span><kbd>Esc</kbd> 戻る</span><span><kbd>Ctrl+Shift+Enter</kbd> ホーム</span><span class="muted">普通の文字キー単体では動きません。</span></div>
 <section class="study-command">
   <div class="command-head"><div><div class="eyebrow">STUDY COMMAND</div><h3>Today's Training</h3></div><div id="todayDate" class="command-date"></div></div>
   <div class="command-grid">
@@ -1116,7 +1120,7 @@ body:before{
     <input id="questionSearchInput" type="search" autocomplete="off" placeholder="例：再保険 財務 / 平成28 / MVA / アセット シェア" aria-label="問題を検索">
     <button id="questionSearchClear" class="btn" type="button">クリア</button>
   </div>
-  <div class="keyboard-help compact"><span><kbd>↓</kbd> 検索結果へ</span><span><kbd>↑ ↓</kbd> 結果移動</span><span><kbd>Enter</kbd> 問題を開く</span><span><kbd>Ctrl+Enter</kbd> この条件から出題</span></div>
+  <div class="keyboard-help compact"><span><kbd>↓</kbd> 検索結果へ</span><span><kbd>↑ ↓</kbd> 結果移動</span><span><kbd>Enter</kbd> 問題を開く</span><span><kbd>Ctrl+Enter</kbd> この条件から出題</span><span><kbd>Esc</kbd> 戻る</span><span><kbd>Ctrl+Shift+Enter</kbd> ホーム</span></div>
   <section class="search-filter-card" aria-label="検索フィルター">
     <div class="search-filter-row"><span class="search-filter-label">章</span><div id="searchChapterChips" class="search-chips"></div></div>
     <div class="search-filter-row">
@@ -1142,7 +1146,7 @@ body:before{
 </main>
 <main id="quizPanel" class="panel">
 <div class="quiz-top">
-  <div><h2 id="quizTitle"></h2><p id="quizDesc" class="muted"></p><button id="searchBackBtn" class="btn search-back-btn" type="button">← 検索へ戻る</button></div>
+  <div><h2 id="quizTitle"></h2><p id="quizDesc" class="muted"></p><button id="searchBackBtn" class="btn search-back-btn" type="button">← 検索へ戻る <span class="shortcut-suffix">（Esc）</span></button></div>
   <div class="mode-row">
     <div class="streak-box"><div class="streak-main">STREAK <b id="sessionStreak">0</b></div><div class="streak-best">SESSION BEST <b id="sessionBest">0</b></div></div><div class="answer-mode-mini"><span>回答</span><select id="answerModeSelect"><option value="choice">選択肢モード</option><option value="write">記述モード</option></select></div>
     <label>出題：</label>
@@ -1152,7 +1156,7 @@ body:before{
 </div>
 <div class="progress-wrap"><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div><div class="progress-meta"><span id="progressText">1 / 5</span><span id="liveScore">正解 0 / 0</span></div></div>
 <nav id="questionNav" class="question-nav"></nav>
-<div id="quizKeyboardHelp" class="keyboard-help"><strong>キーボード</strong><span><kbd>↑ ↓</kbd> 記述の空欄 / 選択肢移動</span><span><kbd>← →</kbd> 選択肢・画面内移動</span><span><kbd>Enter</kbd> 選択</span><span><kbd>Ctrl+Enter</kbd> 判定 → 次へ</span><span class="muted">入力欄では ←→ は文字カーソルのままです。Macは ⌘+Enter も可。</span></div>
+<div id="quizKeyboardHelp" class="keyboard-help"><strong>キーボード</strong><span><kbd>↑ ↓ ← →</kbd> 画面内 / 選択肢移動</span><span><kbd>Enter</kbd> 選択・実行</span><span><kbd>Ctrl+Enter</kbd> 判定 → 次へ</span><span><kbd>Ctrl+← / →</kbd> 前後の問題</span><span><kbd>Ctrl+1〜9</kbd> 空欄へジャンプ</span><span><kbd>Esc</kbd> 戻る</span><span><kbd>Ctrl+Shift+Enter</kbd> ホーム</span><span class="muted">記述欄では ↑↓ が空欄移動、←→ は文字カーソルです。IME変換中はショートカット無効。</span></div>
 <section id="questionCard" class="question-card">
   <div class="question-tools">
     <button id="questionMetaToggle" class="question-meta-toggle" type="button" aria-expanded="false"><span class="question-meta-chevron">›</span><span id="questionMetaToggleLabel">問題情報</span></button>
@@ -1169,11 +1173,11 @@ body:before{
   <form id="choiceForm" class="choices"></form>
   <div id="feedback" class="feedback"></div>
   <div id="questionReferences" class="question-references"></div>
-  <div class="actions"><button id="prevBtn" class="btn">← 前へ</button><div class="right"><button id="revealBtn" class="btn">答えを見る</button><button id="checkBtn" class="btn primary">判定する</button><button id="nextBtn" class="btn primary" style="display:none">次へ → <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div>
+  <div class="actions"><button id="prevBtn" class="btn">← 前へ <span class="shortcut-suffix">（Ctrl+←）</span></button><div class="right"><button id="revealBtn" class="btn">答えを見る</button><button id="checkBtn" class="btn primary">判定する <span class="shortcut-suffix">（Ctrl+Enter）</span></button><button id="nextBtn" class="btn primary" style="display:none">次へ → <span class="shortcut-suffix">（Ctrl+Enter / Ctrl+→）</span></button></div></div>
 </section>
 </main>
-<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ</button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る <span class="shortcut-suffix">（Ctrl+Enter）</span></button><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題 <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.16_20261013</footer>
+<main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div class="keyboard-help compact"><span><kbd>↑ ↓ ← →</kbd> 項目移動</span><span><kbd>Enter</kbd> 実行</span><span><kbd>Ctrl+Enter</kbd> 次の学習へ</span><span><kbd>Esc</kbd> 戻る</span><span><kbd>Ctrl+Shift+Enter</kbd> ホーム</span></div><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ <span class="shortcut-suffix">（Ctrl+Shift+Enter）</span></button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る <span class="shortcut-suffix">（Esc）</span></button><button id="weakRetryBtn" class="btn">間違いだけ復習</button><button id="retryBtn" class="btn primary">次の未習得問題 <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div></section></main>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.17_20261013</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 
@@ -1214,6 +1218,7 @@ let activeFieldByQuestion={},fieldOpenByQuestion={},questionCollapsedByQuestion=
 let retryOnlyByQuestion={},originalResultByQuestion={},lastEnteredQuestionId=null,questionReferenceOpenByQuestion={};
 let searchState={query:"",chapter:"all",source:"all",mastery:"all",favoriteOnly:false,sort:"chapter",view:"results",readerLayout:"full"};
 let searchQuizContext=null,searchRestoreY=0;
+let panelHistory=[];
 
 function defaultState(){return{
   attempts:0,correct:0,favorites:[],bestStreak:0,daily:{date:"",attempts:0,correct:0},answerMode:"choice",
@@ -1615,11 +1620,37 @@ function correctLabel(q){
   if(q.type==="enumeration")return q.items.map(x=>x.canonical).join(" ／ ");
   return q.keys.map(g=>g[0]).join("、")
 }
+function currentPanelId(){
+  return ["homePanel","searchPanel","quizPanel","resultPanel"].find(id=>$(id)?.classList.contains("show"))||"homePanel"
+}
+function updateGlobalNav(){
+  const back=$("backBtn"),current=currentPanelId();
+  if(back)back.classList.toggle("show",current!=="homePanel"&&panelHistory.length>0)
+}
 function showPanel(id,opts={}){
+  const current=currentPanelId();
+  if(current&&current!==id&&!opts.noHistory){
+    panelHistory.push(current);
+    if(panelHistory.length>30)panelHistory.shift()
+  }
   ["homePanel","searchPanel","quizPanel","resultPanel"].forEach(x=>$(x).classList.toggle("show",x===id));
   if(id==="homePanel"){renderDashboard();renderChapters()}
   if(id==="searchPanel")renderSearchResults();
+  updateGlobalNav();
   if(!opts.preserveScroll)window.scrollTo({top:0,behavior:opts.instant?"auto":"smooth"})
+}
+function goHomeKeyboard(){
+  clearSearchQuizContext();panelHistory=[];showPanel("homePanel",{noHistory:true,instant:true})
+}
+function navigateBack(){
+  const current=currentPanelId();
+  if(current==="quizPanel"&&searchQuizContext){returnToSearch();return true}
+  let target=null;
+  while(panelHistory.length&&!target){const x=panelHistory.pop();if(x&&x!==current)target=x}
+  if(!target){if(current!=="homePanel"){showPanel("homePanel",{noHistory:true,instant:true});return true}return false}
+  showPanel(target,{noHistory:true,instant:true});
+  if(target==="quizPanel")renderQuestion();
+  return true
 }
 function allQuestions(){return Object.values(CHAPTERS).flatMap(ch=>ch.bank)}
 function searchableQuestionRecords(){
@@ -1768,7 +1799,7 @@ function launchSearchQuiz(records,{singleId=null}={}){
 }
 function openSearchQuestion(rec){launchSearchQuiz([rec],{singleId:rec.q.id})}
 function returnToSearch(){
-  const y=searchQuizContext?.restoreY??searchRestoreY;clearSearchQuizContext();showPanel("searchPanel",{preserveScroll:true,instant:true});requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}))
+  const y=searchQuizContext?.restoreY??searchRestoreY;clearSearchQuizContext();showPanel("searchPanel",{preserveScroll:true,instant:true,noHistory:true});requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}))
 }
 function openSearchPanel(){clearSearchQuizContext();showPanel("searchPanel");requestAnimationFrame(()=>$("questionSearchInput")?.focus())
 }
@@ -2241,6 +2272,14 @@ function blankDisplayLabel(label){
     .replace(/[【】［］\[\]（）()〔〕]/g,"")
     .trim()
 }
+function blankShortcutNumber(label,fallbackIndex=0){
+  const s=blankDisplayLabel(label),m=s.match(/\d+/);
+  if(m){const n=Number(m[0]);if(n>=1&&n<=9)return n}
+  const n=fallbackIndex+1;return n>=1&&n<=9?n:null
+}
+function fieldShortcutHtml(label,index){
+  const n=blankShortcutNumber(label,index);return n?`<span class="field-jump-shortcut">Ctrl+${n}</span>`:""
+}
 
 function renderQuestionText(q,explicitIndex=null){
   const vals=Array.isArray(answers[q.id])?answers[q.id]:(q.fields||[]).map(()=>"");
@@ -2345,7 +2384,7 @@ function renderQuestion(){
       const titleWrap=document.createElement("span");titleWrap.className="mc-field-title-wrap";
       const ttl=document.createElement("span");ttl.className="mc-field-title";
       const badgeState=result?(result.ok?"correct":"wrong"):(i===active?"active":(complete?"done":""));
-      ttl.innerHTML=`<span>空欄</span><span class="field-number-badge ${badgeState}">${escapeHtmlText(blankDisplayLabel(f.label))}</span>${isMultiField(f)?`<span class="field-extra">正しいものを ${Number(f.required_count)||f.answers.length} 個選択</span>`:""}`;
+      ttl.innerHTML=`<span>空欄</span><span class="field-number-badge ${badgeState}">${escapeHtmlText(blankDisplayLabel(f.label))}</span>${fieldShortcutHtml(f.label,i)}${isMultiField(f)?`<span class="field-extra">正しいものを ${Number(f.required_count)||f.answers.length} 個選択</span>`:""}`;
       const summary=document.createElement("span");summary.className="mc-field-summary";
       const chosen=fieldAnswerSummary(f,vals[i]);
       if(result){summary.textContent=result.ok?`○ 正解：${chosen||result.correct}`:`× あなたの回答：${chosen||"未回答"}`;summary.classList.add(result.ok?"ok":"ng")}
@@ -2410,10 +2449,10 @@ function renderQuestion(){
     const box=document.createElement("div");box.className="input-answer";
     const vals=Array.isArray(answers[q.id])?answers[q.id]:q.fields.map(()=>"");
     q.fields.forEach((f,i)=>{
-      const lab=document.createElement("label");
+      const lab=document.createElement("label");lab.className="write-field";lab.dataset.fieldIndex=String(i);
       const writeBadgeState=checked[q.id]?(inputFieldResults(q)[i].ok?"correct":"wrong"):(fieldIsComplete(f,vals[i])?"done":"");
       const labHead=document.createElement("span");labHead.className="write-field-title";
-      labHead.innerHTML=`<span>空欄</span><span class="field-number-badge ${writeBadgeState}">${escapeHtmlText(blankDisplayLabel(f.label))}</span>`;
+      labHead.innerHTML=`<span>空欄</span><span class="field-number-badge ${writeBadgeState}">${escapeHtmlText(blankDisplayLabel(f.label))}</span>${fieldShortcutHtml(f.label,i)}`;
       lab.append(labHead);
       if(isMultiField(f)){
         const required=Number(f.required_count)||f.answers.length,current=fieldSelectedValues(vals[i]);
@@ -2552,17 +2591,27 @@ function isTextEditingTarget(el){
 }
 function panelFocusables(panel=shownPanel()){
   if(!panel)return[];
-  return [...panel.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled):not([type="hidden"]),select:not(:disabled),[tabindex]:not([tabindex="-1"])')]
-    .filter(el=>elementVisible(el)&&!el.closest('[aria-hidden="true"]'))
+  const roots=[$("app")?.querySelector(".header"),panel].filter(Boolean);
+  const seen=new Set(),items=[];
+  roots.forEach(root=>root.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled):not([type="hidden"]),select:not(:disabled),[tabindex]:not([tabindex="-1"])').forEach(el=>{
+    if(!seen.has(el)&&elementVisible(el)&&!el.closest('[aria-hidden="true"]')){seen.add(el);items.push(el)}
+  }));
+  return items
 }
-function focusByPanelOrder(step){
-  const items=panelFocusables(),active=document.activeElement;
-  if(!items.length)return false;
-  let i=items.indexOf(active);
-  if(i<0)i=step>0?-1:0;
-  const next=(i+step+items.length)%items.length;
-  items[next].focus();
-  return true
+function focusSpatial(direction){
+  const items=panelFocusables(),active=document.activeElement;if(!items.length)return false;
+  if(!items.includes(active)){items[0].focus();return true}
+  const a=active.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2;
+  const vertical=direction==="ArrowUp"||direction==="ArrowDown",forward=direction==="ArrowDown"||direction==="ArrowRight";
+  let best=null,bestScore=Infinity;
+  items.forEach(el=>{if(el===active)return;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,dx=x-ax,dy=y-ay;
+    const main=vertical?dy:dx,cross=Math.abs(vertical?dx:dy);
+    if(forward?main<=6:main>=-6)return;
+    const score=Math.abs(main)*1000+cross*4;
+    if(score<bestScore){bestScore=score;best=el}
+  });
+  if(best){best.focus();best.scrollIntoView({block:"nearest",inline:"nearest"});return true}
+  return false
 }
 function searchResultFocusables(){
   if(!$('searchPanel')?.classList.contains('show'))return[];
@@ -2598,6 +2647,27 @@ function choiceGridMove(btn,key){
   }
   return false
 }
+function moveQuestionByShortcut(delta){
+  if(!$('quizPanel')?.classList.contains('show')||!set.length)return false;
+  const next=Math.max(0,Math.min(set.length-1,pos+delta));if(next===pos)return false;
+  pos=next;renderQuestion();resetQuestionScrollPosition();return true
+}
+function focusWriteField(q,i){
+  requestAnimationFrame(()=>{
+    const lab=document.querySelector(`.write-field[data-field-index="${i}"]`);
+    const inp=lab?.querySelector('input.write-answer-input:not(:disabled)');
+    if(inp){inp.focus();inp.scrollIntoView({behavior:"smooth",block:"center"})}
+  })
+}
+function jumpToBlankShortcut(n){
+  if(!$('quizPanel')?.classList.contains('show'))return false;
+  const q=set[pos];if(!q||q.type!=="input")return false;
+  let i=q.fields.findIndex((f,idx)=>blankShortcutNumber(f.label,idx)===n);if(i<0)return false;
+  activeFieldByQuestion[q.id]=i;ensureFieldOpenState(q)[i]=true;
+  renderQuestion();
+  if(answerMode()==="choice"){scrollToActiveField(q);focusChoiceFieldOption(q,i,0)}else focusWriteField(q,i);
+  return true
+}
 function runPrimaryKeyboardAction(){
   if($('quizPanel')?.classList.contains('show')){
     const check=$('checkBtn'),next=$('nextBtn');
@@ -2618,35 +2688,51 @@ function runPrimaryKeyboardAction(){
 }
 document.addEventListener('keydown',e=>{
   if(e.isComposing||e.keyCode===229)return;
-  const t=e.target;
-  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){
+  const t=e.target,key=e.key;
+
+  if(key==='Escape'){
+    if(navigateBack()){e.preventDefault();e.stopPropagation()}
+    return
+  }
+  if(key==='Enter'&&(e.ctrlKey||e.metaKey)&&e.shiftKey){
+    e.preventDefault();e.stopPropagation();goHomeKeyboard();return
+  }
+  if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(key==='ArrowLeft'||key==='ArrowRight')){
+    if(moveQuestionByShortcut(key==='ArrowRight'?1:-1)){e.preventDefault();e.stopPropagation()}
+    return
+  }
+  if(e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.shiftKey&&/^[1-9]$/.test(key)){
+    if(jumpToBlankShortcut(Number(key))){e.preventDefault();e.stopPropagation()}
+    return
+  }
+  if(key==='Enter'&&(e.ctrlKey||e.metaKey)){
     if(runPrimaryKeyboardAction()){e.preventDefault();e.stopPropagation()}
     return
   }
   if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(t?.classList?.contains('write-answer-input'))return;
-  if(t?.classList?.contains('mc-option')&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
-    if(choiceGridMove(t,e.key)){e.preventDefault();return}
+  if(t?.classList?.contains('mc-option')&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(key)){
+    if(choiceGridMove(t,key)){e.preventDefault();return}
   }
-  if(t===$('questionSearchInput')&&e.key==='ArrowDown'){
+  if(t===$('questionSearchInput')&&key==='ArrowDown'){
     if(focusSearchResult(1,true)){e.preventDefault();return}
   }
-  if((t?.classList?.contains('search-result-card')||t?.classList?.contains('reader-open'))&&(e.key==='ArrowUp'||e.key==='ArrowDown')){
-    if(focusSearchResult(e.key==='ArrowDown'?1:-1)){e.preventDefault();return}
+  if((t?.classList?.contains('search-result-card')||t?.classList?.contains('reader-open'))&&(key==='ArrowUp'||key==='ArrowDown')){
+    if(focusSearchResult(key==='ArrowDown'?1:-1)){e.preventDefault();return}
   }
   if(isTextEditingTarget(t)||t?.tagName==='SELECT')return;
-  if(['ArrowUp','ArrowLeft','ArrowDown','ArrowRight'].includes(e.key)){
-    const step=(e.key==='ArrowDown'||e.key==='ArrowRight')?1:-1;
-    if(focusByPanelOrder(step))e.preventDefault()
+  if(['ArrowUp','ArrowLeft','ArrowDown','ArrowRight'].includes(key)){
+    if(focusSpatial(key))e.preventDefault()
   }
 });
 
 $("authForm").onsubmit=e=>{e.preventDefault();if($("pw").value===PASS){localStorage.setItem(AUTH_KEY,String(Date.now()+LOGIN_DURATION));$("auth").style.display="none";$("app").style.display="block"}else{$("authError").textContent="パスワードが違います。";$("pw").value=""}};
 if(Number(localStorage.getItem(AUTH_KEY))>Date.now()){$("auth").style.display="none";$("app").style.display="block"}
+$("backBtn").onclick=navigateBack;
 $("searchBtn").onclick=openSearchPanel;
 $("homeSearchBtn").onclick=openSearchPanel;
-$("homeBtn").onclick=()=>{clearSearchQuizContext();showPanel("homePanel")};
-$("resultHomeBtn").onclick=()=>{clearSearchQuizContext();showPanel("homePanel")};
+$("homeBtn").onclick=goHomeKeyboard;
+$("resultHomeBtn").onclick=goHomeKeyboard;
 $("searchBackBtn").onclick=returnToSearch;
 $("resultSearchBackBtn").onclick=returnToSearch;
 $("questionSearchInput").oninput=e=>{searchState.query=e.target.value;renderSearchResults()};
@@ -2674,7 +2760,7 @@ $("nextBtn").onclick=()=>{if(pos===set.length-1)finish();else{pos++;renderQuesti
 $("favoriteBtn").onclick=()=>{const id=set[pos].id;state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];saveState();renderQuestion();if($("searchPanel")?.classList.contains("show"))renderSearchResults()};
 $("retryBtn").onclick=()=>startChapter(chapterId,"mastery");
 $("weakRetryBtn").onclick=()=>startChapter(chapterId,"weak");
-renderChapters();renderDashboard();updateStats();renderStudyCommand();renderStreak();renderAnswerModeControls();renderSearchResults();
+renderChapters();renderDashboard();updateStats();renderStudyCommand();renderStreak();renderAnswerModeControls();renderSearchResults();updateGlobalNav();
 
 function updateOnlineStatus(){
   const el=$("offlineStatus");if(!el)return;
