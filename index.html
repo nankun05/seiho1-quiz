@@ -1177,7 +1177,7 @@ body:before{
 </section>
 </main>
 <main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ <span class="shortcut-suffix">（Esc）</span></button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る</button><button id="weakRetryBtn" class="btn">間違いだけ復習 <span class="shortcut-suffix">（Ctrl+Shift+Enter）</span></button><button id="retryBtn" class="btn primary">次の未習得問題 <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.20_20261013</footer>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.21_20261018</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 
@@ -1998,11 +1998,31 @@ function resetQuestionScrollPosition(){
     if(question){question.scrollTop=0;question.scrollLeft=0}
   })
 }
+function scrollQuestionToActiveBlank(q,i,answerEl=null){
+  if(!Number.isInteger(i))return;
+  if(answerEl)answerEl.scrollIntoView({behavior:"smooth",block:"center",inline:"nearest"});
+  setTimeout(()=>{
+    const sticky=$("questionSticky"),question=$("question");
+    if(!sticky||!question||sticky.classList.contains("collapsed"))return;
+    const active=question.querySelector(".blank-number-badge.active");
+    if(!active)return;
+    const bar=sticky.querySelector(".question-sticky-bar");
+    const sr=sticky.getBoundingClientRect(),ar=active.getBoundingClientRect();
+    const barH=bar?.offsetHeight||0;
+    const usable=Math.max(40,sticky.clientHeight-barH);
+    const targetTop=sticky.scrollTop+(ar.top-sr.top)-barH-usable*0.28;
+    sticky.scrollTo({top:Math.max(0,targetTop),behavior:"smooth"})
+  },140)
+}
 function setupWriteInput(inp,q,i=null){
   inp.classList.add("write-answer-input");
   inp.addEventListener("focus",()=>{
-    if(Number.isInteger(i))activateField(q,i,false);
-    setTimeout(()=>inp.scrollIntoView({behavior:"smooth",block:"center"}),60)
+    if(Number.isInteger(i)){
+      activateField(q,i,false);
+      scrollQuestionToActiveBlank(q,i,inp)
+    }else{
+      setTimeout(()=>inp.scrollIntoView({behavior:"smooth",block:"center",inline:"nearest"}),60)
+    }
   });
   inp.addEventListener("keydown",e=>{
     if(e.isComposing||e.keyCode===229)return;
