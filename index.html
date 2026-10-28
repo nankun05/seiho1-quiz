@@ -149,6 +149,10 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .chapter:active{transform:translateY(-1px) scale(.995)}
 .chapter-no{font-size:11px;font-weight:950;color:var(--accent);letter-spacing:.09em}
 .chapter h4{margin:5px 0 7px;font-size:18px}.chapter p{margin:0;color:var(--muted);font-size:13px}
+.chapter-random{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;text-align:left;background:linear-gradient(135deg,rgba(8,145,178,.08),rgba(79,70,229,.055));border-color:rgba(8,145,178,.35)}
+.chapter-random .random-icon{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:25px;font-weight:950;background:rgba(8,145,178,.10);color:var(--accent);border:1px solid rgba(8,145,178,.20)}
+.chapter-random .random-copy h4{margin:2px 0 5px}.chapter-random .random-copy p{margin:0}.chapter-random .random-meta{font-size:12px;font-weight:900;color:var(--muted);white-space:nowrap}
+@media(max-width:640px){.chapter-random{grid-template-columns:auto 1fr}.chapter-random .random-meta{grid-column:1/-1;white-space:normal}}
 .pill{position:absolute;right:14px;top:14px;border-radius:999px;background:#091827;border:1px solid var(--line2);padding:4px 9px;font-size:11px;font-weight:850;color:#b9d8e8}
 .chapter-mastery{margin-top:14px}.chapter-mastery-meta{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted);margin-bottom:6px}
 
@@ -1177,7 +1181,7 @@ body:before{
 </section>
 </main>
 <main id="resultPanel" class="panel"><section class="result-card"><div id="finalScore" class="big">0 / 5</div><div id="grade" class="grade"></div><p id="resultMessage" class="muted" style="text-align:center"></p><div id="reviewList"></div><div class="actions"><button id="resultHomeBtn" class="btn">ホームへ <span class="shortcut-suffix">（Esc）</span></button><div class="right"><button id="resultSearchBackBtn" class="btn" type="button" style="display:none">← 検索へ戻る</button><button id="weakRetryBtn" class="btn">間違いだけ復習 <span class="shortcut-suffix">（Ctrl+Shift+Enter）</span></button><button id="retryBtn" class="btn primary">次の未習得問題 <span class="shortcut-suffix">（Ctrl+Enter）</span></button></div></div></section></main>
-<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.21_20261018</footer>
+<footer class="footer">出典：<a href="https://www.actuaries.jp/examin/textbook/" target="_blank">日本アクチュアリー会 保険1（生命保険）テキスト</a> ／ <a href="https://www.actuaries.jp/lib/collection/" target="_blank">過去問題集</a> ／ ver1.22_20261029</footer>
 </div>
 <div id="offlineStatus" class="offline-status">オフラインで利用中</div>
 
@@ -1213,7 +1217,7 @@ const REVISED_QUESTION_IDS=["pe2014_1_3"];
 const REMOVED_LEGACY_PAST_IDS=["pe2000_1_2","pe2000_1_6","pe2000_1_7","pe2003_1_2","pe2004_1_3","pe2004_1_5","pe2005_1_3","pe2008_1_1","pe2009_1_4","pe2011_1_1","pe2013_1_1","pe2013_1_3","pe2013_1_4","pe2014_1_4","pe2017_1_4","pe2019_1_1","pe2019_1_3","pe2020_1_1","pe2020_1_4","pe2022_1_1","pe2022_1_6","pe2023_1_6","pe2024_1_4","pe2025_1_1","pe2025_1_2","sum8_11_art"];
 const CURRENT_QUESTION_IDS=new Set(Object.values(CHAPTERS).flatMap(ch=>ch.bank.map(q=>q.id)));
 const $=id=>document.getElementById(id),letters=["A","B","C","D","E","F","G","H","I","J","K","L"];
-let state=loadState(),chapterId="1",bank=CHAPTERS["1"].bank,set=[],pos=0,answers={},checked={},revealed={},choiceCache={},sessionStreak=0,sessionBest=0,focusTimer=null,toastTimer=null;
+let state=loadState(),chapterId="1",sessionScope="chapter",bank=CHAPTERS["1"].bank,set=[],pos=0,answers={},checked={},revealed={},choiceCache={},sessionStreak=0,sessionBest=0,focusTimer=null,toastTimer=null;
 let activeFieldByQuestion={},fieldOpenByQuestion={},questionCollapsedByQuestion={},questionMetaOpenByQuestion={},autoAdvanceTimer=null,stickyStateRaf=0;
 let retryOnlyByQuestion={},originalResultByQuestion={},lastEnteredQuestionId=null,questionReferenceOpenByQuestion={};
 let searchState={query:"",chapter:"all",source:"all",mastery:"all",favoriteOnly:false,sort:"chapter",view:"results",readerLayout:"full"};
@@ -1298,6 +1302,7 @@ function setAnswerMode(mode,rerender=true){
   renderAnswerModeControls();
   if(rerender&&$("quizPanel").classList.contains("show")){
     if(searchQuizContext){answers={};checked={};revealed={};choiceCache={};retryOnlyByQuestion={};originalResultByQuestion={};lastEnteredQuestionId=null;renderQuestion();resetQuestionScrollPosition()}
+    else if(sessionScope==="all")startAllChapters($("mode").value||"mastery");
     else startChapter(chapterId,$("mode").value||"mastery");
   }
   if($("searchPanel")?.classList.contains("show"))renderSearchResults();
@@ -1472,8 +1477,13 @@ function renderStreak(){
 }
 function showFocusOverlay(id){
   const o=$("focusOverlay");if(!o)return;
-  $("focusChapter").textContent=`CHAPTER ${String(id).padStart(2,"0")}`;
-  $("focusTitle").textContent=CHAPTERS[id].short;
+  if(id==="all"){
+    $("focusChapter").textContent="ALL CHAPTERS";
+    $("focusTitle").textContent="全章ランダム";
+  }else{
+    $("focusChapter").textContent=`CHAPTER ${String(id).padStart(2,"0")}`;
+    $("focusTitle").textContent=CHAPTERS[id].short;
+  }
   $("focusCount").textContent=`${set.length} QUESTIONS`;
   o.classList.add("show");o.setAttribute("aria-hidden","false");
   clearTimeout(focusTimer);focusTimer=setTimeout(()=>{o.classList.remove("show");o.setAttribute("aria-hidden","true")},900)
@@ -1653,6 +1663,31 @@ function navigateBack(){
   return true
 }
 function allQuestions(){return Object.values(CHAPTERS).flatMap(ch=>ch.bank)}
+function questionChapterId(qOrId){
+  const id=typeof qOrId==="string"?qOrId:qOrId?.id;
+  for(const [cid,ch] of Object.entries(CHAPTERS))if(ch.bank.some(q=>q.id===id))return cid;
+  return ""
+}
+function allChapterMetrics(){
+  const qs=allQuestions(),total=qs.length;
+  const choiceMastered=qs.filter(q=>isMastered(q.id,"choice")).length;
+  const writeMastered=qs.filter(q=>isMastered(q.id,"write")).length;
+  return{total,choiceMastered,writeMastered}
+}
+function mixedChapterSample(candidates,limit=5,preferLowStreak=false){
+  const groups={};
+  candidates.forEach(q=>{const cid=questionChapterId(q);if(!cid)return;(groups[cid]||(groups[cid]=[])).push(q)});
+  const chapterIds=shuffled(Object.keys(groups)),picked=[],used=new Set();
+  const orderedGroup=arr=>{let out=shuffled(arr);if(preferLowStreak)out=out.sort((a,b)=>masteryStreak(a.id)-masteryStreak(b.id));return out};
+  chapterIds.forEach(cid=>{if(picked.length>=limit)return;const g=orderedGroup(groups[cid]);if(g[0]){picked.push(g[0]);used.add(g[0].id)}});
+  if(picked.length<limit){
+    let rest=shuffled(candidates.filter(q=>!used.has(q.id)));
+    if(preferLowStreak)rest=rest.sort((a,b)=>masteryStreak(a.id)-masteryStreak(b.id));
+    picked.push(...rest.slice(0,limit-picked.length));
+  }
+  return picked.slice(0,limit)
+}
+function isAllChapterSession(){return !searchQuizContext&&sessionScope==="all"}
 function searchableQuestionRecords(){
   const out=[];
   Object.entries(CHAPTERS).forEach(([cid,ch],chapterOrder)=>{
@@ -1836,6 +1871,10 @@ function renderDashboard(){
 }
 function renderChapters(){
   const box=$("chapters");box.innerHTML="";
+  const mx=allChapterMetrics(),allTotal=mx.total,allMastered=answerMode()==="write"?mx.writeMastered:mx.choiceMastered;
+  const random=document.createElement("button");random.className="chapter chapter-random";random.type="button";
+  random.innerHTML=`<span class="random-icon">↝</span><div class="random-copy"><div class="chapter-no">MIXED TRAINING</div><h4>全章ランダム</h4><p>第1・2・3・4・5・6・7・8・10章から章をまたいで5問。できるだけ別々の章から出題します。</p></div><div class="random-meta">${masteryTerm()} ${allMastered}/${allTotal}</div>`;
+  random.onclick=()=>startAllChapters("mastery");box.appendChild(random);
   Object.entries(CHAPTERS).forEach(([id,ch])=>{
     const x=chapterMetrics(id);
     const cp=x.total?Math.round(x.choiceMastered/x.total*100):0;
@@ -1874,14 +1913,19 @@ function buildSet(mode="mastery"){
     set=[];pos=0;answers={};checked={};revealed={};choiceCache={};retryOnlyByQuestion={};originalResultByQuestion={};lastEnteredQuestionId=null;lastEnteredQuestionId=null;updateNewSetButton(mode);
     return false
   }
-  if(mode!=="mastery")candidates=shuffled(candidates);
-  set=candidates.slice(0,Math.min(5,candidates.length));pos=0;answers={};checked={};revealed={};choiceCache={};retryOnlyByQuestion={};originalResultByQuestion={};
+  if(isAllChapterSession()){
+    set=mixedChapterSample(candidates,Math.min(5,candidates.length),mode==="mastery");
+  }else{
+    if(mode!=="mastery")candidates=shuffled(candidates);
+    set=candidates.slice(0,Math.min(5,candidates.length));
+  }
+  pos=0;answers={};checked={};revealed={};choiceCache={};retryOnlyByQuestion={};originalResultByQuestion={};
   updateNewSetButton(mode);
   return true
 }
 function startChapter(id,mode="mastery"){
   clearSearchQuizContext();
-  chapterId=id;bank=CHAPTERS[id].bank;sessionStreak=0;sessionBest=0;renderStreak();$("quizTitle").textContent=CHAPTERS[id].title;
+  sessionScope="chapter";chapterId=id;bank=CHAPTERS[id].bank;sessionStreak=0;sessionBest=0;renderStreak();$("quizTitle").textContent=CHAPTERS[id].title;
   $("mode").value=mode;
   const p=bank.filter(q=>(q.attributes||[]).includes("過去問")).length,
         sm=bank.filter(q=>(q.attributes||[]).includes("まとめ資料")).length,
@@ -1898,6 +1942,20 @@ function startChapter(id,mode="mastery"){
     return
   }
   showPanel("quizPanel");renderQuestion();resetQuestionScrollPosition();focusFirstQuizAnswer();showFocusOverlay(id)
+}
+function startAllChapters(mode="mastery"){
+  clearSearchQuizContext();
+  sessionScope="all";chapterId="all";bank=allQuestions();sessionStreak=0;sessionBest=0;renderStreak();$("quizTitle").textContent="全章ランダム";
+  $("mode").value=mode;
+  const p=bank.filter(q=>(q.attributes||[]).includes("過去問")).length,sm=bank.filter(q=>(q.attributes||[]).includes("まとめ資料")).length,ma=bank.filter(q=>isMastered(q.id)).length;
+  $("quizDesc").textContent=`全${bank.length}問（公式過去問${p}・まとめ資料${sm}）／章をまたいでランダム5問／${masteryTerm()} ${ma}/${bank.length} ／ ${modeLabel()}`;
+  const ok=buildSet(mode);
+  if(!ok){
+    if(mode==="mastery"){alert(`全章の対象問題は${masteryTerm()}済みです！`);showPanel("homePanel")}
+    else alert("対象問題がありません。");
+    return
+  }
+  showPanel("quizPanel");renderQuestion();resetQuestionScrollPosition();focusFirstQuizAnswer();showFocusOverlay("all")
 }
 
 function escapeHtmlText(v){
@@ -2375,7 +2433,8 @@ function renderQuestion(){
   const q=set[pos];
   resetFieldOpenOnQuestionEntry(q);renderStreak();renderAnswerModeControls();
   const verifyBadge=q.sourceType==="past_exam"?(q.verified?"<div class=\"source-verify verified\">✓ 公式照合済</div>":"<div class=\"source-verify pending\">△ 要確認</div>"):"";
-  $("qTag").innerHTML=`Q${pos+1} ・ ${(q.attributes||[]).join(" ・ ")} ・ ${displayQuestionTag(q)}${verifyBadge}<div class="mastery-badge ${isMastered(q.id)?"done":""}">${masteryLabel(q.id)}</div><div class="answer-mode-badge ${answerMode()==="write"?"write":""}">${modeLabel()}</div>`;
+  const mixedChapterLabel=isAllChapterSession()?`第${questionChapterId(q)}章 ・ `:"";
+  $("qTag").innerHTML=`Q${pos+1} ・ ${mixedChapterLabel}${(q.attributes||[]).join(" ・ ")} ・ ${displayQuestionTag(q)}${verifyBadge}<div class="mastery-badge ${isMastered(q.id)?"done":""}">${masteryLabel(q.id)}</div><div class="answer-mode-badge ${answerMode()==="write"?"write":""}">${modeLabel()}</div>`;
   const metaOpen=!!questionMetaOpenByQuestion[q.id];
   $("qTag").classList.toggle("open",metaOpen);
   $("questionMetaToggle").classList.toggle("open",metaOpen);
@@ -2577,6 +2636,11 @@ function finish(){
     $("grade").textContent=r>=.9?"検索セット：かなり強い":r>=.7?"合格圏に近い":r>=.5?"もう一段":"重点復習推奨";
     $("resultMessage").textContent=`検索条件から出題した${total}問。${modeLabel()}の最初の判定を成績に記録しました。`;
     setSearchQuizControls(true)
+  }else if(isAllChapterSession()){
+    $("grade").textContent=r>=.9?"全章ランダム：かなり強い":r>=.7?"合格圏に近い":r>=.5?"もう一段":"重点復習推奨";
+    const x=allChapterMetrics(),n=answerMode()==="write"?x.writeMastered:x.choiceMastered;
+    const chapterList=[...new Set(set.map(q=>questionChapterId(q)))].map(id=>`第${id}章`).join("・");
+    $("resultMessage").textContent=`今回の出題：${chapterList}。全章の${masteryTerm()} ${n}/${x.total}問。`;
   }else{
     $("grade").textContent=r>=.9?`${CHAPTERS[chapterId].title}：かなり強い`:r>=.7?"合格圏に近い":r>=.5?"もう一段":"重点復習推奨";
     const x=chapterMetrics(chapterId),n=answerMode()==="write"?x.writeMastered:x.choiceMastered;
@@ -2586,7 +2650,8 @@ function finish(){
   set.forEach(q=>{
     if(!scoredCorrect(q)){
       const d=document.createElement("div");d.className="review";
-      d.innerHTML=`<b>${displayQuestionTag(q)}</b><br>正解：${correctLabel(q)}<br>${q.e}${q.detail?`<div style="margin-top:8px">${q.detail}</div>`:""}${q.tip?`<div class="muted" style="margin-top:8px"><b>試験での押さえ方：</b>${q.tip}</div>`:""}`;
+      const reviewChapter=isAllChapterSession()?`第${questionChapterId(q)}章｜`:"";
+      d.innerHTML=`<b>${reviewChapter}${displayQuestionTag(q)}</b><br>正解：${correctLabel(q)}<br>${q.e}${q.detail?`<div style="margin-top:8px">${q.detail}</div>`:""}${q.tip?`<div class="muted" style="margin-top:8px"><b>試験での押さえ方：</b>${q.tip}</div>`:""}`;
       $("reviewList").append(d)
     }
   });showPanel("resultPanel")
@@ -2752,8 +2817,8 @@ $("readerFullBtn").onclick=()=>{searchState.readerLayout="full";renderSearchResu
 $("searchSetBtn").onclick=()=>launchSearchQuiz(filteredSearchRecords());
 $("logoutBtn").onclick=()=>{localStorage.removeItem(AUTH_KEY);location.reload()};
 $("resetBtn").onclick=()=>{if(confirm("全章の学習記録をリセットしますか？")){state=defaultState();localStorage.removeItem(STATE_KEY);updateStats();renderDashboard();renderChapters();renderAnswerModeControls()}};
-$("newSetBtn").onclick=()=>startChapter(chapterId,$("mode").value);
-$("mode").onchange=()=>startChapter(chapterId,$("mode").value);
+$("newSetBtn").onclick=()=>sessionScope==="all"?startAllChapters($("mode").value):startChapter(chapterId,$("mode").value);
+$("mode").onchange=()=>sessionScope==="all"?startAllChapters($("mode").value):startChapter(chapterId,$("mode").value);
 $("answerModeSelect").onchange=()=>setAnswerMode($("answerModeSelect").value,true);
 $("homeChoiceMode").onclick=()=>setAnswerMode("choice",false);
 $("homeWriteMode").onclick=()=>setAnswerMode("write",false);
@@ -2762,8 +2827,8 @@ $("revealBtn").onclick=()=>{const q=set[pos];revealed[q.id]=true;if(q.type==="in
 $("prevBtn").onclick=()=>{if(pos>0){pos--;renderQuestion();resetQuestionScrollPosition();focusFirstQuizAnswer()}};
 $("nextBtn").onclick=()=>{if(pos===set.length-1)finish();else{pos++;renderQuestion();resetQuestionScrollPosition();focusFirstQuizAnswer()}};
 $("favoriteBtn").onclick=()=>{const id=set[pos].id;state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];saveState();renderQuestion();if($("searchPanel")?.classList.contains("show"))renderSearchResults()};
-$("retryBtn").onclick=()=>startChapter(chapterId,"mastery");
-$("weakRetryBtn").onclick=()=>startChapter(chapterId,"weak");
+$("retryBtn").onclick=()=>sessionScope==="all"?startAllChapters("mastery"):startChapter(chapterId,"mastery");
+$("weakRetryBtn").onclick=()=>sessionScope==="all"?startAllChapters("weak"):startChapter(chapterId,"weak");
 renderChapters();renderDashboard();updateStats();renderStudyCommand();renderStreak();renderAnswerModeControls();renderSearchResults();updateGlobalNav();
 
 function updateOnlineStatus(){
